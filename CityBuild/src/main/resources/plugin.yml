@@ -28,9 +28,24 @@ commands:
     description: Remove the location.
     aliases:
       - rmwarp
+      - deletewarp
+      - delwarp
   setwarp:
     usage: /setwarp <LOCATION>
     description: Set the location.
   warp:
     usage: /warp <LOCATION>
     description: Teleports you to the location.
+  addhome:
+    usage: /addhome <home>
+    description: Add a new home.
+  home:
+    usage: /home <home>
+    description: Teleport you to your home.
+  removehome:
+    usage: /removehome <home>
+    description: Delete a home.
+    aliases:
+      - rmhome
+      - deletehome
+      - delhome

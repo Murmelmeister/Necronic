@@ -3,6 +3,10 @@ package de.murmelmeister.citybuild.command;
 import de.murmelmeister.citybuild.CityBuild;
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.command.commands.*;
+import de.murmelmeister.citybuild.command.commands.homes.AddHomeCommand;
+import de.murmelmeister.citybuild.command.commands.homes.HomeCommand;
+import de.murmelmeister.citybuild.command.commands.homes.RemoveHomeCommand;
+import de.murmelmeister.citybuild.command.commands.locations.*;
 import org.bukkit.command.TabExecutor;
 
 import java.util.Objects;
@@ -24,6 +28,9 @@ public class Commands {
         addCommand("removewarp", new RemoveWarpCommand(main));
         addCommand("setwarp", new SetWarpCommand(main));
         addCommand("warp", new WarpCommand(main));
+        addCommand("addhome", new AddHomeCommand(main));
+        addCommand("home", new HomeCommand(main));
+        addCommand("removehome", new RemoveHomeCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {

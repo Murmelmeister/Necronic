@@ -1,4 +1,4 @@
-package de.murmelmeister.citybuild.command.commands;
+package de.murmelmeister.citybuild.command.commands.locations;
 
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.command.CommandManager;
@@ -15,19 +15,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RemoveWarpCommand extends CommandManager {
-    public RemoveWarpCommand(Main main) {
+public class WarpCommand extends CommandManager {
+    public WarpCommand(Main main) {
         super(main);
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_REMOVE_LOCATION))) {
+        if (!(config.getBoolean(Configs.COMMAND_ENABLE_LOCATION))) {
             sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
             return true;
         }
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_REMOVE_LOCATION)))) {
+        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_LOCATION)))) {
             sendMessage(sender, message.getString(Messages.NO_PERMISSION));
             return true;
         }
@@ -49,8 +49,8 @@ public class RemoveWarpCommand extends CommandManager {
             return true;
         }
 
-        locations.removeLocation(args[0]);
-        sendMessage(player, message.getString(Messages.COMMAND_REMOVE_LOCATION).replace("[LOCATION]", args[0]));
+        player.teleport(locations.getLocation(args[0]));
+        sendMessage(player, message.getString(Messages.COMMAND_SEND_LOCATION).replace("[LOCATION]", args[0]));
         return true;
     }
 

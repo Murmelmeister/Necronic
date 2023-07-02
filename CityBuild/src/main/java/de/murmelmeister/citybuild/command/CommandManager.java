@@ -1,6 +1,7 @@
 package de.murmelmeister.citybuild.command;
 
 import de.murmelmeister.citybuild.Main;
+import de.murmelmeister.citybuild.api.Homes;
 import de.murmelmeister.citybuild.api.Locations;
 import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
@@ -19,12 +20,14 @@ public abstract class CommandManager extends Commands implements TabExecutor {
     public final Config config;
     public final Message message;
     public final Locations locations;
+    public final Homes homes;
 
     public CommandManager(Main main) {
         super(main);
         this.config = main.getConfig();
         this.message = main.getMessage();
         this.locations = main.getLocations();
+        this.homes = main.getHomes();
     }
 
     public void sendMessage(CommandSender sender, String message) {

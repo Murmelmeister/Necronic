@@ -1,4 +1,4 @@
-package de.murmelmeister.citybuild.command.commands;
+package de.murmelmeister.citybuild.command.commands.locations;
 
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.command.CommandManager;

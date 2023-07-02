@@ -1,5 +1,6 @@
 package de.murmelmeister.citybuild;
 
+import de.murmelmeister.citybuild.api.Homes;
 import de.murmelmeister.citybuild.api.Locations;
 import de.murmelmeister.citybuild.command.Commands;
 import de.murmelmeister.citybuild.configs.Config;
@@ -12,6 +13,7 @@ public class Main {
     private final Config config;
     private final Message message;
     private final Locations locations;
+    private final Homes homes;
 
     private final Listeners listeners;
     private final Commands commands;
@@ -21,6 +23,7 @@ public class Main {
         this.config = new Config(this);
         this.message = new Message(this);
         this.locations = new Locations(this);
+        this.homes = new Homes(this);
         this.listeners = new Listeners(this);
         this.commands = new Commands(this);
     }
@@ -52,5 +55,9 @@ public class Main {
 
     public Locations getLocations() {
         return locations;
+    }
+
+    public Homes getHomes() {
+        return homes;
     }
 }

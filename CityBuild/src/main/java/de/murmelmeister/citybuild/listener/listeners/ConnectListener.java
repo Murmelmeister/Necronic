@@ -33,6 +33,8 @@ public class ConnectListener extends Listeners {
             if (config.getBoolean(Configs.EVENT_TELEPORT_TO_SPAWN)) player.teleport(locations.getLocation("Spawn"));
         } else
             sendMessage(player, message.getString(Messages.EVENT_SPAWN_NOT_EXIST).replace("[PREFIX]", message.prefix()));
+
+        homes.createUsername(player);
     }
 
     @SuppressWarnings("deprecation")

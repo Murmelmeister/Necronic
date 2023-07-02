@@ -2,6 +2,7 @@ package de.murmelmeister.citybuild.listener;
 
 import de.murmelmeister.citybuild.CityBuild;
 import de.murmelmeister.citybuild.Main;
+import de.murmelmeister.citybuild.api.Homes;
 import de.murmelmeister.citybuild.api.Locations;
 import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
@@ -19,6 +20,7 @@ public class Listeners implements Listener {
     public final Config config;
     public final Message message;
     public final Locations locations;
+    public final Homes homes;
 
     public Listeners(Main main) {
         this.main = main;
@@ -26,6 +28,7 @@ public class Listeners implements Listener {
         this.config = main.getConfig();
         this.message = main.getMessage();
         this.locations = main.getLocations();
+        this.homes = main.getHomes();
     }
 
     public void register() {
