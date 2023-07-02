@@ -36,7 +36,6 @@ public class Message {
     public void load() {
         for (Messages messages : Messages.values())
             if (getString(messages) == null) set(messages);
-            else getString(messages);
     }
 
     public void save() {

@@ -15,5 +15,22 @@ commands:
     usage: /citybuildrelaod
     description: Reload the configuration.
     aliases:
-      - nlreload
-      - nlrl
+      - cbreload
+      - cbrl
+  setspawn:
+    usage: /setspawn
+    description: Set the spawn.
+  spawn:
+    usage: /spawn
+    description: Teleports you to the spawn.
+  removewarp:
+    usage: /removewarp <LOCATION>
+    description: Remove the location.
+    aliases:
+      - rmwarp
+  setwarp:
+    usage: /setwarp <LOCATION>
+    description: Set the location.
+  warp:
+    usage: /warp <LOCATION>
+    description: Teleports you to the location.

@@ -35,7 +35,6 @@ public class Config {
     public void load() {
         for (Configs configs : Configs.values())
             if (get(configs) == null) set(configs);
-            else get(configs);
     }
 
     public void save() {

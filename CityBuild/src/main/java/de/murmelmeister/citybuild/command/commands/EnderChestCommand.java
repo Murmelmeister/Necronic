@@ -4,7 +4,6 @@ import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.command.CommandManager;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -13,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 public class EnderChestCommand extends CommandManager {
     public EnderChestCommand(Main main) {
@@ -41,12 +39,12 @@ public class EnderChestCommand extends CommandManager {
 
         if (args.length == 0) {
             if (!(config.getBoolean(Configs.COMMAND_ENABLE_ENDER_CHEST_USE))) {
-                sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
+                sendMessage(player, message.getString(Messages.DISABLE_COMMAND));
                 return true;
             }
 
-            if (!(sender.hasPermission(config.getString(Configs.PERMISSION_ENDER_CHEST_USE)))) {
-                sendMessage(sender, message.getString(Messages.NO_PERMISSION));
+            if (!(player.hasPermission(config.getString(Configs.PERMISSION_ENDER_CHEST_USE)))) {
+                sendMessage(player, message.getString(Messages.NO_PERMISSION));
                 return true;
             }
 
@@ -55,16 +53,16 @@ public class EnderChestCommand extends CommandManager {
 
         } else if (args.length == 1) {
             if (!(config.getBoolean(Configs.COMMAND_ENABLE_ENDER_CHEST_OTHER))) {
-                sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
+                sendMessage(player, message.getString(Messages.DISABLE_COMMAND));
                 return true;
             }
 
-            if (!(sender.hasPermission(config.getString(Configs.PERMISSION_ENDER_CHEST_OTHER)))) {
-                sendMessage(sender, message.getString(Messages.NO_PERMISSION));
+            if (!(player.hasPermission(config.getString(Configs.PERMISSION_ENDER_CHEST_OTHER)))) {
+                sendMessage(player, message.getString(Messages.NO_PERMISSION));
                 return true;
             }
 
-            Player target = sender.getServer().getPlayer(args[0]);
+            Player target = player.getServer().getPlayer(args[0]);
 
             if (target == null) {
                 sendMessage(player, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
@@ -75,9 +73,8 @@ public class EnderChestCommand extends CommandManager {
             player.openInventory(enderChest);
 
         } else {
-            sendMessage(sender, message.getString(Messages.COMMAND_ENDER_CHEST_SYNTAX).replace("[USAGE]", command.getUsage()));
+            sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
         }
-
         return true;
     }
 

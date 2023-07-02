@@ -1,6 +1,7 @@
 package de.murmelmeister.citybuild.command;
 
 import de.murmelmeister.citybuild.Main;
+import de.murmelmeister.citybuild.api.Locations;
 import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
 import de.murmelmeister.citybuild.util.HexColor;
@@ -17,11 +18,13 @@ import java.util.List;
 public abstract class CommandManager extends Commands implements TabExecutor {
     public final Config config;
     public final Message message;
+    public final Locations locations;
 
     public CommandManager(Main main) {
         super(main);
         this.config = main.getConfig();
         this.message = main.getMessage();
+        this.locations = main.getLocations();
     }
 
     public void sendMessage(CommandSender sender, String message) {
