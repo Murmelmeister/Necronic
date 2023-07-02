@@ -5,8 +5,14 @@ import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
 import de.murmelmeister.citybuild.util.HexColor;
 import de.murmelmeister.citybuild.util.config.Configs;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
+import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CommandManager extends Commands implements TabExecutor {
     public final Config config;
@@ -20,7 +26,41 @@ public abstract class CommandManager extends Commands implements TabExecutor {
 
     public void sendMessage(CommandSender sender, String message) {
         if (config.getBoolean(Configs.PREFIX_ENABLE))
-            sender.sendMessage(this.message.prefix() + HexColor.format(message));
+            sender.sendMessage(HexColor.format(this.message.prefix() + message));
         else sender.sendMessage(HexColor.format(message));
+    }
+
+    public List<String> playerTabComplete(CommandSender sender, String[] args) {
+        List<String> tabComplete = new ArrayList<>();
+
+        if (args.length == 1) {
+            String lastWord = args[args.length - 1];
+            Player senderPlayer = sender instanceof Player ? (Player) sender : null;
+            for (Player player : sender.getServer().getOnlinePlayers()) {
+                String name = player.getName();
+                if ((senderPlayer == null || senderPlayer.canSee(player)) && StringUtil.startsWithIgnoreCase(name, lastWord))
+                    tabComplete.add(name);
+            }
+            tabComplete.sort(String.CASE_INSENSITIVE_ORDER);
+        }
+
+        return tabComplete;
+    }
+
+    public List<String> offlinePlayerTabComplete(CommandSender sender, String[] args) {
+        List<String> tabComplete = new ArrayList<>();
+
+        if (args.length == 1) {
+            String lastWord = args[args.length - 1];
+            for (OfflinePlayer player : sender.getServer().getOfflinePlayers()) {
+                String name = player.getName();
+                assert name != null;
+                if (StringUtil.startsWithIgnoreCase(name, lastWord))
+                    tabComplete.add(name);
+            }
+            tabComplete.sort(String.CASE_INSENSITIVE_ORDER);
+        }
+
+        return tabComplete;
     }
 }

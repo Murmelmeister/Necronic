@@ -31,7 +31,7 @@ public class Listeners implements Listener {
 
     public void sendMessage(CommandSender sender, String message) {
         if (config.getBoolean(Configs.PREFIX_ENABLE))
-            sender.sendMessage(this.message.prefix() + HexColor.format(message));
+            sender.sendMessage(HexColor.format(this.message.prefix() + message));
         else sender.sendMessage(HexColor.format(message));
     }
 }

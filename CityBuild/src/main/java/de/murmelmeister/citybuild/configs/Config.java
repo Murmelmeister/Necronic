@@ -54,6 +54,10 @@ public class Config {
         return config.get(configs.getPath());
     }
 
+    public String getString(Configs configs) {
+        return config.getString(configs.getPath());
+    }
+
     public boolean getBoolean(Configs configs) {
         return config.getBoolean(configs.getPath());
     }

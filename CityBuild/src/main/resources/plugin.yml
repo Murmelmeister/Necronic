@@ -2,3 +2,18 @@ name: CityBuild
 version: '${project.version}'
 main: de.murmelmeister.citybuild.CityBuild
 api-version: '1.20'
+author: Murmelmeister
+website: https://www.youtube.com/Murmelmeister
+
+commands:
+  enderchest:
+    usage: /enderchest [PLAYER]
+    description: Opens the EnderChest.
+    aliases:
+      - ec
+  citybuildreload:
+    usage: /citybuildrelaod
+    description: Reload the configuration.
+    aliases:
+      - nlreload
+      - nlrl
