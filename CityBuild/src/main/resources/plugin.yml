@@ -1,0 +1,4 @@
+name: CityBuild
+version: '${project.version}'
+main: de.murmelmeister.citybuild.CityBuild
+api-version: '1.20'
