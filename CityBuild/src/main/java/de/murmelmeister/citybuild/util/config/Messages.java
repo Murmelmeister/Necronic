@@ -23,7 +23,8 @@ public enum Messages {
     COMMAND_HOME_LIMIT("Command.Home.Limit", "&cYou have the max homes."),
     EVENT_PLAYER_JOIN("Event.PlayerJoin", "&e[PLAYER]&7 joined the game."),
     EVENT_PLAYER_QUIT("Event.PlayerQuit", "&e[PLAYER]&7 left the game."),
-    EVENT_SPAWN_NOT_EXIST("Event.SpawnNotExist", "&8--- &cWARNING &8---\n[PREFIX]&cThe &eSpawn&c does not exist.");
+    EVENT_SPAWN_NOT_EXIST("Event.SpawnNotExist", "&8--- &cWARNING &8---\n[PREFIX]&cThe &eSpawn&c does not exist."),
+    INVENTORY_TRASH("Inventory.Trash", "&cTrash");
 
     private final String path;
     private final String value;

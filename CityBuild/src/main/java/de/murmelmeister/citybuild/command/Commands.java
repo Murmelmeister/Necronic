@@ -31,6 +31,9 @@ public class Commands {
         addCommand("addhome", new AddHomeCommand(main));
         addCommand("home", new HomeCommand(main));
         addCommand("removehome", new RemoveHomeCommand(main));
+        addCommand("workbench", new WorkbenchCommand(main));
+        addCommand("anvil", new AnvilCommand(main));
+        addCommand("trash", new TrashCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {

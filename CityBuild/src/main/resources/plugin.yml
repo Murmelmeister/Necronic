@@ -7,7 +7,7 @@ website: https://www.youtube.com/Murmelmeister
 
 commands:
   enderchest:
-    usage: /enderchest [PLAYER]
+    usage: /enderchest [player]
     description: Opens the EnderChest.
     aliases:
       - ec
@@ -24,17 +24,17 @@ commands:
     usage: /spawn
     description: Teleports you to the spawn.
   removewarp:
-    usage: /removewarp <LOCATION>
+    usage: /removewarp <location>
     description: Remove the location.
     aliases:
       - rmwarp
       - deletewarp
       - delwarp
   setwarp:
-    usage: /setwarp <LOCATION>
+    usage: /setwarp <location>
     description: Set the location.
   warp:
-    usage: /warp <LOCATION>
+    usage: /warp <location>
     description: Teleports you to the location.
   addhome:
     usage: /addhome <home>
@@ -49,3 +49,16 @@ commands:
       - rmhome
       - deletehome
       - delhome
+  workbench:
+    usage: /workbench
+    description: Opens the workbench.
+    aliases:
+      - wb
+  anvil:
+    usage: /anvil
+    description: Opens the anvil.
+    aliases:
+      - av
+  trash:
+    usage: /trash
+    description: Opens the trash.
