@@ -5,6 +5,7 @@ import de.murmelmeister.citybuild.listener.Listeners;
 import de.murmelmeister.citybuild.util.HexColor;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -38,10 +39,15 @@ public class ConnectListener extends Listeners {
         if (player.hasPermission(config.getString(Configs.PERMISSION_JOIN_FLY))) {
             player.setAllowFlight(true);
             player.setFlying(true);
+            sendMessage(player, message.getString(Messages.EVENT_JOIN_AUTO_FLY));
         }
 
-        if (player.hasPermission(config.getString(Configs.PERMISSION_JOIN_GOD_MODE)))
+        if (player.hasPermission(config.getString(Configs.PERMISSION_JOIN_GOD_MODE))) {
             listUtil.getGodMode().add(player.getUniqueId());
+            sendMessage(player, message.getString(Messages.EVENT_JOIN_AUTO_GOD_MODE));
+        }
+
+        this.ranks.tabRank();
     }
 
     @SuppressWarnings("deprecation")

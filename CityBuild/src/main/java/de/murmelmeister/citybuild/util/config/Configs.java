@@ -1,5 +1,8 @@
 package de.murmelmeister.citybuild.util.config;
 
+import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.ChatColor;
+
 public enum Configs {
 
     PREFIX_ENABLE("Prefix.Enable", true),
@@ -69,7 +72,17 @@ public enum Configs {
     EVENT_TELEPORT_TO_SPAWN("Event.TeleportToSpawn", true),
     HOME_LIMIT_DEFAULT("Home.Limit.Default", 4),
     HOME_LIMIT_RANK("Home.Limit.Rank", 8),
-    HOME_LIMIT_TEAM("Home.Limit.Team", 12);
+    HOME_LIMIT_TEAM("Home.Limit.Team", 12),
+    RANK_CHAT_PREFIX_MESSAGE("Rank.Chat.PrefixMessage", " &8» &r"),
+    RANK_DEFAULT_PRE_PERMISSION("Rank.DefaultPrePermission", "netherlegends.rank."),
+    RANK_DEFAULT_NAME("Rank.Default.Name", "default"),
+    RANK_DEFAULT_CHAT_PREFIX("Rank.Default.Chat.Prefix", "&7"),
+    RANK_DEFAULT_CHAT_SUFFIX("Rank.Default.Chat.Suffix", ""),
+    RANK_DEFAULT_CHAT_COLOR("Rank.Default.Chat.Color", "&f"),
+    RANK_DEFAULT_TAB_PREFIX("Rank.Default.Tab.Prefix", "&7"),
+    RANK_DEFAULT_TAB_SUFFIX("Rank.Default.Tab.Suffix", ""),
+    RANK_DEFAULT_TAB_COLOR("Rank.Default.Tab.Color", ChatColor.GRAY),
+    RANK_DEFAULT_TAB_ID("Rank.Default.Tab.ID", "1111");
 
     private final String path;
     private final Object value;

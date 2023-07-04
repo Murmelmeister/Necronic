@@ -3,6 +3,7 @@ package de.murmelmeister.citybuild.command;
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.api.Homes;
 import de.murmelmeister.citybuild.api.Locations;
+import de.murmelmeister.citybuild.api.Ranks;
 import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
 import de.murmelmeister.citybuild.util.HexColor;
@@ -23,6 +24,7 @@ public abstract class CommandManager extends Commands implements TabExecutor {
     public final Message message;
     public final Locations locations;
     public final Homes homes;
+    public final Ranks ranks;
 
     public CommandManager(Main main) {
         super(main);
@@ -31,6 +33,7 @@ public abstract class CommandManager extends Commands implements TabExecutor {
         this.message = main.getMessage();
         this.locations = main.getLocations();
         this.homes = main.getHomes();
+        this.ranks = main.getRanks();
     }
 
     public void sendMessage(CommandSender sender, String message) {

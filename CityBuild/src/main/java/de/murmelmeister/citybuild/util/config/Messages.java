@@ -36,6 +36,8 @@ public enum Messages {
     EVENT_PLAYER_JOIN("Event.PlayerJoin", "&e[PLAYER]&7 joined the game."),
     EVENT_PLAYER_QUIT("Event.PlayerQuit", "&e[PLAYER]&7 left the game."),
     EVENT_SPAWN_NOT_EXIST("Event.SpawnNotExist", "&8--- &cWARNING &8---\n[PREFIX]&cThe &eSpawn&c does not exist."),
+    EVENT_JOIN_AUTO_FLY("Event.Join.Auto.Fly", "&aYou have been automatically put in&e fly mode&a."),
+    EVENT_JOIN_AUTO_GOD_MODE("Event.Join.Auto.GodMode", "&aYou have been automatically put in&e god mode&a."),
     INVENTORY_TRASH("Inventory.Trash", "&cTrash");
 
     private final String path;
