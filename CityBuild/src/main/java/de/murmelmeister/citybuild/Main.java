@@ -6,9 +6,11 @@ import de.murmelmeister.citybuild.command.Commands;
 import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
 import de.murmelmeister.citybuild.listener.Listeners;
+import de.murmelmeister.citybuild.util.ListUtil;
 
 public class Main {
     private final CityBuild instance;
+    private final ListUtil listUtil;
 
     private final Config config;
     private final Message message;
@@ -20,6 +22,7 @@ public class Main {
 
     public Main(CityBuild instance) {
         this.instance = instance;
+        this.listUtil = new ListUtil();
         this.config = new Config(this);
         this.message = new Message(this);
         this.locations = new Locations(this);
@@ -43,6 +46,10 @@ public class Main {
 
     public CityBuild getInstance() {
         return instance;
+    }
+
+    public ListUtil getListUtil() {
+        return listUtil;
     }
 
     public Config getConfig() {

@@ -6,6 +6,7 @@ import de.murmelmeister.citybuild.api.Locations;
 import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
 import de.murmelmeister.citybuild.util.HexColor;
+import de.murmelmeister.citybuild.util.ListUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CommandManager extends Commands implements TabExecutor {
+    public final ListUtil listUtil;
     public final Config config;
     public final Message message;
     public final Locations locations;
@@ -24,6 +26,7 @@ public abstract class CommandManager extends Commands implements TabExecutor {
 
     public CommandManager(Main main) {
         super(main);
+        this.listUtil = main.getListUtil();
         this.config = main.getConfig();
         this.message = main.getMessage();
         this.locations = main.getLocations();

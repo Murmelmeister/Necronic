@@ -34,6 +34,10 @@ public class Commands {
         addCommand("workbench", new WorkbenchCommand(main));
         addCommand("anvil", new AnvilCommand(main));
         addCommand("trash", new TrashCommand(main));
+        addCommand("feed", new FeedCommand(main));
+        addCommand("heal", new HealCommand(main));
+        addCommand("fly", new FlyCommand(main));
+        addCommand("godmode", new GodModeCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {

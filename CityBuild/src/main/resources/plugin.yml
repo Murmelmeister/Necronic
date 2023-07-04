@@ -62,3 +62,15 @@ commands:
   trash:
     usage: /trash
     description: Opens the trash.
+  feed:
+    usage: /feed [player]
+    description: Feed your hunger.
+  heal:
+    usage: /heal [player]
+    description: Heal you.
+  fly:
+    usage: /fly [player]
+    description: Active the fly mode.
+  godmode:
+    usage: /godmode [player]
+    description: Active the god mode.

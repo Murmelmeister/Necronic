@@ -35,6 +35,13 @@ public class ConnectListener extends Listeners {
             sendMessage(player, message.getString(Messages.EVENT_SPAWN_NOT_EXIST).replace("[PREFIX]", message.prefix()));
 
         homes.createUsername(player);
+        if (player.hasPermission(config.getString(Configs.PERMISSION_JOIN_FLY))) {
+            player.setAllowFlight(true);
+            player.setFlying(true);
+        }
+
+        if (player.hasPermission(config.getString(Configs.PERMISSION_JOIN_GOD_MODE)))
+            listUtil.getGodMode().add(player.getUniqueId());
     }
 
     @SuppressWarnings("deprecation")
@@ -49,5 +56,6 @@ public class ConnectListener extends Listeners {
                     event.setQuitMessage(HexColor.format(message.getString(Messages.EVENT_PLAYER_QUIT).replace("[PLAYER]", player.getName())));
             else event.setQuitMessage(null);
         else event.setQuitMessage(null);
+        listUtil.getGodMode().remove(player.getUniqueId());
     }
 }
