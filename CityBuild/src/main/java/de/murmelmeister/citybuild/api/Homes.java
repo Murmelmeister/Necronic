@@ -106,6 +106,7 @@ public class Homes {
         create(player);
         return config.get("Homes." + name) != null;
     }
+
     public List<String> getHomeList() {
         this.homeList = new ArrayList<>();
         if (config.contains("HomeList")) homeList = config.getStringList("HomeList");

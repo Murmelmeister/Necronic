@@ -38,6 +38,7 @@ public class Commands {
         addCommand("heal", new HealCommand(main));
         addCommand("fly", new FlyCommand(main));
         addCommand("godmode", new GodModeCommand(main));
+        addCommand("rank", new RankCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {

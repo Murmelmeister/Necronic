@@ -3,9 +3,11 @@ package de.murmelmeister.citybuild.api;
 import de.murmelmeister.citybuild.CityBuild;
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.configs.Config;
+import de.murmelmeister.citybuild.configs.Message;
 import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.HexColor;
 import de.murmelmeister.citybuild.util.config.Configs;
+import de.murmelmeister.citybuild.util.config.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -24,6 +26,7 @@ public class Ranks {
     private final Server server;
     private final CityBuild instance;
     private final Config defaultConfig;
+    private final Message message;
 
     private File file;
     private YamlConfiguration config;
@@ -34,6 +37,7 @@ public class Ranks {
         this.server = main.getInstance().getServer();
         this.instance = main.getInstance();
         this.defaultConfig = main.getConfig();
+        this.message = main.getMessage();
     }
 
     public void register() {
@@ -72,17 +76,11 @@ public class Ranks {
                 defaultConfig.getString(Configs.RANK_DEFAULT_TAB_ID));
     }
 
-    public void tabRank() {
+    public void setTabRank() {
         server.getScheduler().runTaskTimerAsynchronously(instance, () -> {
-            for (Player player : server.getOnlinePlayers()) {
+            for (Player player : server.getOnlinePlayers())
                 getRankList().forEach(s -> {
                     Scoreboard scoreboard = player.getScoreboard();
-
-                    Team defaultRank = scoreboard.getTeam(defaultTeamID());
-                    if (defaultRank == null) defaultRank = scoreboard.registerNewTeam(defaultTeamID());
-                    defaultRank.setPrefix(HexColor.format(defaultTabPrefix()));
-                    defaultRank.setSuffix(HexColor.format(defaultTabSuffix()));
-                    defaultRank.setColor(ChatColor.valueOf(defaultTabColor()));
 
                     Team team = scoreboard.getTeam(getTeamID(s));
                     if (team == null) team = scoreboard.registerNewTeam(getTeamID(s));
@@ -90,13 +88,22 @@ public class Ranks {
                     team.setSuffix(HexColor.format(getTabSuffix(s)));
                     team.setColor(ChatColor.valueOf(getTabColor(s)));
 
-                    for (Player target : server.getOnlinePlayers())
-                        if (target.hasPermission(getPermission(s))) // The ranks are not sorted
-                            team.addEntry(target.getName());
-                        else defaultRank.addEntry(target.getName());
+                    if (player.hasPermission(getPermission(s)))
+                        /*
+                        When a new player joins he is not in "default", unless the group has the "default" permission.
+                        With * permission you have all tab/chat permission, there you have to give the external "-permission".
+                        */
+                        team.addEntry(player.getName());
                 });
-            }
-        }, 20L, 2 * 20L);
+        }, 20L, defaultConfig.getLong(Configs.RANK_UPDATE_TAB_TIMER) * 20L);
+    }
+
+    public void setScoreboardTabList() {
+        server.getScheduler().runTaskTimerAsynchronously(instance, () -> {
+            for (Player player : server.getOnlinePlayers())
+                player.setPlayerListHeaderFooter(HexColor.format(message.getString(Messages.SCOREBOARD_TAB_LIST_HEADER).replace("[CURRENT_PLAYERS]", String.valueOf(server.getOnlinePlayers().size())).replace("[MAX_PLAYERS]", String.valueOf(server.getMaxPlayers()))),
+                        HexColor.format(message.getString(Messages.SCOREBOARD_TAB_LIST_FOOTER)));
+        }, 20L, defaultConfig.getLong(Configs.SCOREBOARD_UPDATE_TAB_LIST) * 20L);
     }
 
     public void addRank(String name, String chatPrefix, String chatSuffix, String chatColor, String tabPrefix, String tabSuffix, String tabColor, String tabId) {
@@ -117,8 +124,34 @@ public class Ranks {
         set(path + ".Tab.Color", tabColor);
         set(path + ".Tab.ID", tabId);
         set(path + ".TeamID", tabId + name);
-        set(path + ".Permission", defaultConfig.getString(Configs.RANK_DEFAULT_PRE_PERMISSION) + name);
+        set(path + ".Permission", defaultConfig.getString(Configs.RANK_PRE_PERMISSION) + name);
         save();
+    }
+
+    public void removeRank(String name) {
+        create();
+        this.rankList = getRankList();
+        rankList.remove(name);
+        set("RankList", rankList);
+        set("Ranks." + name, null);
+        save();
+    }
+
+    public String getRank(String name) {
+        create();
+        return HexColor.format(message.getString(Messages.COMMAND_RANK_GET)
+                .replace("[PREFIX]", message.prefix())
+                .replace("[NAME]", name)
+                .replace("[CHAT_PREFIX]", getChatPrefix(name))
+                .replace("[CHAT_SUFFIX]", getChatSuffix(name))
+                .replace("[CHAT_COLOR]", getChatColor(name))
+                .replace("[TAB_PREFIX]", getTabPrefix(name))
+                .replace("[TAB_SUFFIX]", getTabSuffix(name))
+                .replace("[TAB_COLOR]", getTabColor(name))
+                .replace("[TAB_ID]", getTabID(name))
+                .replace("[TEAM_ID]", getTeamID(name))
+                .replace("[PERMISSION]", getPermission(name))
+        );
     }
 
     public boolean existRank(String name) {
@@ -131,9 +164,21 @@ public class Ranks {
         return getString("Ranks." + name + ".Chat.Prefix");
     }
 
+    public void setChatPrefix(String name, String chatPrefix) {
+        create();
+        set("Ranks." + name + ".Chat.Prefix", chatPrefix);
+        save();
+    }
+
     public String getChatSuffix(String name) {
         create();
         return getString("Ranks." + name + ".Chat.Suffix");
+    }
+
+    public void setChatSuffix(String name, String chatSuffix) {
+        create();
+        set("Ranks." + name + ".Chat.Suffix", chatSuffix);
+        save();
     }
 
     public String getChatColor(String name) {
@@ -141,9 +186,21 @@ public class Ranks {
         return getString("Ranks." + name + ".Chat.Color");
     }
 
+    public void setChatColor(String name, String chatColor) {
+        create();
+        set("Ranks." + name + ".Chat.Color", chatColor);
+        save();
+    }
+
     public String getTabPrefix(String name) {
         create();
         return getString("Ranks." + name + ".Tab.Prefix");
+    }
+
+    public void setTabPrefix(String name, String tabPrefix) {
+        create();
+        set("Ranks." + name + ".Tab.Prefix", tabPrefix);
+        save();
     }
 
     public String getTabSuffix(String name) {
@@ -151,15 +208,32 @@ public class Ranks {
         return getString("Ranks." + name + ".Tab.Suffix");
     }
 
+    public void setTabSuffix(String name, String tabSuffix) {
+        create();
+        set("Ranks." + name + ".Tab.Suffix", tabSuffix);
+        save();
+    }
+
     public String getTabColor(String name) {
         create();
         return getString("Ranks." + name + ".Tab.Color");
     }
 
+    public void setTabColor(String name, String tabColor) {
+        create();
+        set("Ranks." + name + ".Tab.Color", tabColor);
+        save();
+    }
 
     public String getTabID(String name) {
         create();
         return getString("Ranks." + name + ".Tab.ID");
+    }
+
+    public void setTabID(String name, String tabID) {
+        create();
+        set("Ranks." + name + ".Tab.ID", tabID);
+        save();
     }
 
     public String getTeamID(String name) {
@@ -167,54 +241,21 @@ public class Ranks {
         return getString("Ranks." + name + ".TeamID");
     }
 
+    public void setTeamID(String name, String teamID) {
+        create();
+        set("Ranks." + name + ".TeamID", teamID);
+        save();
+    }
+
     public String getPermission(String name) {
         create();
         return getString("Ranks." + name + ".Permission");
     }
 
-    public String defaultChatPrefix() {
+    public void setPermission(String name, String permission) {
         create();
-        return getString("Ranks." + defaultConfig.getString(Configs.RANK_DEFAULT_NAME) + ".Chat.Prefix");
-    }
-
-    public String defaultChatSuffix() {
-        create();
-        return getString("Ranks." + defaultConfig.getString(Configs.RANK_DEFAULT_NAME) + ".Chat.Suffix");
-    }
-
-    public String defaultChatColor() {
-        create();
-        return getString("Ranks." + defaultConfig.getString(Configs.RANK_DEFAULT_NAME) + ".Chat.Color");
-    }
-
-    public String defaultTabPrefix() {
-        create();
-        return getString("Ranks." + defaultConfig.getString(Configs.RANK_DEFAULT_NAME) + ".Tab.Prefix");
-    }
-
-    public String defaultTabSuffix() {
-        create();
-        return getString("Ranks." + defaultConfig.getString(Configs.RANK_DEFAULT_NAME) + ".Tab.Suffix");
-    }
-
-    public String defaultTabColor() {
-        create();
-        return getString("Ranks." + defaultConfig.getString(Configs.RANK_DEFAULT_NAME) + ".Tab.Color");
-    }
-
-    public String defaultTabID() {
-        create();
-        return getString("Ranks." + defaultConfig.getString(Configs.RANK_DEFAULT_NAME) + ".Tab.ID");
-    }
-
-    public String defaultTeamID() {
-        create();
-        return getString("Ranks." + defaultConfig.getString(Configs.RANK_DEFAULT_NAME) + ".TeamID");
-    }
-
-    public String defaultPermission() {
-        create();
-        return getString("Ranks." + defaultConfig.getString(Configs.RANK_DEFAULT_NAME) + ".Permission");
+        set("Ranks." + name + ".Permission", permission);
+        save();
     }
 
     public List<String> getRankList() {

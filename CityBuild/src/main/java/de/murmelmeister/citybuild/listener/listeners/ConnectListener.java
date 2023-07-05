@@ -5,7 +5,7 @@ import de.murmelmeister.citybuild.listener.Listeners;
 import de.murmelmeister.citybuild.util.HexColor;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
-import net.kyori.adventure.text.Component;
+import de.murmelmeister.citybuild.util.scoreboard.TestScoreboard;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -47,7 +47,9 @@ public class ConnectListener extends Listeners {
             sendMessage(player, message.getString(Messages.EVENT_JOIN_AUTO_GOD_MODE));
         }
 
-        this.ranks.tabRank();
+        ranks.setTabRank();
+        ranks.setScoreboardTabList();
+        new TestScoreboard(player, main);
     }
 
     @SuppressWarnings("deprecation")

@@ -1,5 +1,6 @@
 package de.murmelmeister.citybuild.util.scoreboard;
 
+import de.murmelmeister.citybuild.Main;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -12,8 +13,10 @@ public abstract class ScoreboardBuilder {
     protected final Objective objective;
 
     protected final Player player;
+    protected final Main main;
 
-    public ScoreboardBuilder(Player player, Component displayName) {
+    public ScoreboardBuilder(Player player, Component displayName, Main main) {
+        this.main = main;
         this.player = player;
         if (player.getScoreboard().equals(Bukkit.getScoreboardManager().getMainScoreboard()))
             player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
@@ -36,6 +39,11 @@ public abstract class ScoreboardBuilder {
         this.objective.displayName(displayName);
     }
 
+    @Deprecated
+    public void setDisplayName(String displayName) {
+        this.objective.setDisplayName(displayName);
+    }
+
     public void setScoreContent(String content, int score) {
         this.objective.getScore(content).setScore(score);
     }
@@ -48,6 +56,14 @@ public abstract class ScoreboardBuilder {
         Team team = getTeamByScore(score);
         if (team == null) return;
         team.prefix(content);
+        showScore(score);
+    }
+
+    @Deprecated
+    public void setScoreTeam(String content, int score) {
+        Team team = getTeamByScore(score);
+        if (team == null) return;
+        team.setPrefix(content);
         showScore(score);
     }
 

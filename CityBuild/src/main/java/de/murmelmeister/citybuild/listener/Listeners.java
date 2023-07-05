@@ -18,7 +18,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 
 public class Listeners implements Listener {
-    private final Main main;
+    public final Main main;
     public final CityBuild instance;
     public final ListUtil listUtil;
 

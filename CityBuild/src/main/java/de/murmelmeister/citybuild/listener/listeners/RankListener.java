@@ -17,11 +17,13 @@ public class RankListener extends Listeners {
     @EventHandler
     public void handlePlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        for (String name : ranks.getRankList()) // The ranks are not sorted
+        for (String name : ranks.getRankList())
             if (player.hasPermission(ranks.getPermission(name)))
+                /*
+                When a new player joins he is not in "default", unless the group has the "default" permission.
+                With * permission you have all tab/chat permission, there you have to give the external "-permission".
+                */
                 setFormat(event, ranks.getChatPrefix(name), ranks.getChatSuffix(name), ranks.getChatColor(name));
-            else
-                setFormat(event, ranks.defaultChatPrefix(), ranks.defaultChatSuffix(), ranks.defaultChatColor());
     }
 
     @Deprecated

@@ -74,3 +74,8 @@ commands:
   godmode:
     usage: /godmode [player]
     description: Active the god mode.
+  rank:
+    usage: /rank <get|remove|add|set> <name> <...>
+    description: Edit the chat and tab ranks.
+    aliases:
+      - ranks

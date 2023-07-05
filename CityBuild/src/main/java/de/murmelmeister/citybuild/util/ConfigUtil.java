@@ -9,8 +9,8 @@ public class ConfigUtil {
     /**
      * Checks if the path and the file are created correctly.
      *
-     * @param logger Outputs in the console
-     * @param file The file that will be checked
+     * @param logger   Outputs in the console
+     * @param file     The file that will be checked
      * @param fileName The name of the file
      */
     public static void createFile(Logger logger, File file, String fileName) {

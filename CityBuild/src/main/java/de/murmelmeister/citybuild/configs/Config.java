@@ -64,4 +64,8 @@ public class Config {
     public int getInt(Configs configs) {
         return config.getInt(configs.getPath());
     }
+
+    public long getLong(Configs configs) {
+        return config.getLong(configs.getPath());
+    }
 }
