@@ -79,3 +79,10 @@ commands:
     description: Edit the chat and tab ranks.
     aliases:
       - ranks
+  lobby:
+    usage: /lobby
+    description: Send you to a server.
+    aliases:
+      - l
+      - hub
+      - hublobby

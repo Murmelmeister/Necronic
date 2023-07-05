@@ -53,6 +53,7 @@ public enum Configs {
     PERMISSION_RANK_SET_TAB_ID("Permission.Rank.Set.Tab.ID", "netherlegends.command.rank.set.tab.id"),
     PERMISSION_RANK_SET_TEAM_ID("Permission.Rank.Set.TeamID", "netherlegends.command.rank.set.teamid"),
     PERMISSION_RANK_SET_PERMISSION("Permission.Rank.Set.Permission", "netherlegends.command.rank.set.permission"),
+    PERMISSION_LOBBY("Permission.Lobby", "netherlegends.command.lobby"),
     COMMAND_ENABLE_ENDER_CHEST_COMMAND("Command.Enable.EnderChest.Command", true),
     COMMAND_ENABLE_ENDER_CHEST_USE("Command.Enable.EnderChest.Use", true),
     COMMAND_ENABLE_ENDER_CHEST_OTHER("Command.Enable.EnderChest.Other", true),
@@ -93,6 +94,7 @@ public enum Configs {
     COMMAND_ENABLE_RANK_SET_TAB_ID("Command.Enable.Rank.Set.Tab.ID", true),
     COMMAND_ENABLE_RANK_SET_TEAM_ID("Command.Enable.Rank.Set.TeamID", true),
     COMMAND_ENABLE_RANK_SET_PERMISSION("Command.Enable.Rank.Set.Permission", true),
+    COMMAND_ENABLE_LOBBY("Command.Enable.Lobby", true),
     EVENT_PLAYER_JOIN("Event.PlayerJoin", true),
     EVENT_PLAYER_QUIT("Event.PlayerQuit", true),
     EVENT_TELEPORT_TO_SPAWN("Event.TeleportToSpawn", true),
@@ -111,8 +113,8 @@ public enum Configs {
     RANK_DEFAULT_TAB_COLOR("Rank.Default.Tab.Color", ChatColor.GRAY.toString()),
     RANK_DEFAULT_TAB_ID("Rank.Default.Tab.ID", "1111"),
     SCOREBOARD_UPDATE_TAB_LIST("Scoreboard.Update.TabList", 4L),
-    SCOREBOARD_ENABLE_SCORE_15("Scoreboard.Enable.Score.15", true),
-    SCOREBOARD_ENABLE_SCORE_14("Scoreboard.Enable.Score.14", true),
+    SCOREBOARD_ENABLE_SCORE_15("Scoreboard.Enable.Score.15", false),
+    SCOREBOARD_ENABLE_SCORE_14("Scoreboard.Enable.Score.14", false),
     SCOREBOARD_ENABLE_SCORE_13("Scoreboard.Enable.Score.13", true),
     SCOREBOARD_ENABLE_SCORE_12("Scoreboard.Enable.Score.12", true),
     SCOREBOARD_ENABLE_SCORE_11("Scoreboard.Enable.Score.11", true),
@@ -127,7 +129,8 @@ public enum Configs {
     SCOREBOARD_ENABLE_SCORE_2("Scoreboard.Enable.Score.2", true),
     SCOREBOARD_ENABLE_SCORE_1("Scoreboard.Enable.Score.1", true),
     SCOREBOARD_ENABLE_SCORE_0("Scoreboard.Enable.Score.0", false),
-    SCOREBOARD_UPDATE_SCORE_TIMER("Scoreboard.Update.ScoreTimer", 4L);
+    SCOREBOARD_UPDATE_SCORE_TIMER("Scoreboard.Update.ScoreTimer", 4L),
+    LOBBY_TO_SEND_SERVER("LobbyToSendServer", "Lobby-1");
 
     private final String path;
     private final Object value;

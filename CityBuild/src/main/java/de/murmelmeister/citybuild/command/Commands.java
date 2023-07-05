@@ -39,6 +39,7 @@ public class Commands {
         addCommand("fly", new FlyCommand(main));
         addCommand("godmode", new GodModeCommand(main));
         addCommand("rank", new RankCommand(main));
+        addCommand("lobby", new LobbyCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {
