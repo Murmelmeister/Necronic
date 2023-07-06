@@ -147,7 +147,11 @@ public enum Configs {
     SCOREBOARD_ENABLE_SCORE_1("Scoreboard.Enable.Score.1", true),
     SCOREBOARD_ENABLE_SCORE_0("Scoreboard.Enable.Score.0", false),
     SCOREBOARD_UPDATE_SCORE_TIMER("Scoreboard.Update.ScoreTimer", 4L),
-    LOBBY_TO_SEND_SERVER("LobbyToSendServer", "Lobby-1");
+    LOBBY_TO_SEND_SERVER("LobbyToSendServer", "Lobby-1"),
+    TIME_DAY_TIME("Time.Day.Time", 1000L),
+    TIME_DAY_COOLDOWN("Time.Day.Cooldown", 60 * 60 * 1000),
+    TIME_NIGHT_TIME("Time.Night.Time", 13000L),
+    TIME_NIGHT_COOLDOWN("Time.Night.Cooldown", 60 * 60 * 1000);
 
     private final String path;
     private final Object value;

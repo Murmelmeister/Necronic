@@ -89,3 +89,9 @@ commands:
   live:
     usage: /live
     description: Set the suffix in live in the tab list.
+  day:
+    usage: /day
+    description: Set the time to day.
+  night:
+    usage: /night
+    description: Set the time to night.

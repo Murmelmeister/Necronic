@@ -45,6 +45,8 @@ public class Commands {
         addCommand("rank", new RankCommand(main));
         addCommand("lobby", new LobbyCommand(main));
         addCommand("live", new LiveCommand(main));
+        addCommand("day", new DayCommand(main));
+        addCommand("night", new NightCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {
