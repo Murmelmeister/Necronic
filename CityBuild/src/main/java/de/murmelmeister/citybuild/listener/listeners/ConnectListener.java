@@ -65,5 +65,6 @@ public class ConnectListener extends Listeners {
             else event.setQuitMessage(null);
         else event.setQuitMessage(null);
         listUtil.getGodMode().remove(player.getUniqueId());
+        listUtil.getLive().remove(player.getUniqueId());
     }
 }

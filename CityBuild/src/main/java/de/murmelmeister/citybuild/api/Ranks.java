@@ -6,12 +6,14 @@ import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
 import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.HexColor;
+import de.murmelmeister.citybuild.util.ListUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.slf4j.Logger;
@@ -27,10 +29,12 @@ public class Ranks {
     private final CityBuild instance;
     private final Config defaultConfig;
     private final Message message;
+    private final ListUtil listUtil;
 
     private File file;
     private YamlConfiguration config;
     private List<String> rankList;
+    private BukkitTask bukkitTask;
 
     public Ranks(Main main) {
         this.logger = main.getInstance().getSLF4JLogger();
@@ -38,6 +42,7 @@ public class Ranks {
         this.instance = main.getInstance();
         this.defaultConfig = main.getConfig();
         this.message = main.getMessage();
+        this.listUtil = main.getListUtil();
     }
 
     public void register() {
@@ -77,25 +82,31 @@ public class Ranks {
     }
 
     public void setTabRank() {
-        server.getScheduler().runTaskTimerAsynchronously(instance, () -> {
-            for (Player player : server.getOnlinePlayers())
-                getRankList().forEach(s -> {
-                    Scoreboard scoreboard = player.getScoreboard();
+        this.bukkitTask = server.getScheduler().runTaskTimerAsynchronously(instance, () -> getRankList().forEach(s -> {
+            for (Player player : server.getOnlinePlayers()) {
+                Scoreboard scoreboard = player.getScoreboard();
 
-                    Team team = scoreboard.getTeam(getTeamID(s));
-                    if (team == null) team = scoreboard.registerNewTeam(getTeamID(s));
-                    team.setPrefix(HexColor.format(getTabPrefix(s)));
-                    team.setSuffix(HexColor.format(getTabSuffix(s)));
-                    team.setColor(ChatColor.valueOf(getTabColor(s)));
+                Team team = scoreboard.getTeam(getTeamID(s));
+                if (team == null) team = scoreboard.registerNewTeam(getTeamID(s));
+                team.setPrefix(HexColor.format(getTabPrefix(s)));
+                team.setSuffix(HexColor.format(getTabSuffix(s)));
+                team.setColor(ChatColor.valueOf(getTabColor(s)));
 
-                    if (player.hasPermission(getPermission(s)))
+                for (Player target : server.getOnlinePlayers()) {
+                    if (team.hasEntry(target.getName()))
+                        if (listUtil.getLive().contains(player.getUniqueId()))
+                            team.setSuffix(HexColor.format(defaultConfig.getString(Configs.RANK_LIVE_SUFFIX))); // Does not work great
+                        else team.setSuffix(HexColor.format(getTabSuffix(s)));
+
+                    if (target.hasPermission(getPermission(s)))
                         /*
                         When a new player joins he is not in "default", unless the group has the "default" permission.
                         With * permission you have all tab/chat permission, there you have to give the external "-permission".
                         */
-                        team.addEntry(player.getName());
-                });
-        }, 20L, defaultConfig.getLong(Configs.RANK_UPDATE_TAB_TIMER) * 20L);
+                        team.addEntry(target.getName());
+                }
+            }
+        }), 20L, defaultConfig.getLong(Configs.RANK_UPDATE_TAB_TIMER) * 20L);
     }
 
     public void setScoreboardTabList() {
@@ -124,6 +135,7 @@ public class Ranks {
         set(path + ".Tab.Color", tabColor);
         set(path + ".Tab.ID", tabId);
         set(path + ".TeamID", tabId + name);
+        set(path + ".Scoreboard", name);
         set(path + ".Permission", defaultConfig.getString(Configs.RANK_PRE_PERMISSION) + name);
         save();
     }
@@ -150,6 +162,7 @@ public class Ranks {
                 .replace("[TAB_COLOR]", getTabColor(name))
                 .replace("[TAB_ID]", getTabID(name))
                 .replace("[TEAM_ID]", getTeamID(name))
+                .replace("[SCOREBOARD]", getScoreboard(name))
                 .replace("[PERMISSION]", getPermission(name))
         );
     }
@@ -247,6 +260,17 @@ public class Ranks {
         save();
     }
 
+    public String getScoreboard(String name) {
+        create();
+        return getString("Ranks." + name + ".Scoreboard");
+    }
+
+    public void setScoreboard(String name, String scoreboard) {
+        create();
+        set("Ranks." + name + ".Scoreboard", scoreboard);
+        save();
+    }
+
     public String getPermission(String name) {
         create();
         return getString("Ranks." + name + ".Permission");
@@ -270,5 +294,9 @@ public class Ranks {
 
     private String getString(String path) {
         return config.getString(path);
+    }
+
+    public BukkitTask getBukkitTask() {
+        return bukkitTask;
     }
 }

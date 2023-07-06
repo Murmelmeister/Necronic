@@ -6,6 +6,10 @@ import de.murmelmeister.citybuild.command.commands.*;
 import de.murmelmeister.citybuild.command.commands.homes.AddHomeCommand;
 import de.murmelmeister.citybuild.command.commands.homes.HomeCommand;
 import de.murmelmeister.citybuild.command.commands.homes.RemoveHomeCommand;
+import de.murmelmeister.citybuild.command.commands.inventories.AnvilCommand;
+import de.murmelmeister.citybuild.command.commands.inventories.EnderChestCommand;
+import de.murmelmeister.citybuild.command.commands.inventories.TrashCommand;
+import de.murmelmeister.citybuild.command.commands.inventories.WorkbenchCommand;
 import de.murmelmeister.citybuild.command.commands.locations.*;
 import org.bukkit.command.TabExecutor;
 
@@ -40,6 +44,7 @@ public class Commands {
         addCommand("godmode", new GodModeCommand(main));
         addCommand("rank", new RankCommand(main));
         addCommand("lobby", new LobbyCommand(main));
+        addCommand("live", new LiveCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {

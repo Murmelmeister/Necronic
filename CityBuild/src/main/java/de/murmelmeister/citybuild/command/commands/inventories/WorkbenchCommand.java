@@ -1,4 +1,4 @@
-package de.murmelmeister.citybuild.command.commands;
+package de.murmelmeister.citybuild.command.commands.inventories;
 
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.command.CommandManager;
@@ -13,19 +13,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnvilCommand extends CommandManager {
-    public AnvilCommand(Main main) {
+public class WorkbenchCommand extends CommandManager {
+    public WorkbenchCommand(Main main) {
         super(main);
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_ANVIL))) {
+        if (!(config.getBoolean(Configs.COMMAND_ENABLE_WORKBENCH))) {
             sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
             return true;
         }
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_ANVIL)))) {
+        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_WORKBENCH)))) {
             sendMessage(sender, message.getString(Messages.NO_PERMISSION));
             return true;
         }
@@ -37,7 +37,7 @@ public class AnvilCommand extends CommandManager {
             return true;
         }
 
-        player.openAnvil(null, true);
+        player.openWorkbench(null, true);
         return true;
     }
 

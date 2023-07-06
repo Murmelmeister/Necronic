@@ -1,31 +1,33 @@
-package de.murmelmeister.citybuild.command.commands;
+package de.murmelmeister.citybuild.command.commands.inventories;
 
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.command.CommandManager;
+import de.murmelmeister.citybuild.util.HexColor;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkbenchCommand extends CommandManager {
-    public WorkbenchCommand(Main main) {
+public class TrashCommand extends CommandManager {
+    public TrashCommand(Main main) {
         super(main);
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_WORKBENCH))) {
+        if (!(config.getBoolean(Configs.COMMAND_ENABLE_TRASH))) {
             sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
             return true;
         }
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_WORKBENCH)))) {
+        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_TRASH)))) {
             sendMessage(sender, message.getString(Messages.NO_PERMISSION));
             return true;
         }
@@ -37,7 +39,8 @@ public class WorkbenchCommand extends CommandManager {
             return true;
         }
 
-        player.openWorkbench(null, true);
+        Inventory trash = player.getServer().createInventory(null, 5 * 9, HexColor.format(message.getString(Messages.INVENTORY_TRASH)));
+        player.openInventory(trash);
         return true;
     }
 
