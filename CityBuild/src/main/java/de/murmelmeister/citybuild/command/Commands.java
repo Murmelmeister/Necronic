@@ -46,7 +46,11 @@ public class Commands {
         addCommand("lobby", new LobbyCommand(main));
         addCommand("live", new LiveCommand(main));
         addCommand("day", new DayCommand(main));
-        addCommand("night", new NightCommand(main));
+        addCommand("head", new HeadCommand(main));
+        addCommand("sign", new SignCommand(main));
+        addCommand("unsign", new UnSignCommand(main));
+        addCommand("rename", new RenameCommand(main));
+        addCommand("repair", new RepairCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {
