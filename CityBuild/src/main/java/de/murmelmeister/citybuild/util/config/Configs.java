@@ -1,11 +1,11 @@
 package de.murmelmeister.citybuild.util.config;
 
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.ChatColor;
 
 public enum Configs {
 
     PREFIX_ENABLE("Prefix.Enable", true),
+    CURRENT_SERVER("CurrentServer", "CityBuild"),
     PERMISSION_ENDER_CHEST_COMMAND("Permission.EnderChest.Command", "netherlegends.command.enderchest.command"),
     PERMISSION_ENDER_CHEST_USE("Permission.EnderChest.Use", "netherlegends.command.enderchest.use"),
     PERMISSION_ENDER_CHEST_OTHER("Permission.EnderChest.Other", "netherlegends.command.enderchest.other"),
@@ -157,8 +157,7 @@ public enum Configs {
     TIME_SIGN_COOLDOWN("Time.Sign.Cooldown", 24 * 60 * 60 * 1000),
     TIME_UN_SIGN_COOLDOWN("Time.UnSign.Cooldown", 24 * 60 * 60 * 1000),
     TIME_REPAIR_COOLDOWN("Time.Repair.Cooldown", 4 * 24 * 60 * 60 * 1000),
-    TIME_RENAME_COOLDOWN("Time.Rename.Cooldown", 24 * 60 * 60 * 1000),
-    CURRENT_SERVER("CurrentServer", "CityBuild");
+    TIME_RENAME_COOLDOWN("Time.Rename.Cooldown", 24 * 60 * 60 * 1000);
 
     private final String path;
     private final Object value;

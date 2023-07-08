@@ -78,7 +78,7 @@ public class SignCommand extends CommandManager {
     private void createItem(Player player, String lore) {
         ItemStack itemStack = player.getItemInHand();
         ItemMeta itemMeta = itemStack.getItemMeta();
-        String created = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(new Date());
+        String created = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS").format(new Date());
         List<String> loreList = new ArrayList<>();
         loreList.add(HexColor.format(lore));
         loreList.add(" ");
