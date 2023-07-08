@@ -28,6 +28,7 @@ public class Listeners implements Listener {
     public final Locations locations;
     public final Homes homes;
     public final Ranks ranks;
+    public final Economy economy;
 
     public Listeners(Main main) {
         this.main = main;
@@ -40,6 +41,7 @@ public class Listeners implements Listener {
         this.locations = main.getLocations();
         this.homes = main.getHomes();
         this.ranks = main.getRanks();
+        this.economy = main.getEconomy();
     }
 
     public void register() {

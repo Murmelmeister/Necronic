@@ -1,4 +1,4 @@
-package de.murmelmeister.citybuild.command.commands;
+package de.murmelmeister.citybuild.command.commands.teleport;
 
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.command.CommandManager;
@@ -13,19 +13,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DayCommand extends CommandManager {
-    public DayCommand(Main main) {
+public class TpaAcceptCommand extends CommandManager {
+    public TpaAcceptCommand(Main main) {
         super(main);
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_TIME_DAY))) {
+        if (!(config.getBoolean(Configs.COMMAND_ENABLE_TPA_ACCEPT))) {
             sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
             return true;
         }
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_TIME_DAY)))) {
+        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_TPA_ACCEPT)))) {
             sendMessage(sender, message.getString(Messages.NO_PERMISSION));
             return true;
         }
@@ -37,23 +37,7 @@ public class DayCommand extends CommandManager {
             return true;
         }
 
-        if (player.hasPermission(config.getString(Configs.PERMISSION_NOT_COOLDOWN))) {
-            player.getWorld().setTime(config.getLong(Configs.TIME_DAY_TIME));
-            sendMessage(player, message.getString(Messages.COMMAND_DAY));
-            return true;
-        }
-
-        if (cooldown.getDuration(player, "Day") <= System.currentTimeMillis())
-            cooldown.removeCooldown(player, "Day");
-
-        if (cooldown.hasCooldown(player, "Day")) {
-            sendMessage(player, message.getString(Messages.COOLDOWN_MESSAGE).replace("[DATE]", cooldown.getExpired(player, "Day").replace(" ", message.getString(Messages.COOLDOWN_DATE))));
-            return true;
-        }
-
-        cooldown.addCooldown(player, "Day", config.getLong(Configs.TIME_DAY_COOLDOWN));
-        player.getWorld().setTime(config.getLong(Configs.TIME_DAY_TIME));
-        sendMessage(player, message.getString(Messages.COMMAND_DAY));
+        // TODO: Function
         return true;
     }
 

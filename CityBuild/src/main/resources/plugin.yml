@@ -110,3 +110,18 @@ commands:
   rename:
     usage: /rename <displayName...>
     description: Rename a item.
+  tp:
+    usage: /tp <player> [player]
+    description: Teleport to a player.
+  tpa:
+    usage: /tpa <player>
+    description: Send a teleport request to the player.
+  tpahere:
+    usage: /tpahere <player>
+    description: Send a teleport request to you.
+  tpaaccept:
+    usage: /tpaaccept
+    description: Accept the teleport request.
+  tpadeny:
+    usage: /tpadeny
+    description: Deny the teleport request.

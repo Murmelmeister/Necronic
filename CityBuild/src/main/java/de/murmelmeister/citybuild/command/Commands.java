@@ -11,6 +11,7 @@ import de.murmelmeister.citybuild.command.commands.inventories.EnderChestCommand
 import de.murmelmeister.citybuild.command.commands.inventories.TrashCommand;
 import de.murmelmeister.citybuild.command.commands.inventories.WorkbenchCommand;
 import de.murmelmeister.citybuild.command.commands.locations.*;
+import de.murmelmeister.citybuild.command.commands.teleport.*;
 import org.bukkit.command.TabExecutor;
 
 import java.util.Objects;
@@ -52,6 +53,11 @@ public class Commands {
         addCommand("unsign", new UnSignCommand(main));
         addCommand("rename", new RenameCommand(main));
         addCommand("repair", new RepairCommand(main));
+        addCommand("tp", new TpCommand(main));
+        addCommand("tpa", new TpaCommand(main));
+        addCommand("tpahere", new TpaHereCommand(main));
+        addCommand("tpaaccept", new TpaAcceptCommand(main));
+        addCommand("tpadeny", new TpaDenyCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {

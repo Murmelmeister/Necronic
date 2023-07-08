@@ -18,6 +18,7 @@ public class Main {
     private final Locations locations;
     private final Homes homes;
     private final Ranks ranks;
+    private final Economy economy;
 
     private final Listeners listeners;
     private final Commands commands;
@@ -32,6 +33,7 @@ public class Main {
         this.locations = new Locations(this);
         this.homes = new Homes(this);
         this.ranks = new Ranks(this);
+        this.economy = new Economy(this);
         this.listeners = new Listeners(this);
         this.commands = new Commands(this);
     }
@@ -85,5 +87,9 @@ public class Main {
 
     public Ranks getRanks() {
         return ranks;
+    }
+
+    public Economy getEconomy() {
+        return economy;
     }
 }

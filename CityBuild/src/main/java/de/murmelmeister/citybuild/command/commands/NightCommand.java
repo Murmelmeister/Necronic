@@ -10,14 +10,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class NightCommand extends CommandManager {
     public NightCommand(Main main) {
         super(main);
     }
-
-    //private final Map<UUID, Long> cooldown = new HashMap<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
