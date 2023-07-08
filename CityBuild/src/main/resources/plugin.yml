@@ -96,10 +96,10 @@ commands:
     usage: /night
     description: Set the time to night.
   head:
-    usage: /head
+    usage: /head <name>
     description: Give you a player head.
   sign:
-    usage: /sign <sign>
+    usage: /sign <sign...>
     description: Sign a item.
   unsign:
     usage: /unsign
@@ -108,5 +108,5 @@ commands:
     usage: /repair
     description: Repair a item.
   rename:
-    usage: /rename <displayName>
+    usage: /rename <displayName...>
     description: Rename a item.

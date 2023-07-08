@@ -62,6 +62,7 @@ public enum Configs {
     PERMISSION_REPAIR("Permission.Repair", "netherlegends.command.repair"),
     PERMISSION_RENAME("Permission.Rename", "netherlegends.command.rename"),
     PERMISSION_LIVE("Permission.Live", "netherlegends.command.live"),
+    PERMISSION_NOT_COOLDOWN("Permission.NotCooldown", "netherlegends.admin.notcooldown"),
     COMMAND_ENABLE_ENDER_CHEST_COMMAND("Command.Enable.EnderChest.Command", true),
     COMMAND_ENABLE_ENDER_CHEST_USE("Command.Enable.EnderChest.Use", true),
     COMMAND_ENABLE_ENDER_CHEST_OTHER("Command.Enable.EnderChest.Other", true),
@@ -149,9 +150,14 @@ public enum Configs {
     SCOREBOARD_ENABLE_SCORE_0("Scoreboard.Enable.Score.0", false),
     LOBBY_TO_SEND_SERVER("LobbyToSendServer", "Lobby-1"),
     TIME_DAY_TIME("Time.Day.Time", 1000L),
-    TIME_DAY_COOLDOWN("Time.Day.Cooldown", 60 * 60 * 1000),
     TIME_NIGHT_TIME("Time.Night.Time", 13000L),
+    TIME_DAY_COOLDOWN("Time.Day.Cooldown", 60 * 60 * 1000),
     TIME_NIGHT_COOLDOWN("Time.Night.Cooldown", 60 * 60 * 1000),
+    TIME_HEAD_COOLDOWN("Time.Head.Cooldown", 7 * 24 * 60 * 60 * 1000),
+    TIME_SIGN_COOLDOWN("Time.Sign.Cooldown", 24 * 60 * 60 * 1000),
+    TIME_UN_SIGN_COOLDOWN("Time.UnSign.Cooldown", 24 * 60 * 60 * 1000),
+    TIME_REPAIR_COOLDOWN("Time.Repair.Cooldown", 4 * 24 * 60 * 60 * 1000),
+    TIME_RENAME_COOLDOWN("Time.Rename.Cooldown", 24 * 60 * 60 * 1000),
     CURRENT_SERVER("CurrentServer", "CityBuild");
 
     private final String path;

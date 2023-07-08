@@ -36,6 +36,8 @@ public class ConnectListener extends Listeners {
             sendMessage(player, message.getString(Messages.EVENT_SPAWN_NOT_EXIST).replace("[PREFIX]", message.prefix()));
 
         homes.createUsername(player);
+        schedulerTask.setUsername(player);
+        cooldown.setUsername(player);
         if (player.hasPermission(config.getString(Configs.PERMISSION_JOIN_FLY))) {
             player.setAllowFlight(true);
             player.setFlying(true);

@@ -1,9 +1,6 @@
 package de.murmelmeister.citybuild;
 
-import de.murmelmeister.citybuild.api.Homes;
-import de.murmelmeister.citybuild.api.Locations;
-import de.murmelmeister.citybuild.api.Ranks;
-import de.murmelmeister.citybuild.api.SchedulerTask;
+import de.murmelmeister.citybuild.api.*;
 import de.murmelmeister.citybuild.command.Commands;
 import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
@@ -17,6 +14,7 @@ public class Main {
     private final Config config;
     private final Message message;
     private final SchedulerTask schedulerTask;
+    private final Cooldown cooldown;
     private final Locations locations;
     private final Homes homes;
     private final Ranks ranks;
@@ -30,6 +28,7 @@ public class Main {
         this.config = new Config(this);
         this.message = new Message(this);
         this.schedulerTask = new SchedulerTask(this);
+        this.cooldown = new Cooldown(this);
         this.locations = new Locations(this);
         this.homes = new Homes(this);
         this.ranks = new Ranks(this);
@@ -70,6 +69,10 @@ public class Main {
 
     public SchedulerTask getSchedulerTask() {
         return schedulerTask;
+    }
+
+    public Cooldown getCooldown() {
+        return cooldown;
     }
 
     public Locations getLocations() {

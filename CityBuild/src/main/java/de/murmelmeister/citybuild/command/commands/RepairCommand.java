@@ -4,9 +4,13 @@ import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.command.CommandManager;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,13 +41,35 @@ public class RepairCommand extends CommandManager {
             return true;
         }
 
-        // TODO: Add cooldown
-        // TODO: Function
+        if (player.getItemInHand().getType().equals(Material.AIR)) return true;
+
+        if (player.hasPermission(config.getString(Configs.PERMISSION_NOT_COOLDOWN))) {
+            createItem(player.getItemInHand());
+            return true;
+        }
+
+        if (cooldown.getDuration(player, "Repair") <= System.currentTimeMillis())
+            cooldown.removeCooldown(player, "Repair");
+
+        if (cooldown.hasCooldown(player, "Repair")) {
+            sendMessage(player, message.getString(Messages.COOLDOWN_MESSAGE).replace("[DATE]", cooldown.getExpired(player, "Repair").replace(" ", message.getString(Messages.COOLDOWN_DATE))));
+            return true;
+        }
+
+        cooldown.addCooldown(player, "Repair", config.getLong(Configs.TIME_REPAIR_COOLDOWN));
+        createItem(player.getItemInHand());
         return true;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         return new ArrayList<>();
+    }
+
+    private ItemStack createItem(ItemStack itemStack) {
+        Damageable damageable = (Damageable) itemStack.getItemMeta();
+        damageable.setDamage(0);
+        itemStack.setItemMeta(damageable);
+        return itemStack;
     }
 }

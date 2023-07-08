@@ -31,12 +31,17 @@ public class SchedulerTask {
         this.config = YamlConfiguration.loadConfiguration(file);
     }
 
+    public void setUsername(Player player) {
+        create(player);
+        set("Username", player.getName());
+        save();
+    }
+
     public void addBukkitTask(Player player, BukkitTask bukkitTask) {
         create(player);
-        config.set("Username", player.getName());
         this.taskList = getTaskList();
         taskList.add(bukkitTask.toString());
-        config.set("TaskList", taskList);
+        set("TaskList", taskList);
         save();
     }
 
@@ -45,7 +50,7 @@ public class SchedulerTask {
         this.taskList = getTaskList();
         if (taskList.contains(bukkitTask.toString())) bukkitTask.cancel();
         taskList.remove(bukkitTask.toString());
-        config.set("TaskList", taskList);
+        set("TaskList", taskList);
         save();
     }
 
@@ -61,5 +66,9 @@ public class SchedulerTask {
         this.taskList = new ArrayList<>();
         if (config.contains("TaskList")) taskList = config.getStringList("TaskList");
         return taskList;
+    }
+
+    private void set(String path, Object value) {
+        config.set(path, value);
     }
 }

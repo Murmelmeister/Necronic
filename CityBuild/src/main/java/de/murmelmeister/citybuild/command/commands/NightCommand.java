@@ -17,7 +17,7 @@ public class NightCommand extends CommandManager {
         super(main);
     }
 
-    private final Map<UUID, Long> cooldown = new HashMap<>();
+    //private final Map<UUID, Long> cooldown = new HashMap<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -38,20 +38,21 @@ public class NightCommand extends CommandManager {
             return true;
         }
 
-        long current = System.currentTimeMillis();
-        if (cooldown.containsKey(player.getUniqueId())) {
-            long past = cooldown.get(player.getUniqueId());
-            int result = (int) ((past + (config.getLong(Configs.TIME_NIGHT_COOLDOWN))) - current);
-            if (result > 0) {
-                int minute = result / 60 / 1000;
-                result = result - (minute * 1000 * 60);
-                int second = result / 1000;
-                sendMessage(player, minute + " min " + second + " sec");
-                return true;
-            }
+        if (player.hasPermission(config.getString(Configs.PERMISSION_NOT_COOLDOWN))) {
+            player.getWorld().setTime(config.getLong(Configs.TIME_NIGHT_TIME));
+            sendMessage(player, message.getString(Messages.COMMAND_NIGHT));
+            return true;
         }
 
-        cooldown.put(player.getUniqueId(), current);
+        if (cooldown.getDuration(player, "Night") <= System.currentTimeMillis())
+            cooldown.removeCooldown(player, "Night");
+
+        if (cooldown.hasCooldown(player, "Night")) {
+            sendMessage(player, message.getString(Messages.COOLDOWN_MESSAGE).replace("[DATE]", cooldown.getExpired(player, "Night").replace(" ", message.getString(Messages.COOLDOWN_DATE))));
+            return true;
+        }
+
+        cooldown.addCooldown(player, "Night", config.getLong(Configs.TIME_NIGHT_COOLDOWN));
         player.getWorld().setTime(config.getLong(Configs.TIME_NIGHT_TIME));
         sendMessage(player, message.getString(Messages.COMMAND_NIGHT));
         return true;

@@ -1,9 +1,7 @@
 package de.murmelmeister.citybuild.command;
 
 import de.murmelmeister.citybuild.Main;
-import de.murmelmeister.citybuild.api.Homes;
-import de.murmelmeister.citybuild.api.Locations;
-import de.murmelmeister.citybuild.api.Ranks;
+import de.murmelmeister.citybuild.api.*;
 import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
 import de.murmelmeister.citybuild.util.HexColor;
@@ -22,6 +20,8 @@ public abstract class CommandManager extends Commands implements TabExecutor {
     public final ListUtil listUtil;
     public final Config config;
     public final Message message;
+    public final SchedulerTask schedulerTask;
+    public final Cooldown cooldown;
     public final Locations locations;
     public final Homes homes;
     public final Ranks ranks;
@@ -31,6 +31,8 @@ public abstract class CommandManager extends Commands implements TabExecutor {
         this.listUtil = main.getListUtil();
         this.config = main.getConfig();
         this.message = main.getMessage();
+        this.schedulerTask = main.getSchedulerTask();
+        this.cooldown = main.getCooldown();
         this.locations = main.getLocations();
         this.homes = main.getHomes();
         this.ranks = main.getRanks();
