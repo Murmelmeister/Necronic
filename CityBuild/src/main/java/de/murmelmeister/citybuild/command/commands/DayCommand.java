@@ -10,13 +10,14 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class DayCommand extends CommandManager {
     public DayCommand(Main main) {
         super(main);
     }
+
+    private final Map<UUID, Long> cooldown = new HashMap<>();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -37,8 +38,22 @@ public class DayCommand extends CommandManager {
             return true;
         }
 
-        // TODO: Add cooldown
+        long current = System.currentTimeMillis();
+        if (cooldown.containsKey(player.getUniqueId())) {
+            long past = cooldown.get(player.getUniqueId());
+            int result = (int) ((past + (config.getLong(Configs.TIME_DAY_COOLDOWN))) - current);
+            if (result > 0) {
+                int minute = result / 60 / 1000;
+                result = result - (minute * 1000 * 60);
+                int second = result / 1000;
+                sendMessage(player, minute + " min " + second + " sec");
+                return true;
+            }
+        }
+
+        cooldown.put(player.getUniqueId(), current);
         player.getWorld().setTime(config.getLong(Configs.TIME_DAY_TIME));
+        sendMessage(player, message.getString(Messages.COMMAND_DAY));
         return true;
     }
 

@@ -46,6 +46,7 @@ public class Commands {
         addCommand("lobby", new LobbyCommand(main));
         addCommand("live", new LiveCommand(main));
         addCommand("day", new DayCommand(main));
+        addCommand("night", new NightCommand(main));
         addCommand("head", new HeadCommand(main));
         addCommand("sign", new SignCommand(main));
         addCommand("unsign", new UnSignCommand(main));

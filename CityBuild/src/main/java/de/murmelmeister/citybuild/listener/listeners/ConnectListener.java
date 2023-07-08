@@ -47,8 +47,8 @@ public class ConnectListener extends Listeners {
             sendMessage(player, message.getString(Messages.EVENT_JOIN_AUTO_GOD_MODE));
         }
 
-        ranks.setTabRank();
-        ranks.setScoreboardTabList();
+        ranks.setTabRank(player); // If you don't have the permission for the ranks then you don't have a scoreboard and team
+        ranks.setScoreboardTabList(player);
         new TestScoreboard(player, main);
     }
 
@@ -66,5 +66,6 @@ public class ConnectListener extends Listeners {
         else event.setQuitMessage(null);
         listUtil.getGodMode().remove(player.getUniqueId());
         listUtil.getLive().remove(player.getUniqueId());
+        player.getServer().getScheduler().getPendingTasks().forEach(bukkitTask -> schedulerTask.removeBukkitTask(player, bukkitTask));
     }
 }

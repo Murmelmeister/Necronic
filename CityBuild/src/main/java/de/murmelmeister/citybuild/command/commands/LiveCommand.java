@@ -40,15 +40,15 @@ public class LiveCommand extends CommandManager {
         if (listUtil.getLive().contains(player.getUniqueId())) {
             listUtil.getLive().remove(player.getUniqueId());
 
-            if (ranks.getBukkitTask().isCancelled()) ranks.getBukkitTask().cancel();
-            ranks.setTabRank();
+            //if (ranks.getBukkitTask().isCancelled()) ranks.getBukkitTask().cancel();
+            //ranks.setTabRank();
 
             sendMessage(player, message.getString(Messages.COMMAND_LIVE_OFF));
         } else {
             listUtil.getLive().add(player.getUniqueId());
 
-            if (ranks.getBukkitTask().isCancelled()) ranks.getBukkitTask().cancel();
-            ranks.setTabRank();
+            //if (ranks.getBukkitTask().isCancelled()) ranks.getBukkitTask().cancel();
+            //ranks.setTabRank();
 
             sendMessage(player, message.getString(Messages.COMMAND_LIVE_ON));
         }

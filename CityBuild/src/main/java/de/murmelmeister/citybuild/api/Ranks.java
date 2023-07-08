@@ -13,15 +13,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Ranks {
     private final Logger logger;
@@ -30,11 +28,11 @@ public class Ranks {
     private final Config defaultConfig;
     private final Message message;
     private final ListUtil listUtil;
+    private final SchedulerTask schedulerTask;
 
     private File file;
     private YamlConfiguration config;
     private List<String> rankList;
-    private BukkitTask bukkitTask;
 
     public Ranks(Main main) {
         this.logger = main.getInstance().getSLF4JLogger();
@@ -43,6 +41,7 @@ public class Ranks {
         this.defaultConfig = main.getConfig();
         this.message = main.getMessage();
         this.listUtil = main.getListUtil();
+        this.schedulerTask = main.getSchedulerTask();
     }
 
     public void register() {
@@ -81,40 +80,38 @@ public class Ranks {
                 defaultConfig.getString(Configs.RANK_DEFAULT_TAB_ID));
     }
 
-    public void setTabRank() {
-        this.bukkitTask = server.getScheduler().runTaskTimerAsynchronously(instance, () -> getRankList().forEach(s -> {
-            for (Player player : server.getOnlinePlayers()) {
-                Scoreboard scoreboard = player.getScoreboard();
+    public void setTabRank(Player player) {
+        schedulerTask.addBukkitTask(player,
+                server.getScheduler().runTaskTimerAsynchronously(instance, () -> getRankList().forEach(s -> {
+                    Scoreboard scoreboard = player.getScoreboard();
 
-                Team team = scoreboard.getTeam(getTeamID(s));
-                if (team == null) team = scoreboard.registerNewTeam(getTeamID(s));
-                team.setPrefix(HexColor.format(getTabPrefix(s)));
-                team.setSuffix(HexColor.format(getTabSuffix(s)));
-                team.setColor(ChatColor.valueOf(getTabColor(s)));
+                    Team team = scoreboard.getTeam(getTeamID(s));
+                    if (team == null) team = scoreboard.registerNewTeam(getTeamID(s));
+                    team.setPrefix(HexColor.format(getTabPrefix(s)));
+                    team.setSuffix(HexColor.format(getTabSuffix(s)));
+                    team.setColor(ChatColor.valueOf(getTabColor(s)));
 
-                for (Player target : server.getOnlinePlayers()) {
-                    if (team.hasEntry(target.getName()))
-                        if (listUtil.getLive().contains(player.getUniqueId()))
-                            team.setSuffix(HexColor.format(defaultConfig.getString(Configs.RANK_LIVE_SUFFIX))); // Does not work great
-                        else team.setSuffix(HexColor.format(getTabSuffix(s)));
+                    for (Player target : server.getOnlinePlayers()) {
+                        /*if (team.hasEntry(target.getName()))
+                            if (listUtil.getLive().contains(player.getUniqueId()))
+                                team.setSuffix(HexColor.format(defaultConfig.getString(Configs.RANK_LIVE_SUFFIX))); // Does not work great
+                            else team.setSuffix(HexColor.format(getTabSuffix(s)));*/
 
-                    if (target.hasPermission(getPermission(s)))
-                        /*
-                        When a new player joins he is not in "default", unless the group has the "default" permission.
-                        With * permission you have all tab/chat permission, there you have to give the external "-permission".
-                        */
-                        team.addEntry(target.getName());
-                }
-            }
-        }), 20L, defaultConfig.getLong(Configs.RANK_UPDATE_TAB_TIMER) * 20L);
+                        if (target.hasPermission(getPermission(s)))
+                            /*
+                            When a new player joins he is not in "default", unless the group has the "default" permission.
+                            With * permission you have all tab/chat permission, there you have to give the external "-permission".
+                            */
+                            team.addEntry(target.getName());
+                    }
+                }), 20L, defaultConfig.getLong(Configs.RANK_UPDATE_TAB_TIMER) * 20L));
     }
 
-    public void setScoreboardTabList() {
-        server.getScheduler().runTaskTimerAsynchronously(instance, () -> {
-            for (Player player : server.getOnlinePlayers())
-                player.setPlayerListHeaderFooter(HexColor.format(message.getString(Messages.SCOREBOARD_TAB_LIST_HEADER).replace("[CURRENT_PLAYERS]", String.valueOf(server.getOnlinePlayers().size())).replace("[MAX_PLAYERS]", String.valueOf(server.getMaxPlayers()))),
-                        HexColor.format(message.getString(Messages.SCOREBOARD_TAB_LIST_FOOTER)));
-        }, 20L, defaultConfig.getLong(Configs.SCOREBOARD_UPDATE_TAB_LIST) * 20L);
+    public void setScoreboardTabList(Player player) {
+        schedulerTask.addBukkitTask(player,
+                server.getScheduler().runTaskTimerAsynchronously(instance, () -> player.setPlayerListHeaderFooter(HexColor.format(message.getString(Messages.SCOREBOARD_TAB_LIST_HEADER)
+                                .replace("[CURRENT_PLAYERS]", String.valueOf(server.getOnlinePlayers().size())).replace("[MAX_PLAYERS]", String.valueOf(server.getMaxPlayers())).replace("[SERVER]", defaultConfig.getString(Configs.CURRENT_SERVER))),
+                        HexColor.format(message.getString(Messages.SCOREBOARD_TAB_LIST_FOOTER))), 20L, defaultConfig.getLong(Configs.SCOREBOARD_UPDATE_TAB_LIST) * 20L));
     }
 
     public void addRank(String name, String chatPrefix, String chatSuffix, String chatColor, String tabPrefix, String tabSuffix, String tabColor, String tabId) {
@@ -294,9 +291,5 @@ public class Ranks {
 
     private String getString(String path) {
         return config.getString(path);
-    }
-
-    public BukkitTask getBukkitTask() {
-        return bukkitTask;
     }
 }

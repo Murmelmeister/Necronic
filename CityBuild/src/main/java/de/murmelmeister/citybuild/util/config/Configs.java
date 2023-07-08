@@ -118,7 +118,7 @@ public enum Configs {
     HOME_LIMIT_RANK("Home.Limit.Rank", 8),
     HOME_LIMIT_TEAM("Home.Limit.Team", 12),
     RANK_CHAT_PREFIX_MESSAGE("Rank.Chat.PrefixMessage", " &8» &r"),
-    RANK_UPDATE_TAB_TIMER("Rank.Update.TabTimer", 4L),
+    RANK_UPDATE_TAB_TIMER("Rank.Update.TabTimer", 2L),
     RANK_PRE_PERMISSION("Rank.DefaultPrePermission", "netherlegends.rank."),
     RANK_DEFAULT_NAME("Rank.Default.Name", "default"),
     RANK_DEFAULT_CHAT_PREFIX("Rank.Default.Chat.Prefix", "&7"),
@@ -129,7 +129,8 @@ public enum Configs {
     RANK_DEFAULT_TAB_COLOR("Rank.Default.Tab.Color", ChatColor.GRAY.toString()),
     RANK_DEFAULT_TAB_ID("Rank.Default.Tab.ID", "1111"),
     RANK_LIVE_SUFFIX("Rank.Live.Suffix", " &8[&5LIVE&8]"),
-    SCOREBOARD_UPDATE_TAB_LIST("Scoreboard.Update.TabList", 4L),
+    SCOREBOARD_UPDATE_TAB_LIST("Scoreboard.Update.TabList", 2L),
+    SCOREBOARD_UPDATE_SCORE_TIMER("Scoreboard.Update.ScoreTimer", 2L),
     SCOREBOARD_ENABLE_SCORE_15("Scoreboard.Enable.Score.15", false),
     SCOREBOARD_ENABLE_SCORE_14("Scoreboard.Enable.Score.14", false),
     SCOREBOARD_ENABLE_SCORE_13("Scoreboard.Enable.Score.13", true),
@@ -146,12 +147,12 @@ public enum Configs {
     SCOREBOARD_ENABLE_SCORE_2("Scoreboard.Enable.Score.2", true),
     SCOREBOARD_ENABLE_SCORE_1("Scoreboard.Enable.Score.1", true),
     SCOREBOARD_ENABLE_SCORE_0("Scoreboard.Enable.Score.0", false),
-    SCOREBOARD_UPDATE_SCORE_TIMER("Scoreboard.Update.ScoreTimer", 4L),
     LOBBY_TO_SEND_SERVER("LobbyToSendServer", "Lobby-1"),
     TIME_DAY_TIME("Time.Day.Time", 1000L),
     TIME_DAY_COOLDOWN("Time.Day.Cooldown", 60 * 60 * 1000),
     TIME_NIGHT_TIME("Time.Night.Time", 13000L),
-    TIME_NIGHT_COOLDOWN("Time.Night.Cooldown", 60 * 60 * 1000);
+    TIME_NIGHT_COOLDOWN("Time.Night.Cooldown", 60 * 60 * 1000),
+    CURRENT_SERVER("CurrentServer", "CityBuild");
 
     private final String path;
     private final Object value;
