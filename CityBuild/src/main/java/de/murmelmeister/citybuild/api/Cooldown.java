@@ -1,7 +1,9 @@
 package de.murmelmeister.citybuild.api;
 
 import de.murmelmeister.citybuild.Main;
+import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.util.ConfigUtil;
+import de.murmelmeister.citybuild.util.config.Configs;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.slf4j.Logger;
@@ -10,15 +12,18 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class Cooldown {
     private final Logger logger;
+    private final Config defaultConfig;
 
     private File file;
     private YamlConfiguration config;
 
     public Cooldown(Main main) {
         this.logger = main.getInstance().getSLF4JLogger();
+        this.defaultConfig = main.getConfig();
     }
 
     public void create(Player player) {
@@ -37,8 +42,10 @@ public class Cooldown {
     public void addCooldown(Player player, String cooldownName, long time) {
         create(player);
         long duration = time + System.currentTimeMillis();
-        String created = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS").format(new Date());
-        String expired = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS").format(duration);
+        SimpleDateFormat format = new SimpleDateFormat(defaultConfig.getString(Configs.PATTERN_CONFIG));
+        if (defaultConfig.getBoolean(Configs.TIMEZONE_CONFIG_ENABLE)) format.setTimeZone(TimeZone.getTimeZone(defaultConfig.getString(Configs.TIMEZONE_ZONE)));
+        String created = format.format(new Date());
+        String expired = format.format(duration); // TimeZone UTC
         String path = "Cooldown." + cooldownName;
         set(path + ".Name", cooldownName);
         set(path + ".Duration", duration);

@@ -26,6 +26,7 @@ public abstract class CommandManager extends Commands implements TabExecutor {
     public final Homes homes;
     public final Ranks ranks;
     public final Economy economy;
+    public final ItemValue itemValue;
 
     public CommandManager(Main main) {
         super(main);
@@ -38,6 +39,7 @@ public abstract class CommandManager extends Commands implements TabExecutor {
         this.homes = main.getHomes();
         this.ranks = main.getRanks();
         this.economy = main.getEconomy();
+        this.itemValue = main.getItemValue();
     }
 
     public void sendMessage(CommandSender sender, String message) {

@@ -5,7 +5,12 @@ import org.bukkit.ChatColor;
 public enum Configs {
 
     PREFIX_ENABLE("Prefix.Enable", true),
+    TIMEZONE_ENABLE("TimeZone.Enable", true),
+    TIMEZONE_CONFIG_ENABLE("TimeZone.Config.Enable", false),
+    TIMEZONE_ZONE("TimeZone.Zone", "Europe/Berlin"),
     CURRENT_SERVER("CurrentServer", "CityBuild"),
+    PATTERN_CONFIG("Pattern.Config", "yyyy-MM-dd HH:mm:ss.SSS"),
+    PATTERN_COMMAND_SIGN("Pattern.Command.Sign", "yyyy-MM-dd HH:mm"),
     PERMISSION_ENDER_CHEST_COMMAND("Permission.EnderChest.Command", "netherlegends.command.enderchest.command"),
     PERMISSION_ENDER_CHEST_USE("Permission.EnderChest.Use", "netherlegends.command.enderchest.use"),
     PERMISSION_ENDER_CHEST_OTHER("Permission.EnderChest.Other", "netherlegends.command.enderchest.other"),
@@ -167,7 +172,10 @@ public enum Configs {
     TIME_SIGN_COOLDOWN("Time.Sign.Cooldown", 24 * 60 * 60 * 1000),
     TIME_UN_SIGN_COOLDOWN("Time.UnSign.Cooldown", 24 * 60 * 60 * 1000),
     TIME_REPAIR_COOLDOWN("Time.Repair.Cooldown", 4 * 24 * 60 * 60 * 1000),
-    TIME_RENAME_COOLDOWN("Time.Rename.Cooldown", 24 * 60 * 60 * 1000);
+    TIME_RENAME_COOLDOWN("Time.Rename.Cooldown", 24 * 60 * 60 * 1000),
+    ECONOMY_CURRENCY("Economy.Currency", "Money"),
+    ECONOMY_DEFAULT_MONEY("Economy.Default.Money", 0L),
+    ECONOMY_DEFAULT_SELL_PRICE("Economy.Default.SellPrice", 0L);
 
     private final String path;
     private final Object value;

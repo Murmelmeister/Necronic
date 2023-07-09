@@ -19,6 +19,7 @@ public class Main {
     private final Homes homes;
     private final Ranks ranks;
     private final Economy economy;
+    private final ItemValue itemValue;
 
     private final Listeners listeners;
     private final Commands commands;
@@ -34,6 +35,7 @@ public class Main {
         this.homes = new Homes(this);
         this.ranks = new Ranks(this);
         this.economy = new Economy(this);
+        this.itemValue = new ItemValue(this);
         this.listeners = new Listeners(this);
         this.commands = new Commands(this);
     }
@@ -47,6 +49,7 @@ public class Main {
         message.register();
         locations.create();
         ranks.register();
+        itemValue.register();
 
         listeners.register();
         commands.register();
@@ -91,5 +94,9 @@ public class Main {
 
     public Economy getEconomy() {
         return economy;
+    }
+
+    public ItemValue getItemValue() {
+        return itemValue;
     }
 }

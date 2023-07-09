@@ -15,9 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class SignCommand extends CommandManager {
     public SignCommand(Main main) {
@@ -78,10 +76,10 @@ public class SignCommand extends CommandManager {
     private void createItem(Player player, String lore) {
         ItemStack itemStack = player.getItemInHand();
         ItemMeta itemMeta = itemStack.getItemMeta();
-        String created = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS").format(new Date());
-        List<String> loreList = new ArrayList<>();
-        loreList.add(HexColor.format(lore));
-        loreList.add(" ");
+        SimpleDateFormat format = new SimpleDateFormat(config.getString(Configs.PATTERN_COMMAND_SIGN));
+        if (config.getBoolean(Configs.TIMEZONE_ENABLE)) format.setTimeZone(TimeZone.getTimeZone(config.getString(Configs.TIMEZONE_ZONE)));
+        String created = format.format(new Date());
+        List<String> loreList = new ArrayList<>(Arrays.asList(lore, "\n"));
         loreList.add(HexColor.format(message.getString(Messages.COMMAND_SIGN_CREATE).replace("[NAME]", player.getName()).replace("[DATE]", created.replace(" ", message.getString(Messages.COMMAND_SIGN_DATE)))));
         itemMeta.setLore(loreList);
         itemStack.setItemMeta(itemMeta);

@@ -29,6 +29,7 @@ public class Listeners implements Listener {
     public final Homes homes;
     public final Ranks ranks;
     public final Economy economy;
+    public final ItemValue itemValue;
 
     public Listeners(Main main) {
         this.main = main;
@@ -42,6 +43,7 @@ public class Listeners implements Listener {
         this.homes = main.getHomes();
         this.ranks = main.getRanks();
         this.economy = main.getEconomy();
+        this.itemValue = main.getItemValue();
     }
 
     public void register() {
