@@ -49,6 +49,18 @@ public enum Messages {
     COMMAND_NIGHT("Command.Night", "&aYou have set the time to&e night&a."),
     COMMAND_SIGN_CREATE("Command.Sign.Created", "&e[NAME]&7 created it on&e [DATE]&7."),
     COMMAND_SIGN_DATE("Command.Sign.Date", " at "),
+    COMMAND_TP_TO_TARGET("Command.Tp.ToTarget", "&aYou have been teleported to the player&e [PLAYER]&a."),
+    COMMAND_TP_TARGET_TO_TARGET("Command.Tp.TargetToTarget", "&aYou teleported the player&e [PLAYER1]&a to&e [PLAYER2]&a."),
+    COMMAND_TPA_GET_REQUEST_FROM_PLAYER("Command.Tpa.GetRequestFromPlayer", "&e[PLAYER]&a has sent you a&e tpa request&a. \n[PREFIX]&aUse&e /tpaaccept&a or&e /tpadeny"),
+    COMMAND_TPA_SEND_REQUEST_TO_TARGET("Command.Tpa.SendRequestToTarget", "&aYou have sent a&e tpa request&a to&e [PLAYER]&a."),
+    COMMAND_TPA_HERE_GET_REQUEST_FROM_PLAYER("Command.TpaHere.GetRequestFromPlayer", "&e[PLAYER]&a has sent you a&e tpahere request&a. \n[PREFIX]&aUse&e /tpaaccept&a or&e /tpadeny"),
+    COMMAND_TPA_HERE_SEND_REQUEST_TO_TARGET("Command.TpaHere.SendRequestToTarget", "&aYou have sent a&e tpahere request&a to&e [PLAYER]&a."),
+    COMMAND_TPA_ACCEPT_TARGET("Command.TpaAccept.Target", "&aYou have&e accepted&a the request from&e [PLAYER]&a."),
+    COMMAND_TPA_ACCEPT_PLAYER("Command.TpaAccept.Player", "&aYour request has been&e accepted&a by&e [PLAYER]&a."),
+    COMMAND_TPA_ACCEPT_NO_REQUEST("Command.TpaAccept.NoRequest", "&cYou have not received a request."),
+    COMMAND_TPA_DENY_TARGET("Command.TpaDeny.Target", "&aYou have&e rejected&a the request from&e [PLAYER]&a."),
+    COMMAND_TPA_DENY_PLAYER("Command.TpaDeny.Player", "&aYour request has been&e rejected&a by&e [PLAYER]&a."),
+    COMMAND_TPA_DENY_NO_REQUEST("Command.TpaDeny.NoRequest", "&cYou have not received a request."),
     INVENTORY_TRASH("Inventory.Trash", "&cTrash"),
     EVENT_PLAYER_JOIN("Event.PlayerJoin", "&e[PLAYER]&7 joined the game."),
     EVENT_PLAYER_QUIT("Event.PlayerQuit", "&e[PLAYER]&7 left the game."),
@@ -72,7 +84,7 @@ public enum Messages {
     SCOREBOARD_SCORE_4("Scoreboard.Score.4", "&1"),
     SCOREBOARD_SCORE_3("Scoreboard.Score.3", "&8| &6IP-Address:"),
     SCOREBOARD_SCORE_2("Scoreboard.Score.2", "&8» &eNetherLegends.net"),
-    SCOREBOARD_SCORE_1("Scoreboard.Score.1", "&8&m-----&r &7v1.0.0 &8&m-----"),
+    SCOREBOARD_SCORE_1("Scoreboard.Score.1", "&8&m-----&r &7v0.0.1 &8&m-----"),
     SCOREBOARD_SCORE_0("Scoreboard.Score.0", "Test 0");
 
     private final String path;

@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TpaDenyCommand extends CommandManager {
@@ -37,12 +36,60 @@ public class TpaDenyCommand extends CommandManager {
             return true;
         }
 
-        // TODO: Function
+        if (args.length != 1) {
+            sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
+            return true;
+        }
+
+        Player target = player.getServer().getPlayer(args[0]);
+
+        if (target == null) {
+            sendMessage(player, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
+            return true;
+        }
+
+        if (listUtil.getTpa().containsKey(player.getUniqueId()) && !(listUtil.getTpaHere().containsKey(player.getUniqueId()))) {
+            if (!(listUtil.getTpa().containsValue(target.getUniqueId()))) {
+                sendMessage(player, message.getString(Messages.COMMAND_TPA_DENY_NO_REQUEST));
+                return true;
+            }
+
+            Player targetDeny = player.getServer().getPlayer(listUtil.getTpa().get(player.getUniqueId()));
+
+            if (targetDeny == null) {
+                sendMessage(player, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
+                return true;
+            }
+
+            listUtil.getTpa().remove(player.getUniqueId(), targetDeny.getUniqueId());
+            sendMessage(targetDeny, message.getString(Messages.COMMAND_TPA_DENY_PLAYER).replace("[PLAYER]", player.getName()));
+            sendMessage(player, message.getString(Messages.COMMAND_TPA_DENY_TARGET).replace("[PLAYER]", targetDeny.getName()));
+        } else if (!(listUtil.getTpa().containsKey(player.getUniqueId())) && listUtil.getTpaHere().containsKey(player.getUniqueId())) {
+            if (!(listUtil.getTpaHere().containsValue(target.getUniqueId()))) {
+                sendMessage(player, message.getString(Messages.COMMAND_TPA_DENY_NO_REQUEST));
+                return true;
+            }
+
+            Player targetDeny = player.getServer().getPlayer(listUtil.getTpaHere().get(player.getUniqueId()));
+
+            if (targetDeny == null) {
+                sendMessage(player, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
+                return true;
+            }
+
+            listUtil.getTpaHere().remove(player.getUniqueId(), targetDeny.getUniqueId());
+            sendMessage(targetDeny, message.getString(Messages.COMMAND_TPA_DENY_PLAYER).replace("[PLAYER]", player.getName()));
+            sendMessage(player, message.getString(Messages.COMMAND_TPA_DENY_TARGET).replace("[PLAYER]", targetDeny.getName()));
+        } else {
+            listUtil.getTpa().remove(player.getUniqueId());
+            listUtil.getTpaHere().remove(player.getUniqueId());
+            sendMessage(player, message.getString(Messages.COMMAND_TPA_DENY_NO_REQUEST));
+        }
         return true;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return new ArrayList<>();
+        return playerTabComplete(sender, args);
     }
 }

@@ -1,16 +1,18 @@
 package de.murmelmeister.citybuild.util;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class ListUtil {
     private final Set<UUID> godMode;
     private final Set<UUID> live;
+    private final Map<UUID, UUID> tpa;
+    private final Map<UUID, UUID> tpaHere;
 
     public ListUtil() {
         this.godMode = new HashSet<>();
         this.live = new HashSet<>();
+        this.tpa = new HashMap<>();
+        this.tpaHere = new HashMap<>();
     }
 
     public Set<UUID> getGodMode() {
@@ -19,5 +21,13 @@ public class ListUtil {
 
     public Set<UUID> getLive() {
         return live;
+    }
+
+    public Map<UUID, UUID> getTpa() {
+        return tpa;
+    }
+
+    public Map<UUID, UUID> getTpaHere() {
+        return tpaHere;
     }
 }

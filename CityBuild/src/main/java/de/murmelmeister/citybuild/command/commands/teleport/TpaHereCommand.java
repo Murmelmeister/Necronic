@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TpaHereCommand extends CommandManager {
@@ -37,12 +36,26 @@ public class TpaHereCommand extends CommandManager {
             return true;
         }
 
-        // TODO: Function
+        if (args.length != 1) {
+            sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
+            return true;
+        }
+
+        Player target = player.getServer().getPlayer(args[0]);
+
+        if (target == null) {
+            sendMessage(player, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
+            return true;
+        }
+
+        listUtil.getTpaHere().put(target.getUniqueId(), player.getUniqueId());
+        sendMessage(target, message.getString(Messages.COMMAND_TPA_HERE_GET_REQUEST_FROM_PLAYER).replace("[PLAYER]", player.getName()).replace("[PREFIX]", message.prefix()));
+        sendMessage(player, message.getString(Messages.COMMAND_TPA_HERE_SEND_REQUEST_TO_TARGET).replace("[PLAYER]", target.getName()));
         return true;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return new ArrayList<>();
+        return playerTabComplete(sender, args);
     }
 }

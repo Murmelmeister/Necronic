@@ -7,7 +7,7 @@ import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
 import de.murmelmeister.citybuild.listener.listeners.ColorListener;
 import de.murmelmeister.citybuild.listener.listeners.ConnectListener;
-import de.murmelmeister.citybuild.listener.listeners.DamageListener;
+import de.murmelmeister.citybuild.listener.listeners.GodModeListener;
 import de.murmelmeister.citybuild.listener.listeners.RankListener;
 import de.murmelmeister.citybuild.util.HexColor;
 import de.murmelmeister.citybuild.util.ListUtil;
@@ -46,7 +46,7 @@ public class Listeners implements Listener {
 
     public void register() {
         addListener(new ColorListener(main));
-        addListener(new DamageListener(main));
+        addListener(new GodModeListener(main));
         addListener(new RankListener(main));
         addListener(new ConnectListener(main));
     }

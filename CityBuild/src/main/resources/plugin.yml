@@ -120,8 +120,8 @@ commands:
     usage: /tpahere <player>
     description: Send a teleport request to you.
   tpaaccept:
-    usage: /tpaaccept
+    usage: /tpaaccept <player>
     description: Accept the teleport request.
   tpadeny:
-    usage: /tpadeny
+    usage: /tpadeny <player>
     description: Deny the teleport request.
