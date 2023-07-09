@@ -44,8 +44,8 @@ public class Economy {
         save();
     }
 
-    public long defaultMoney() {
-        return defaultConfig.getLong(Configs.ECONOMY_DEFAULT_MONEY);
+    public double defaultMoney() {
+        return defaultConfig.getDouble(Configs.ECONOMY_DEFAULT_MONEY);
     }
 
     private void set(String path, Object value) {

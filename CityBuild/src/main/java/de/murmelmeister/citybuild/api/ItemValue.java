@@ -51,8 +51,8 @@ public class ItemValue {
         }
     }
 
-    public long defaultSellPrice() {
-        return defaultConfig.getLong(Configs.ECONOMY_DEFAULT_SELL_PRICE);
+    public double defaultSellPrice() {
+        return defaultConfig.getDouble(Configs.ECONOMY_DEFAULT_SELL_PRICE);
     }
 
     public void set(String path, Object value) {
