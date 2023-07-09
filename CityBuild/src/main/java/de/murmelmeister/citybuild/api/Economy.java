@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.MathContext;
 
 public class Economy {
     private final Logger logger;
@@ -44,8 +46,55 @@ public class Economy {
         save();
     }
 
-    public double defaultMoney() {
-        return defaultConfig.getDouble(Configs.ECONOMY_DEFAULT_MONEY);
+    public void createAccount(Player player) {
+        create(player);
+        if (config.getString("Money") == null) set("Money", defaultMoney());
+        save();
+    }
+
+    public BigDecimal getMoney(Player player) {
+        create(player);
+        BigDecimal exactMoney = defaultMoney();
+        double money = exactMoney.doubleValue();
+        new BigDecimal(money);
+        money = config.getDouble("Money");
+        exactMoney = BigDecimal.valueOf(money);
+        return exactMoney;
+    }
+
+    public void setMoney(Player player, BigDecimal money) {
+        create(player);
+        set("Money", money);
+        save();
+    }
+
+    public void addMoney(Player player, BigDecimal money) {
+        create(player);
+        BigDecimal amount = getMoney(player).add(money, MathContext.DECIMAL128);
+        set("Money", amount);
+        save();
+    }
+
+    public void removeMoney(Player player, BigDecimal money) {
+        create(player);
+        BigDecimal amount = getMoney(player).subtract(money, MathContext.DECIMAL128);
+        set("Money", amount);
+        save();
+    }
+
+    public void resetMoney(Player player) {
+        create(player);
+        set("Money", defaultMoney());
+        save();
+    }
+
+    public boolean hasEnoughMoney(Player player, double money) {
+        create(player);
+        return money <= getMoney(player).doubleValue();
+    }
+
+    public BigDecimal defaultMoney() {
+        return BigDecimal.valueOf(defaultConfig.getDouble(Configs.ECONOMY_DEFAULT_MONEY));
     }
 
     private void set(String path, Object value) {

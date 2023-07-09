@@ -39,6 +39,7 @@ public class ConnectListener extends Listeners {
         schedulerTask.setUsername(player);
         cooldown.setUsername(player);
         economy.setUsername(player);
+        economy.createAccount(player);
         if (player.hasPermission(config.getString(Configs.PERMISSION_JOIN_FLY))) {
             player.setAllowFlight(true);
             player.setFlying(true);
