@@ -51,9 +51,10 @@ public class ConnectListener extends Listeners {
             sendMessage(player, message.getString(Messages.EVENT_JOIN_AUTO_GOD_MODE));
         }
 
-        ranks.setTabRank(player); // If you don't have the permission for the ranks then you don't have a scoreboard and team
-        ranks.setScoreboardTabList(player);
-        new TestScoreboard(player, main);
+        if (config.getBoolean(Configs.RANK_ENABLE_TAB))
+            ranks.setTabRank(player); // If you don't have the permission for the ranks then you don't have a scoreboard and team
+        if (config.getBoolean(Configs.SCOREBOARD_ENABLE_TAB_LIST)) ranks.setScoreboardTabList(player);
+        if (config.getBoolean(Configs.SCOREBOARD_ENABLE_SCOREBOARD)) new TestScoreboard(player, main);
     }
 
     @SuppressWarnings("deprecation")

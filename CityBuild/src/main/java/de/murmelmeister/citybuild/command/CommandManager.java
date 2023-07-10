@@ -13,6 +13,7 @@ import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ public abstract class CommandManager extends Commands implements TabExecutor {
     public final Ranks ranks;
     public final Economy economy;
     public final ItemValue itemValue;
+    public final DecimalFormat decimalFormat;
 
     public CommandManager(Main main) {
         super(main);
@@ -40,6 +42,7 @@ public abstract class CommandManager extends Commands implements TabExecutor {
         this.ranks = main.getRanks();
         this.economy = main.getEconomy();
         this.itemValue = main.getItemValue();
+        this.decimalFormat = new DecimalFormat(config.getString(Configs.PATTERN_DECIMAL));
     }
 
     public void sendMessage(CommandSender sender, String message) {

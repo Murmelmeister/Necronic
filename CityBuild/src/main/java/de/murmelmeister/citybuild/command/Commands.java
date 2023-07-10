@@ -3,6 +3,7 @@ package de.murmelmeister.citybuild.command;
 import de.murmelmeister.citybuild.CityBuild;
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.command.commands.*;
+import de.murmelmeister.citybuild.command.commands.economy.MoneyCommand;
 import de.murmelmeister.citybuild.command.commands.homes.AddHomeCommand;
 import de.murmelmeister.citybuild.command.commands.homes.HomeCommand;
 import de.murmelmeister.citybuild.command.commands.homes.RemoveHomeCommand;
@@ -58,6 +59,7 @@ public class Commands {
         addCommand("tpahere", new TpaHereCommand(main));
         addCommand("tpaaccept", new TpaAcceptCommand(main));
         addCommand("tpadeny", new TpaDenyCommand(main));
+        addCommand("money", new MoneyCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {

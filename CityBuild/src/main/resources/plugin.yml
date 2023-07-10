@@ -125,3 +125,6 @@ commands:
   tpadeny:
     usage: /tpadeny <player>
     description: Deny the teleport request.
+  money:
+    usage: /money [player]
+    description: Show the player money.
