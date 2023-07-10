@@ -52,7 +52,7 @@ public class ItemValue {
     }
 
     public double defaultSellPrice() {
-        return defaultConfig.getDouble(Configs.ECONOMY_DEFAULT_SELL_PRICE);
+        return defaultConfig.getDouble(Configs.ECONOMY_DEFAULT_ITEM_SELL_PRICE);
     }
 
     public void set(String path, Object value) {

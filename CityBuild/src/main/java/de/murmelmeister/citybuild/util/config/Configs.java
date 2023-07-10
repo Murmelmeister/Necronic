@@ -134,9 +134,11 @@ public enum Configs {
     COMMAND_ENABLE_MONEY_COMMAND("Command.Enable.Money.Command", true),
     COMMAND_ENABLE_MONEY_USE("Command.Enable.Money.Use", true),
     COMMAND_ENABLE_MONEY_OTHER("Command.Enable.Money.Other", true),
-    EVENT_PLAYER_JOIN("Event.PlayerJoin", true),
-    EVENT_PLAYER_QUIT("Event.PlayerQuit", true),
-    EVENT_TELEPORT_TO_SPAWN("Event.TeleportToSpawn", true),
+    EVENT_ENABLE_PLAYER_JOIN("Event.Enable.PlayerJoin", true),
+    EVENT_ENABLE_PLAYER_QUIT("Event.Enable.PlayerQuit", true),
+    EVENT_ENABLE_TELEPORT_TO_SPAWN("Event.Enable.TeleportToSpawn", true),
+    EVENT_ENABLE_JOIN_MESSAGE("Event.Enable.Join.Message", true),
+    EVENT_ENABLE_JOIN_TITLE("Event.Enable.Join.Title", true),
     HOME_LIMIT_DEFAULT("Home.Limit.Default", 4),
     HOME_LIMIT_RANK("Home.Limit.Rank", 8),
     HOME_LIMIT_TEAM("Home.Limit.Team", 12),
@@ -185,7 +187,7 @@ public enum Configs {
     TIME_RENAME_COOLDOWN("Time.Rename.Cooldown", 24 * 60 * 60 * 1000),
     ECONOMY_CURRENCY("Economy.Currency", "Money"),
     ECONOMY_DEFAULT_MONEY("Economy.Default.Money", 0L),
-    ECONOMY_DEFAULT_SELL_PRICE("Economy.Default.SellPrice", 0L);
+    ECONOMY_DEFAULT_ITEM_SELL_PRICE("Economy.Default.ItemSellPrice", 0L);
 
     private final String path;
     private final Object value;

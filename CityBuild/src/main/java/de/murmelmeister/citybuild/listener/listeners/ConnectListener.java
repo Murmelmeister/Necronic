@@ -21,7 +21,7 @@ public class ConnectListener extends Listeners {
     public void handlePlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        if (config.getBoolean(Configs.EVENT_PLAYER_JOIN))
+        if (config.getBoolean(Configs.EVENT_ENABLE_PLAYER_JOIN))
             if (player.canSee(player)) // Maybe unnecessary, but if someone is in vanish you should not see the message
                 if (config.getBoolean(Configs.PREFIX_ENABLE))
                     event.setJoinMessage(HexColor.format(message.prefix() + message.getString(Messages.EVENT_PLAYER_JOIN).replace("[PLAYER]", player.getName())));
@@ -31,7 +31,8 @@ public class ConnectListener extends Listeners {
         else event.setJoinMessage(null);
 
         if (locations.hasLocation("Spawn")) {
-            if (config.getBoolean(Configs.EVENT_TELEPORT_TO_SPAWN)) player.teleport(locations.getLocation("Spawn"));
+            if (config.getBoolean(Configs.EVENT_ENABLE_TELEPORT_TO_SPAWN))
+                player.teleport(locations.getLocation("Spawn"));
         } else
             sendMessage(player, message.getString(Messages.EVENT_SPAWN_NOT_EXIST).replace("[PREFIX]", message.prefix()));
 
@@ -55,13 +56,18 @@ public class ConnectListener extends Listeners {
             ranks.setTabRank(player); // If you don't have the permission for the ranks then you don't have a scoreboard and team
         if (config.getBoolean(Configs.SCOREBOARD_ENABLE_TAB_LIST)) ranks.setScoreboardTabList(player);
         if (config.getBoolean(Configs.SCOREBOARD_ENABLE_SCOREBOARD)) new TestScoreboard(player, main);
+        if (config.getBoolean(Configs.EVENT_ENABLE_JOIN_MESSAGE))
+            player.sendMessage(HexColor.format(message.getString(Messages.EVENT_JOIN_MESSAGE).replace("[PREFIX]", message.prefix()).replace("[PLAYER]", player.getName())));
+        if (config.getBoolean(Configs.EVENT_ENABLE_JOIN_TITLE))
+            player.sendTitle(HexColor.format(message.getString(Messages.EVENT_JOIN_TITLE)).replace("[PREFIX]", message.prefix()).replace("[PLAYER]", player.getName()),
+                    HexColor.format(message.getString(Messages.EVENT_JOIN_SUB_TITLE).replace("[PREFIX]", message.prefix()).replace("[PLAYER]", player.getName())));
     }
 
     @SuppressWarnings("deprecation")
     @EventHandler
     public void handlePlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if (config.getBoolean(Configs.EVENT_PLAYER_QUIT))
+        if (config.getBoolean(Configs.EVENT_ENABLE_PLAYER_QUIT))
             if (player.canSee(player)) // Maybe unnecessary, but if someone is in vanish you should not see the message
                 if (config.getBoolean(Configs.PREFIX_ENABLE))
                     event.setQuitMessage(HexColor.format(message.prefix() + message.getString(Messages.EVENT_PLAYER_QUIT).replace("[PLAYER]", player.getName())));
