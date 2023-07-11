@@ -128,3 +128,16 @@ commands:
   money:
     usage: /money [player]
     description: Show the player money.
+  economy:
+    usage: /economy <set|add|remove|reset> <player> [money]
+    description: Edited the money of a player.
+    aliases:
+      - eco
+  gamemode:
+    usage: /gamemode <0|1|2|3> [player]
+    description: Changed the game mode of a player.
+    aliases:
+      - gm
+  pay:
+    usage: /pay <player> <money>
+    description: Send a player money.

@@ -28,7 +28,7 @@ public class Cooldown {
 
     public void create(Player player) {
         String fileName = player.getUniqueId() + ".yml";
-        this.file = new File("plugins//NetherLegends//Cooldown//", fileName);
+        this.file = new File(String.format("plugins//%s//Cooldown//", defaultConfig.getString(Configs.FILE_NAME)), fileName);
         ConfigUtil.createFile(logger, file, fileName);
         this.config = YamlConfiguration.loadConfiguration(file);
     }

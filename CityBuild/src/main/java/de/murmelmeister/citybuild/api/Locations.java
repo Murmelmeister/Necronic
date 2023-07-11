@@ -1,7 +1,9 @@
 package de.murmelmeister.citybuild.api;
 
 import de.murmelmeister.citybuild.Main;
+import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.util.ConfigUtil;
+import de.murmelmeister.citybuild.util.config.Configs;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -16,6 +18,7 @@ import java.util.List;
 public class Locations {
     private final Logger logger;
     private final Server server;
+    private final Config defaultConfig;
 
     private File file;
     private YamlConfiguration config;
@@ -24,11 +27,12 @@ public class Locations {
     public Locations(Main main) {
         this.logger = main.getInstance().getSLF4JLogger();
         this.server = main.getInstance().getServer();
+        this.defaultConfig = main.getConfig();
     }
 
     public void create() {
         String fileName = "locations.yml";
-        this.file = new File("plugins//NetherLegends//", fileName);
+        this.file = new File(String.format("plugins//%s//", defaultConfig.getString(Configs.FILE_NAME)), fileName);
         ConfigUtil.createFile(logger, file, fileName);
         this.config = YamlConfiguration.loadConfiguration(file);
     }

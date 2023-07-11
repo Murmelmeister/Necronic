@@ -1,7 +1,9 @@
 package de.murmelmeister.citybuild.api;
 
 import de.murmelmeister.citybuild.Main;
+import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.util.ConfigUtil;
+import de.murmelmeister.citybuild.util.config.Configs;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -16,6 +18,7 @@ import java.util.UUID;
 
 public class Homes {
     private final Logger logger;
+    private final Config defaultConfig;
 
     private File file;
     private YamlConfiguration config;
@@ -23,12 +26,13 @@ public class Homes {
 
     public Homes(Main main) {
         this.logger = main.getInstance().getSLF4JLogger();
+        this.defaultConfig = main.getConfig();
     }
 
     public void create(Player player) {
         UUID uuid = player.getUniqueId();
         String fileName = uuid + ".yml";
-        this.file = new File("plugins//NetherLegends//Homes//", fileName);
+        this.file = new File(String.format("plugins//%s//Homes//", defaultConfig.getString(Configs.FILE_NAME)), fileName);
         ConfigUtil.createFile(logger, file, fileName);
         this.config = YamlConfiguration.loadConfiguration(file);
     }

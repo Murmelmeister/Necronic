@@ -2,7 +2,7 @@ package de.murmelmeister.citybuild.util.config;
 
 public enum Messages {
 
-    PREFIX("Prefix", "&6NetherLegends &8» &r"),
+    PREFIX("Prefix", "&5Necronic &8» &r"),
     NO_PERMISSION("NoPermission", "&cYou don't have the permission to do that."),
     NO_CONSOLE("NoConsole", "&cThis command does not work in the console."),
     NO_PLAYER_EXIST("NoPlayerExist", "&cThis player &e[PLAYER] &cis not online on the server."),
@@ -63,18 +63,20 @@ public enum Messages {
     COMMAND_TPA_DENY_NO_REQUEST("Command.TpaDeny.NoRequest", "&cYou have not received a request."),
     COMMAND_MONEY_USE("Command.Money.Use", "&aYour [CURRENCY]: &e[MONEY]"),
     COMMAND_MONEY_OTHER("Command.Money.Other", "&a[PLAYER] [CURRENCY]: &e[MONEY]"),
+    COMMAND_GAME_MODE_USE("Command.GameMode.Use", "&aYour game mode has been changed to&e [MODE]&a."),
+    COMMAND_GAME_MODE_OTHER("Command.GameMode.Other", "&aYou have changed the player&e [PLAYER]&a game mode to&e [MODE]&a."),
     INVENTORY_TRASH("Inventory.Trash", "&cTrash"),
     EVENT_PLAYER_JOIN("Event.PlayerJoin", "&e[PLAYER]&7 joined the game."),
     EVENT_PLAYER_QUIT("Event.PlayerQuit", "&e[PLAYER]&7 left the game."),
     EVENT_SPAWN_NOT_EXIST("Event.SpawnNotExist", "&8--- &cWARNING &8---\n[PREFIX]&cThe &eSpawn&c does not exist."),
     EVENT_JOIN_AUTO_FLY("Event.Join.Auto.Fly", "&aYou have been automatically put in&e fly mode&a."),
     EVENT_JOIN_AUTO_GOD_MODE("Event.Join.Auto.GodMode", "&aYou have been automatically put in&e god mode&a."),
-    EVENT_JOIN_MESSAGE("Event.Join.Message", "&8» &eNetherLegends.net \n&8»&7 Welcome on citybuild \n&8»&7 Discord&8:&e /discord"),
+    EVENT_JOIN_MESSAGE("Event.Join.Message", "&8» &dNeconic.net \n&8»&7 Welcome on citybuild \n&8»&7 Discord&8:&e /discord"),
     EVENT_JOIN_TITLE("Event.Join.Title", "&7Hey&8, &3[PLAYER]"),
     EVENT_JOIN_SUB_TITLE("Event.Join.SubTitle", "&7Have fun on the&e CityBuild"),
-    SCOREBOARD_TAB_LIST_HEADER("Scoreboard.TabList.Header", "\n &8» &6NetherLegends &8« \n &7Server &8» &6[SERVER] \n &7Current players &8» &6[CURRENT_PLAYERS]&8/&6[MAX_PLAYERS] \n"),
-    SCOREBOARD_TAB_LIST_FOOTER("Scoreboard.TabList.Footer", "\n &7Discord &8»&e dsc.gg/NetherLegendsNET \n &7Website &8»&e netherlegends.net"),
-    SCOREBOARD_SCORE_DISPLAY_NAME("Scoreboard.Score.DisplayName", "&8» &6NetherLegends &8«"),
+    SCOREBOARD_TAB_LIST_HEADER("Scoreboard.TabList.Header", "\n &8» &5Necronic &8« \n &7Server &8» &6[SERVER] \n &7Current players &8» &6[CURRENT_PLAYERS]&8/&6[MAX_PLAYERS] \n"),
+    SCOREBOARD_TAB_LIST_FOOTER("Scoreboard.TabList.Footer", "\n &7Discord &8»&e dsc.gg/NetherLegendsNET \n &7Website &8»&e www.necronic.com"),
+    SCOREBOARD_SCORE_DISPLAY_NAME("Scoreboard.Score.DisplayName", "&8» &5Necronic &8«"),
     SCOREBOARD_SCORE_15("Scoreboard.Score.15", "Test 15"),
     SCOREBOARD_SCORE_14("Scoreboard.Score.14", "Test 14"),
     SCOREBOARD_SCORE_13("Scoreboard.Score.13", "&8&m----------------"),
@@ -88,7 +90,7 @@ public enum Messages {
     SCOREBOARD_SCORE_5("Scoreboard.Score.5", "&8» &e[MONEY]"),
     SCOREBOARD_SCORE_4("Scoreboard.Score.4", "&1"),
     SCOREBOARD_SCORE_3("Scoreboard.Score.3", "&8| &6IP-Address:"),
-    SCOREBOARD_SCORE_2("Scoreboard.Score.2", "&8» &eNetherLegends.net"),
+    SCOREBOARD_SCORE_2("Scoreboard.Score.2", "&8» &dNecronic.net"),
     SCOREBOARD_SCORE_1("Scoreboard.Score.1", "&8&m-----&r &7v0.0.1 &8&m-----"),
     SCOREBOARD_SCORE_0("Scoreboard.Score.0", "Test 0");
 

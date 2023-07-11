@@ -52,7 +52,7 @@ public class Ranks {
 
     public void create() {
         String fileName = "ranks.yml";
-        this.file = new File("plugins//NetherLegends//", fileName);
+        this.file = new File(String.format("plugins//%s//", defaultConfig.getString(Configs.FILE_NAME)), fileName);
         ConfigUtil.createFile(logger, file, fileName);
         this.config = YamlConfiguration.loadConfiguration(file);
     }

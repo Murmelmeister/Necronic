@@ -33,7 +33,7 @@ public class ItemValue {
 
     public void create() {
         String fileName = "itemValue.yml";
-        this.file = new File("plugins//NetherLegends//Economy//", fileName);
+        this.file = new File(String.format("plugins//%s//Economy//", defaultConfig.getString(Configs.FILE_NAME)), fileName);
         ConfigUtil.createFile(logger, file, fileName);
         this.config = YamlConfiguration.loadConfiguration(file);
     }

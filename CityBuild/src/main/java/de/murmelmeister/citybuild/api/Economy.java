@@ -27,7 +27,7 @@ public class Economy {
 
     public void create(Player player) {
         String fileName = player.getUniqueId() + ".yml";
-        this.file = new File("plugins//NetherLegends//Economy//UserData//", fileName);
+        this.file = new File(String.format("plugins//%s//Economy//UserData//", defaultConfig.getString(Configs.FILE_NAME)), fileName);
         ConfigUtil.createFile(logger, file, fileName);
         this.config = YamlConfiguration.loadConfiguration(file);
     }
@@ -86,6 +86,11 @@ public class Economy {
         create(player);
         set("Money", defaultMoney());
         save();
+    }
+
+    public void payMoney(Player player, Player target, BigDecimal money) {
+        removeMoney(player, money);
+        addMoney(target, money);
     }
 
     public boolean hasEnoughMoney(Player player, double money) {
