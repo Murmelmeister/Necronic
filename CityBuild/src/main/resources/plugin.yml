@@ -142,5 +142,5 @@ commands:
     usage: /pay <player> <money>
     description: Send a player money.
   sell:
-    usage: /sell
+    usage: /sell <hand|price>
     description: Sell the item in your hand.

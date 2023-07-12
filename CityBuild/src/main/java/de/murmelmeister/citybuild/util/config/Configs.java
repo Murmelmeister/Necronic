@@ -223,7 +223,8 @@ public enum Configs {
     TIME_RENAME_COOLDOWN("Time.Rename.Cooldown", 24 * 60 * 60 * 1000),
     ECONOMY_CURRENCY("Economy.Currency", "Money"),
     ECONOMY_DEFAULT_MONEY("Economy.Default.Money", 0L),
-    ECONOMY_DEFAULT_ITEM_SELL_PRICE("Economy.Default.ItemSellPrice", 0L);
+    ECONOMY_DEFAULT_ITEM_SELL_PRICE("Economy.Default.ItemSellPrice", 0L),
+    MATERIAL_CASE("Material.Case", false);
 
     private final String path;
     private final Object value;
