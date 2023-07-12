@@ -3,6 +3,7 @@ package de.murmelmeister.citybuild.configs;
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.HexColor;
+import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.slf4j.Logger;
@@ -12,12 +13,14 @@ import java.io.IOException;
 
 public class Message {
     private final Logger logger;
+    private final Config defaultConfig;
 
     private File file;
     private YamlConfiguration config;
 
     public Message(Main main) {
         this.logger = main.getInstance().getSLF4JLogger();
+        this.defaultConfig = main.getConfig();
     }
 
     public void register() {
@@ -28,7 +31,7 @@ public class Message {
 
     public void create() {
         String fileName = "message.yml";
-        this.file = new File("plugins//NetherLegends//", fileName);
+        this.file = new File(String.format("plugins//%s//", defaultConfig.getString(Configs.FILE_NAME)), fileName);
         ConfigUtil.createFile(logger, file, fileName);
         this.config = YamlConfiguration.loadConfiguration(file);
     }

@@ -94,6 +94,6 @@ public class GodModeCommand extends CommandManager {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return playerTabComplete(sender, args);
+        return playerTabComplete(sender, args, 1);
     }
 }

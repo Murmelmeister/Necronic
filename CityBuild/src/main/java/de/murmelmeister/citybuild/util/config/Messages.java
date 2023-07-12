@@ -1,7 +1,7 @@
 package de.murmelmeister.citybuild.util.config;
 
 public enum Messages {
-
+// TODO: Revise messages
     PREFIX("Prefix", "&5Necronic &8» &r"),
     NO_PERMISSION("NoPermission", "&cYou don't have the permission to do that."),
     NO_CONSOLE("NoConsole", "&cThis command does not work in the console."),
@@ -65,6 +65,16 @@ public enum Messages {
     COMMAND_MONEY_OTHER("Command.Money.Other", "&a[PLAYER] [CURRENCY]: &e[MONEY]"),
     COMMAND_GAME_MODE_USE("Command.GameMode.Use", "&aYour game mode has been changed to&e [MODE]&a."),
     COMMAND_GAME_MODE_OTHER("Command.GameMode.Other", "&aYou have changed the player&e [PLAYER]&a game mode to&e [MODE]&a."),
+    COMMAND_PAY_MONEY_NEGATIVE("Command.Pay.Money.Negative", "&cYou must not specify a negative number."),
+    COMMAND_PAY_MONEY_ENOUGH("Command.Pay.Money.Enough", "&cYou do not have&e enough [CURRENCY]&c."),
+    COMMAND_PAY_PLAYER("Command.Pay.Player", "&7You have paid&e [PLAYER]&5 [MONEY] [CURRENCY]&7."),
+    COMMAND_PAY_TARGET("Command.Pay.Target", "&e[PLAYER]&7 has paid you&5 [MONEY] [CURRENCY]&7."),
+    COMMAND_PAY_ALL("Command.Pay.All", "&cThis does not work."),
+    COMMAND_ECONOMY_SET("Command.Economy.Set", "&7Money of&e [PLAYER]&7 was&a set&7 to&5 [MONEY] [CURRENCY]&7."),
+    COMMAND_ECONOMY_ADD("Command.Economy.Add", "&7Money of&e [PLAYER]&7 was&a added&7 to&5 [MONEY] [CURRENCY]&7."),
+    COMMAND_ECONOMY_REMOVE("Command.Economy.Remove", "&7Money of&e [PLAYER]&7 was&a removed&7 to&5 [MONEY] [CURRENCY]&7."),
+    COMMAND_ECONOMY_RESET("Command.Economy.Reset", "&7Money of&e [PLAYER]&7 was&a reset&7."),
+    COMMAND_SELL("Command.Sell", "&7You have received&d [MONEY] [CURRENCY]&7 about&c [ITEM]&7."),
     INVENTORY_TRASH("Inventory.Trash", "&cTrash"),
     EVENT_PLAYER_JOIN("Event.PlayerJoin", "&e[PLAYER]&7 joined the game."),
     EVENT_PLAYER_QUIT("Event.PlayerQuit", "&e[PLAYER]&7 left the game."),

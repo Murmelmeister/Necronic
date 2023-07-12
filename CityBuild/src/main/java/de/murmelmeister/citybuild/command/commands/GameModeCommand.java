@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -102,19 +103,9 @@ public class GameModeCommand extends CommandManager {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1)
-            return Stream.of("survival", "creative", "adventure", "spectator", "0", "1", "2", "3").filter(s -> StringUtil.startsWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
-        if (args.length == 2) {
-            List<String> tabComplete = new ArrayList<>();
-            String lastWord = args[args.length - 1];
-            Player senderPlayer = sender instanceof Player ? (Player) sender : null;
-            for (Player player : sender.getServer().getOnlinePlayers()) {
-                String name = player.getName();
-                if ((senderPlayer == null || senderPlayer.canSee(player)) && StringUtil.startsWithIgnoreCase(name, lastWord))
-                    tabComplete.add(name);
-            }
-            tabComplete.sort(String.CASE_INSENSITIVE_ORDER);
-            return tabComplete;
-        }
+            return tabComplete(Arrays.asList("survival", "creative", "adventure", "spectator", "0", "1", "2", "3"), args);
+        //return Stream.of("survival", "creative", "adventure", "spectator", "0", "1", "2", "3").filter(s -> StringUtil.startsWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+        if (args.length == 2) return playerTabComplete(sender, args);
         return Collections.emptyList();
     }
 
@@ -137,7 +128,7 @@ public class GameModeCommand extends CommandManager {
         }
 
         player.setGameMode(GameMode.SURVIVAL);
-        sendMessage(player, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.SURVIVAL.name()));
+        sendMessage(player, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.SURVIVAL.name().toLowerCase()));
     }
 
     private void gameModeUseCreative(CommandSender sender) {
@@ -159,7 +150,7 @@ public class GameModeCommand extends CommandManager {
         }
 
         player.setGameMode(GameMode.CREATIVE);
-        sendMessage(player, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.CREATIVE.name()));
+        sendMessage(player, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.CREATIVE.name().toLowerCase()));
     }
 
     private void gameModeUseAdventure(CommandSender sender) {
@@ -181,7 +172,7 @@ public class GameModeCommand extends CommandManager {
         }
 
         player.setGameMode(GameMode.ADVENTURE);
-        sendMessage(player, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.ADVENTURE.name()));
+        sendMessage(player, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.ADVENTURE.name().toLowerCase()));
     }
 
     private void gameModeUseSpectator(CommandSender sender) {
@@ -203,7 +194,7 @@ public class GameModeCommand extends CommandManager {
         }
 
         player.setGameMode(GameMode.SPECTATOR);
-        sendMessage(player, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.SPECTATOR.name()));
+        sendMessage(player, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.SPECTATOR.name().toLowerCase()));
     }
 
     private void gameModeOtherSurvival(CommandSender sender, String[] args) {
@@ -217,16 +208,16 @@ public class GameModeCommand extends CommandManager {
             return;
         }
 
-        Player target = sender.getServer().getPlayer(args[0]);
+        Player target = sender.getServer().getPlayer(args[1]);
 
         if (target == null) {
-            sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
+            sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[1]));
             return;
         }
 
         target.setGameMode(GameMode.SURVIVAL);
-        sendMessage(target, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.SURVIVAL.name()));
-        sendMessage(sender, message.getString(Messages.COMMAND_GAME_MODE_OTHER).replace("[MODE]", GameMode.SURVIVAL.name()).replace("[PLAYER]", target.getName()));
+        sendMessage(target, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.SURVIVAL.name()).toLowerCase());
+        sendMessage(sender, message.getString(Messages.COMMAND_GAME_MODE_OTHER).replace("[MODE]", GameMode.SURVIVAL.name().toLowerCase()).replace("[PLAYER]", target.getName()));
     }
 
     private void gameModeOtherCreative(CommandSender sender, String[] args) {
@@ -240,16 +231,16 @@ public class GameModeCommand extends CommandManager {
             return;
         }
 
-        Player target = sender.getServer().getPlayer(args[0]);
+        Player target = sender.getServer().getPlayer(args[1]);
 
         if (target == null) {
-            sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
+            sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[1]));
             return;
         }
 
         target.setGameMode(GameMode.CREATIVE);
-        sendMessage(target, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.CREATIVE.name()));
-        sendMessage(sender, message.getString(Messages.COMMAND_GAME_MODE_OTHER).replace("[MODE]", GameMode.CREATIVE.name()).replace("[PLAYER]", target.getName()));
+        sendMessage(target, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.CREATIVE.name().toLowerCase()));
+        sendMessage(sender, message.getString(Messages.COMMAND_GAME_MODE_OTHER).replace("[MODE]", GameMode.CREATIVE.name().toLowerCase()).replace("[PLAYER]", target.getName()));
     }
 
     private void gameModeOtherAdventure(CommandSender sender, String[] args) {
@@ -263,16 +254,16 @@ public class GameModeCommand extends CommandManager {
             return;
         }
 
-        Player target = sender.getServer().getPlayer(args[0]);
+        Player target = sender.getServer().getPlayer(args[1]);
 
         if (target == null) {
-            sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
+            sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[1]));
             return;
         }
 
         target.setGameMode(GameMode.ADVENTURE);
-        sendMessage(target, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.ADVENTURE.name()));
-        sendMessage(sender, message.getString(Messages.COMMAND_GAME_MODE_OTHER).replace("[MODE]", GameMode.ADVENTURE.name()).replace("[PLAYER]", target.getName()));
+        sendMessage(target, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.ADVENTURE.name().toLowerCase()));
+        sendMessage(sender, message.getString(Messages.COMMAND_GAME_MODE_OTHER).replace("[MODE]", GameMode.ADVENTURE.name().toLowerCase()).replace("[PLAYER]", target.getName()));
     }
 
     private void gameModeOtherSpectator(CommandSender sender, String[] args) {
@@ -286,15 +277,15 @@ public class GameModeCommand extends CommandManager {
             return;
         }
 
-        Player target = sender.getServer().getPlayer(args[0]);
+        Player target = sender.getServer().getPlayer(args[1]);
 
         if (target == null) {
-            sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
+            sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[1]));
             return;
         }
 
         target.setGameMode(GameMode.SPECTATOR);
-        sendMessage(target, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.SPECTATOR.name()));
-        sendMessage(sender, message.getString(Messages.COMMAND_GAME_MODE_OTHER).replace("[MODE]", GameMode.SPECTATOR.name()).replace("[PLAYER]", target.getName()));
+        sendMessage(target, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.SPECTATOR.name().toLowerCase()));
+        sendMessage(sender, message.getString(Messages.COMMAND_GAME_MODE_OTHER).replace("[MODE]", GameMode.SPECTATOR.name().toLowerCase()).replace("[PLAYER]", target.getName()));
     }
 }

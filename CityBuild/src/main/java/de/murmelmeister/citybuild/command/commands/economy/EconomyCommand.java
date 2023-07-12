@@ -7,16 +7,11 @@ import de.murmelmeister.citybuild.util.config.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.*;
 
 public class EconomyCommand extends CommandManager {
     public EconomyCommand(Main main) {
@@ -62,19 +57,9 @@ public class EconomyCommand extends CommandManager {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1)
-            return Stream.of("set", "add", "remove", "reset").filter(s -> StringUtil.startsWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
-        if (args.length == 2) {
-            List<String> tabComplete = new ArrayList<>();
-            String lastWord = args[args.length - 1];
-            Player senderPlayer = sender instanceof Player ? (Player) sender : null;
-            for (Player player : sender.getServer().getOnlinePlayers()) {
-                String name = player.getName();
-                if ((senderPlayer == null || senderPlayer.canSee(player)) && StringUtil.startsWithIgnoreCase(name, lastWord))
-                    tabComplete.add(name);
-            }
-            tabComplete.sort(String.CASE_INSENSITIVE_ORDER);
-            return tabComplete;
-        }
+            return tabComplete(Arrays.asList("set", "add", "remove", "reset"), args);
+        if (args.length == 2)
+            return playerTabComplete(sender, args);
         return Collections.emptyList();
     }
 
@@ -101,7 +86,8 @@ public class EconomyCommand extends CommandManager {
 
         BigDecimal money = new BigDecimal(args[2]);
         economy.setMoney(target, money);
-        // TODO: Message
+        sendMessage(sender, message.getString(Messages.COMMAND_ECONOMY_SET)
+                .replace("[PLAYER]", target.getName()).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
     }
 
     /*
@@ -127,7 +113,8 @@ public class EconomyCommand extends CommandManager {
 
         BigDecimal money = new BigDecimal(args[2]);
         economy.addMoney(target, money);
-        // TODO: Message
+        sendMessage(sender, message.getString(Messages.COMMAND_ECONOMY_ADD)
+                .replace("[PLAYER]", target.getName()).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
     }
 
     /*
@@ -153,7 +140,8 @@ public class EconomyCommand extends CommandManager {
 
         BigDecimal money = new BigDecimal(args[2]);
         economy.removeMoney(target, money);
-        // TODO: Message
+        sendMessage(sender, message.getString(Messages.COMMAND_ECONOMY_REMOVE)
+                .replace("[PLAYER]", target.getName()).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
     }
 
     /*
@@ -178,6 +166,6 @@ public class EconomyCommand extends CommandManager {
         }
 
         economy.resetMoney(target);
-        // TODO: Message
+        sendMessage(sender, message.getString(Messages.COMMAND_ECONOMY_RESET).replace("[PLAYER]", target.getName()));
     }
 }

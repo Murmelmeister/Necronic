@@ -27,7 +27,7 @@ public class Config {
 
     public void create() {
         String fileName = "config.yml";
-        this.file = new File("plugins//NetherLegends//", fileName);
+        this.file = new File(String.format("plugins//%s//", Configs.FILE_NAME.getValue()), fileName);
         ConfigUtil.createFile(logger, file, fileName);
         this.config = YamlConfiguration.loadConfiguration(file);
     }

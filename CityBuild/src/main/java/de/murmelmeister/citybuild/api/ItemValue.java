@@ -6,10 +6,13 @@ import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 public class ItemValue {
     private final Logger logger;
@@ -51,8 +54,24 @@ public class ItemValue {
         }
     }
 
-    public double defaultSellPrice() {
-        return defaultConfig.getDouble(Configs.ECONOMY_DEFAULT_ITEM_SELL_PRICE);
+    public BigDecimal sellItem(Player player, ItemStack itemStack) {
+        int amount = itemStack.getAmount();
+        BigDecimal price = BigDecimal.valueOf(getValue(itemStack.getType()));
+        if (amount <= 0)
+            return BigDecimal.ZERO;
+        BigDecimal result = price.multiply(BigDecimal.valueOf(amount));
+        ItemStack item = itemStack.clone();
+        item.setAmount(amount);
+        if (!(player.getInventory().containsAtLeast(item, amount)))
+            player.sendMessage(" Trying to remove more items than are available.");
+        player.getInventory().removeItem(item);
+        player.updateInventory();
+        economy.addMoney(player, result);
+        return result;
+    }
+
+    public BigDecimal defaultSellPrice() {
+        return BigDecimal.valueOf(defaultConfig.getDouble(Configs.ECONOMY_DEFAULT_ITEM_SELL_PRICE));
     }
 
     public void set(String path, Object value) {
@@ -63,7 +82,7 @@ public class ItemValue {
         return config.get(path);
     }
 
-    public Object getValue(Material material) {
-        return config.get(material.name() + ".Value");
+    public double getValue(Material material) {
+        return config.getDouble(material.name() + ".Value");
     }
 }
