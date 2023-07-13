@@ -14,7 +14,6 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public class ItemValueCommand extends CommandManager {
     public ItemValueCommand(Main main) {
@@ -71,11 +70,10 @@ public class ItemValueCommand extends CommandManager {
         }
 
         String materialName = args[1].toUpperCase();
-        /*for (String items : itemValue.getItems())
-            if (!Objects.equals(items, materialName)) {
-                sendMessage(sender, message.getString(Messages.COMMAND_ITEM_VALUE_MATERIAL_NOT_EXIST).replace("[MATERIAL]", materialName));
-                return;
-            }*/
+        if (!(itemValue.existName(materialName))) {
+            sendMessage(sender, message.getString(Messages.COMMAND_ITEM_VALUE_MATERIAL_NOT_EXIST).replace("[MATERIAL]", materialName));
+            return;
+        }
         Material material = Material.valueOf(materialName);
 
         if (config.getBoolean(Configs.MATERIAL_CASE))
@@ -99,11 +97,10 @@ public class ItemValueCommand extends CommandManager {
 
         String materialName = args[1].toUpperCase();
         BigDecimal price = new BigDecimal(args[2]);
-        /*for (String items : itemValue.getItems())
-            if (!Objects.equals(items, materialName)) {
-                sendMessage(sender, message.getString(Messages.COMMAND_ITEM_VALUE_MATERIAL_NOT_EXIST).replace("[MATERIAL]", materialName));
-                return;
-            }*/
+        if (!(itemValue.existName(materialName))) {
+            sendMessage(sender, message.getString(Messages.COMMAND_ITEM_VALUE_MATERIAL_NOT_EXIST).replace("[MATERIAL]", materialName));
+            return;
+        }
         Material material = Material.valueOf(materialName);
 
         itemValue.setValue(material, price);

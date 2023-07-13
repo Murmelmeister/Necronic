@@ -98,6 +98,10 @@ public class ItemValue {
         set(material.name() + ".Value", price);
     }
 
+    public boolean existName(String name) {
+        return config.getString(name) != null;
+    }
+
     public List<String> getItems() {
         this.items = new ArrayList<>();
         if (config.contains("ItemList")) items = config.getStringList("ItemList");
