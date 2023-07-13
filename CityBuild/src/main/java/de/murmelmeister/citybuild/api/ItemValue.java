@@ -13,6 +13,8 @@ import org.slf4j.Logger;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemValue {
     private final Logger logger;
@@ -21,6 +23,7 @@ public class ItemValue {
 
     private File file;
     private YamlConfiguration config;
+    private List<String> items;
 
     public ItemValue(Main main) {
         this.logger = main.getInstance().getSLF4JLogger();
@@ -43,7 +46,7 @@ public class ItemValue {
 
     public void load() {
         for (Material material : Material.values())
-            if (get(material.name() + ".Value") == null) set(material.name() + ".Value", defaultSellPrice());
+            if (get(material.name() + ".Value") == null) setValue(material, defaultSellPrice());
     }
 
     public void save() {
@@ -84,5 +87,20 @@ public class ItemValue {
 
     public double getValue(Material material) {
         return config.getDouble(material.name() + ".Value");
+    }
+
+    public void setValue(Material material, BigDecimal price) {
+        this.items = getItems();
+        if (!(items.contains(material.name()))) {
+            items.add(material.name());
+            set("ItemList", items);
+        }
+        set(material.name() + ".Value", price);
+    }
+
+    public List<String> getItems() {
+        this.items = new ArrayList<>();
+        if (config.contains("ItemList")) items = config.getStringList("ItemList");
+        return items;
     }
 }

@@ -3,10 +3,7 @@ package de.murmelmeister.citybuild.command;
 import de.murmelmeister.citybuild.CityBuild;
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.command.commands.*;
-import de.murmelmeister.citybuild.command.commands.economy.EconomyCommand;
-import de.murmelmeister.citybuild.command.commands.economy.MoneyCommand;
-import de.murmelmeister.citybuild.command.commands.economy.PayCommand;
-import de.murmelmeister.citybuild.command.commands.economy.SellCommand;
+import de.murmelmeister.citybuild.command.commands.economy.*;
 import de.murmelmeister.citybuild.command.commands.homes.AddHomeCommand;
 import de.murmelmeister.citybuild.command.commands.homes.HomeCommand;
 import de.murmelmeister.citybuild.command.commands.homes.RemoveHomeCommand;
@@ -67,6 +64,7 @@ public class Commands {
         addCommand("gamemode", new GameModeCommand(main));
         addCommand("pay", new PayCommand(main));
         addCommand("sell", new SellCommand(main));
+        addCommand("itemvalue", new ItemValueCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {

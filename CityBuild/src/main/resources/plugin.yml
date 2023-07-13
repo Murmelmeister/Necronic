@@ -144,3 +144,8 @@ commands:
   sell:
     usage: /sell <hand|price>
     description: Sell the item in your hand.
+  itemvalue:
+    usage: /itemvalue <get|set> <material> [price]
+    description: Edit the item values.
+    aliases:
+      - iv

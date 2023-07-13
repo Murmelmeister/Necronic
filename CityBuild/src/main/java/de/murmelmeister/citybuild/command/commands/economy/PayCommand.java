@@ -75,7 +75,7 @@ public class PayCommand extends CommandManager {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return null;
+        return tabCompletePlayers(sender, args, 1);
     }
 
     private void payAllPlayers(Player player, String[] args) {

@@ -8,16 +8,12 @@ import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class GameModeCommand extends CommandManager {
     public GameModeCommand(Main main) {
@@ -104,8 +100,7 @@ public class GameModeCommand extends CommandManager {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1)
             return tabComplete(Arrays.asList("survival", "creative", "adventure", "spectator", "0", "1", "2", "3"), args);
-        //return Stream.of("survival", "creative", "adventure", "spectator", "0", "1", "2", "3").filter(s -> StringUtil.startsWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
-        if (args.length == 2) return playerTabComplete(sender, args);
+        if (args.length == 2) return tabCompletePlayers(sender, args);
         return Collections.emptyList();
     }
 

@@ -90,6 +90,6 @@ public class TpaDenyCommand extends CommandManager {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        return playerTabComplete(sender, args, 1);
+        return tabCompletePlayers(sender, args, 1);
     }
 }

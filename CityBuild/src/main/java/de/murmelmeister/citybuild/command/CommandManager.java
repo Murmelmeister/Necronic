@@ -7,6 +7,7 @@ import de.murmelmeister.citybuild.configs.Message;
 import de.murmelmeister.citybuild.util.HexColor;
 import de.murmelmeister.citybuild.util.ListUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -15,6 +16,7 @@ import org.bukkit.util.StringUtil;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,7 +55,7 @@ public abstract class CommandManager extends Commands implements TabExecutor {
         else sender.sendMessage(HexColor.format(message));
     }
 
-    public List<String> playerTabComplete(CommandSender sender, String[] args) {
+    public List<String> tabCompletePlayers(CommandSender sender, String[] args) {
         List<String> tabComplete = new ArrayList<>();
         String lastWord = args[args.length - 1];
         Player senderPlayer = sender instanceof Player ? (Player) sender : null;
@@ -66,13 +68,13 @@ public abstract class CommandManager extends Commands implements TabExecutor {
         return tabComplete;
     }
 
-    public List<String> playerTabComplete(CommandSender sender, String[] args, int length) {
+    public List<String> tabCompletePlayers(CommandSender sender, String[] args, int length) {
         if (args.length == length)
-            return playerTabComplete(sender, args);
+            return tabCompletePlayers(sender, args);
         return Collections.emptyList();
     }
 
-    public List<String> offlinePlayerTabComplete(CommandSender sender, String[] args) {
+    public List<String> tabCompleteOfflinePlayers(CommandSender sender, String[] args) {
         List<String> tabComplete = new ArrayList<>();
         String lastWord = args[args.length - 1];
         for (OfflinePlayer player : sender.getServer().getOfflinePlayers()) {
@@ -85,10 +87,17 @@ public abstract class CommandManager extends Commands implements TabExecutor {
         return tabComplete;
     }
 
-    public List<String> offlinePlayerTabComplete(CommandSender sender, String[] args, int length) {
+    public List<String> tabCompleteOfflinePlayers(CommandSender sender, String[] args, int length) {
         if (args.length == length)
-            return offlinePlayerTabComplete(sender, args);
+            return tabCompleteOfflinePlayers(sender, args);
         return Collections.emptyList();
+    }
+
+    public List<String> tabCompleteMaterial(String[] args) {
+        List<String> materials = new ArrayList<>();
+        for (Material material : Material.values())
+            materials.add(material.name());
+        return materials.stream().filter(s -> StringUtil.startsWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
     }
 
     public List<String> tabComplete(List<String> list, String[] args) {

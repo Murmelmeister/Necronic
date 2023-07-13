@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class SellCommand extends CommandManager {
             return true;
         }
 
-        // TODO: Edit the sell list + show the list
+        // TODO: Edit the sell list
 
         if (args.length != 1) {
             sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
@@ -74,7 +73,6 @@ public class SellCommand extends CommandManager {
                 sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
                 break;
         }
-
         return true;
     }
 

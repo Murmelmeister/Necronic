@@ -56,10 +56,8 @@ public class EconomyCommand extends CommandManager {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        if (args.length == 1)
-            return tabComplete(Arrays.asList("set", "add", "remove", "reset"), args);
-        if (args.length == 2)
-            return playerTabComplete(sender, args);
+        if (args.length == 1) return tabComplete(Arrays.asList("set", "add", "remove", "reset"), args);
+        if (args.length == 2) return tabCompletePlayers(sender, args);
         return Collections.emptyList();
     }
 
