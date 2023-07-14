@@ -1,0 +1,6 @@
+name: Lobby
+version: '${project.version}'
+main: de.murmelmeister.lobby.Lobby
+api-version: '1.20'
+author: Murmelmeister
+website: https://www.youtube.com/Murmelmeister

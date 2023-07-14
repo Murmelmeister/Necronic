@@ -53,10 +53,6 @@ public class Listeners implements Listener {
         addListener(new ConnectListener(main));
     }
 
-    public void updateScoreboard() {
-        instance.getServer().getOnlinePlayers().forEach(player -> new TestScoreboard(player, main));
-    }
-
     private void addListener(Listener listener) {
         instance.getServer().getPluginManager().registerEvents(listener, instance);
     }
