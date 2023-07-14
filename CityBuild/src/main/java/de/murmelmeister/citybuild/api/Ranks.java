@@ -87,7 +87,7 @@ public class Ranks {
                     team.setPrefix(HexColor.format(getTabPrefix(s)));
                     team.setSuffix(HexColor.format(getTabSuffix(s)));
                     //team.setColor(ChatColor.valueOf(ChatColor.getLastColors(getTabColor(s))));
-                    team.setColor(Objects.requireNonNull(ChatColor.getByChar(getTabColor(s).replace("§", ""))));
+                    team.setColor(Objects.requireNonNull(ChatColor.getByChar(getTabColor(s).replace("§", "").replace("&", ""))));
 
                     for (Player target : server.getOnlinePlayers()) {
                         /*if (team.hasEntry(target.getName()))

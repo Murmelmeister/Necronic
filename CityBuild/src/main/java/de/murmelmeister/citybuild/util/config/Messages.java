@@ -100,7 +100,7 @@ public enum Messages {
     SCOREBOARD_SCORE_11("Scoreboard.Score.11", "&8» &d[SERVER]"),
     SCOREBOARD_SCORE_10("Scoreboard.Score.10", "&3"),
     SCOREBOARD_SCORE_9("Scoreboard.Score.9", "&8| &5Your rank:"),
-    SCOREBOARD_SCORE_8("Scoreboard.Score.8", "&8» &7[RANK]"),
+    SCOREBOARD_SCORE_8("Scoreboard.Score.8", "&8» [RANK_COLOR][RANK]"),
     SCOREBOARD_SCORE_7("Scoreboard.Score.7", "&2"),
     SCOREBOARD_SCORE_6("Scoreboard.Score.6", "&8| &5Your [CURRENCY]:"),
     SCOREBOARD_SCORE_5("Scoreboard.Score.5", "&8» &d[MONEY]"),
