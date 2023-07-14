@@ -17,24 +17,16 @@ public class TpaDenyCommand extends CommandManager {
         super(main);
     }
 
+    /*
+    /tpaDeny <player>
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_TPA_DENY))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_TPA_DENY))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_TPA_DENY))) return true;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_TPA_DENY)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
-
-        Player player = sender instanceof Player ? (Player) sender : null;
-
-        if (player == null) {
-            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-            return true;
-        }
+        Player player = getPlayer(sender);
+        if (!(existPlayer(sender))) return true;
 
         if (args.length != 1) {
             sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
@@ -42,7 +34,6 @@ public class TpaDenyCommand extends CommandManager {
         }
 
         Player target = player.getServer().getPlayer(args[0]);
-
         if (target == null) {
             sendMessage(player, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
             return true;
@@ -55,7 +46,6 @@ public class TpaDenyCommand extends CommandManager {
             }
 
             Player targetDeny = player.getServer().getPlayer(listUtil.getTpa().get(player.getUniqueId()));
-
             if (targetDeny == null) {
                 sendMessage(player, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
                 return true;
@@ -71,7 +61,6 @@ public class TpaDenyCommand extends CommandManager {
             }
 
             Player targetDeny = player.getServer().getPlayer(listUtil.getTpaHere().get(player.getUniqueId()));
-
             if (targetDeny == null) {
                 sendMessage(player, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
                 return true;

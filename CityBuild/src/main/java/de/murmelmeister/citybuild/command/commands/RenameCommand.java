@@ -22,24 +22,16 @@ public class RenameCommand extends CommandManager {
         super(main);
     }
 
+    /*
+    /rename <displayName...>
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RENAME))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RENAME))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_RENAME))) return true;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RENAME)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
-
-        Player player = sender instanceof Player ? (Player) sender : null;
-
-        if (player == null) {
-            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-            return true;
-        }
+        Player player = getPlayer(sender);
+        if (!(existPlayer(sender))) return true;
 
         if (args.length == 0) {
             sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));

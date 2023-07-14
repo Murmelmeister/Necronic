@@ -17,22 +17,19 @@ public class CityBuildReloadCommand extends CommandManager {
         super(main);
     }
 
+    /*
+    /cityBuildReload
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RELOAD))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RELOAD)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RELOAD))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_RELOAD))) return true;
 
         this.config.create();
         this.message.create();
         this.locations.create();
         this.ranks.create();
+        this.itemValue.create();
         sendMessage(sender, message.getString(Messages.COMMAND_RELOAD));
         return true;
     }

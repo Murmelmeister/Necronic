@@ -6,14 +6,12 @@ import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class RankCommand extends CommandManager {
     public RankCommand(Main main) {
@@ -22,17 +20,10 @@ public class RankCommand extends CommandManager {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RANK_COMMAND))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RANK_COMMAND))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_RANK_COMMAND))) return true;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RANK_COMMAND)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
-
-        if (args.length >= 2) { // args.length <= 9
+        if (args.length >= 2) {
             switch (args[0]) {
                 case "get":
                     getRank(sender, args);
@@ -50,21 +41,18 @@ public class RankCommand extends CommandManager {
                     sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
                     break;
             }
-        } else {
-            sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
-        }
-
+        } else sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
         return true;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         if (args.length == 1)
-            return Stream.of("get", "remove", "add", "set").filter(s -> StringUtil.startsWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+            return tabComplete(Arrays.asList("get", "remove", "add", "set"), args, 1);
         if (args.length == 2)
-            return ranks.getRankList().stream().filter(s -> StringUtil.startsWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+            return tabComplete(ranks.getRankList(), args, 2);
         if (args.length == 3 && args[0].equals("set"))
-            return Stream.of("chatprefix", "chatsuffix", "chatcolor", "tabprefix", "tabsuffix", "tabcolor", "tabid", "teamid", "permission").filter(s -> StringUtil.startsWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+            return tabComplete(Arrays.asList("chatprefix", "chatsuffix", "chatcolor", "tabprefix", "tabsuffix", "tabcolor", "tabid", "teamid", "permission"), args, 3);
         return Collections.emptyList();
     }
 
@@ -72,18 +60,10 @@ public class RankCommand extends CommandManager {
     /rank get <name>
      */
     private void getRank(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RANK_GET))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RANK_GET)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RANK_GET))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_RANK_GET))) return;
 
         String name = args[1];
-
         if (!(ranks.existRank(name))) {
             sendMessage(sender, message.getString(Messages.COMMAND_RANK_NOT_EXIST).replace("[NAME]", name));
             return;
@@ -96,18 +76,10 @@ public class RankCommand extends CommandManager {
     /rank remove <name>
      */
     private void removeRank(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RANK_REMOVE))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RANK_REMOVE)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RANK_REMOVE))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_RANK_REMOVE))) return;
 
         String name = args[1];
-
         ranks.removeRank(name);
         sendMessage(sender, message.getString(Messages.COMMAND_RANK_REMOVE).replace("[NAME]", name));
     }
@@ -116,15 +88,8 @@ public class RankCommand extends CommandManager {
     /rank add <name> <chatPrefix> <chatSuffix> <chatColor> <tabPrefix> <tabSuffix> <tabColor> <tabID>
      */
     private void addRank(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RANK_ADD))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RANK_ADD)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RANK_ADD))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_RANK_ADD))) return;
 
         if (args.length <= 8) {
             sendMessage(sender, message.getString(Messages.COMMAND_RANK_USAGE));
@@ -204,15 +169,8 @@ public class RankCommand extends CommandManager {
     /rank set <name> chatprefix <prefix>
      */
     private void setChatPrefixRank(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RANK_SET_CHAT_PREFIX))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RANK_SET_CHAT_PREFIX)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RANK_SET_CHAT_PREFIX))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_RANK_SET_CHAT_PREFIX))) return;
 
         String name = args[1];
         String prefix = args[3];
@@ -230,15 +188,8 @@ public class RankCommand extends CommandManager {
     /rank set <name> chatsuffix <suffix>
      */
     private void setChatSuffixRank(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RANK_SET_CHAT_SUFFIX))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RANK_SET_CHAT_SUFFIX)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RANK_SET_CHAT_SUFFIX))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_RANK_SET_CHAT_SUFFIX))) return;
 
         String name = args[1];
         String suffix = args[3];
@@ -256,15 +207,9 @@ public class RankCommand extends CommandManager {
     /rank set <name> chatcolor <color>
      */
     private void setChatColorRank(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RANK_SET_CHAT_COLOR))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RANK_SET_CHAT_COLOR))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_RANK_SET_CHAT_COLOR))) return;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RANK_SET_CHAT_COLOR)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
 
         String name = args[1];
         String color = args[3];
@@ -282,15 +227,8 @@ public class RankCommand extends CommandManager {
     /rank set <name> tabprefix <prefix>
      */
     private void setTabPrefixRank(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RANK_SET_TAB_PREFIX))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RANK_SET_TAB_PREFIX)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RANK_SET_TAB_PREFIX))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_RANK_SET_TAB_PREFIX))) return;
 
         String name = args[1];
         String prefix = args[3];
@@ -308,15 +246,8 @@ public class RankCommand extends CommandManager {
     /rank set <name> tabsuffix <suffix>
      */
     private void setTabSuffixRank(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RANK_SET_TAB_SUFFIX))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RANK_SET_TAB_SUFFIX)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RANK_SET_TAB_SUFFIX))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_RANK_SET_TAB_SUFFIX))) return;
 
         String name = args[1];
         String suffix = args[3];
@@ -334,15 +265,8 @@ public class RankCommand extends CommandManager {
     /rank set <name> tabcolor <color>
      */
     private void setTabColorRank(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RANK_SET_TAB_COLOR))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RANK_SET_TAB_COLOR)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RANK_SET_TAB_COLOR))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_RANK_SET_TAB_COLOR))) return;
 
         String name = args[1];
         String color = args[3];
@@ -360,15 +284,8 @@ public class RankCommand extends CommandManager {
     /rank set <name> tabid <id>
      */
     private void setTabIDRank(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RANK_SET_TAB_ID))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RANK_SET_TAB_ID)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RANK_SET_TAB_ID))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_RANK_SET_TAB_ID))) return;
 
         String name = args[1];
         String id = args[3];
@@ -386,15 +303,8 @@ public class RankCommand extends CommandManager {
     /rank set <name> teamid <id>
      */
     private void setTeamIDRank(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RANK_SET_TEAM_ID))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RANK_SET_TEAM_ID)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RANK_SET_TEAM_ID))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_RANK_SET_TEAM_ID))) return;
 
         String name = args[1];
         String id = args[3];
@@ -412,15 +322,8 @@ public class RankCommand extends CommandManager {
     /rank set <name> permission <permission>
      */
     private void setPermissionRank(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_RANK_SET_PERMISSION))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_RANK_SET_PERMISSION)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_RANK_SET_PERMISSION))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_RANK_SET_PERMISSION))) return;
 
         String name = args[1];
         String permission = args[3];

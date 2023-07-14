@@ -22,24 +22,16 @@ public class SignCommand extends CommandManager {
         super(main);
     }
 
+    /*
+    /sign <sign...>
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_SIGN))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_SIGN))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_SIGN))) return true;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_SIGN)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
-
-        Player player = sender instanceof Player ? (Player) sender : null;
-
-        if (player == null) {
-            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-            return true;
-        }
+        Player player = getPlayer(sender);
+        if (!(existPlayer(sender))) return true;
 
         StringBuilder messageBuilder = new StringBuilder();
         for (String arg : args) {
@@ -77,7 +69,8 @@ public class SignCommand extends CommandManager {
         ItemStack itemStack = player.getItemInHand();
         ItemMeta itemMeta = itemStack.getItemMeta();
         SimpleDateFormat format = new SimpleDateFormat(config.getString(Configs.PATTERN_COMMAND_SIGN));
-        if (config.getBoolean(Configs.TIMEZONE_ENABLE)) format.setTimeZone(TimeZone.getTimeZone(config.getString(Configs.TIMEZONE_ZONE)));
+        if (config.getBoolean(Configs.TIMEZONE_ENABLE))
+            format.setTimeZone(TimeZone.getTimeZone(config.getString(Configs.TIMEZONE_ZONE)));
         String created = format.format(new Date());
         List<String> loreList = new ArrayList<>(Arrays.asList(lore, "\n"));
         loreList.add(HexColor.format(message.getString(Messages.COMMAND_SIGN_CREATE).replace("[NAME]", player.getName()).replace("[DATE]", created.replace(" ", message.getString(Messages.COMMAND_SIGN_DATE)))));

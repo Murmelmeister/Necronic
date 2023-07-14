@@ -18,24 +18,16 @@ public class SetSpawnCommand extends CommandManager {
         super(main);
     }
 
+    /*
+    /setSpawn
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_SET_SPAWN))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_SET_SPAWN))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_SET_SPAWN))) return true;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_SET_SPAWN)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
-
-        Player player = sender instanceof Player ? (Player) sender : null;
-
-        if (player == null) {
-            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-            return true;
-        }
+        Player player = getPlayer(sender);
+        if (!(existPlayer(sender))) return true;
 
         locations.setLocation(player.getLocation(), "Spawn");
         sendMessage(player, message.getString(Messages.COMMAND_SET_SPAWN));

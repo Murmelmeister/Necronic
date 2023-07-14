@@ -21,32 +21,21 @@ public class HeadCommand extends CommandManager {
         super(main);
     }
 
+    /*
+    /head [name]
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_HEAD))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_HEAD))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_HEAD))) return true;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_HEAD)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
+        Player player = getPlayer(sender);
+        if (!(existPlayer(sender))) return true;
 
-        Player player = sender instanceof Player ? (Player) sender : null;
-
-        if (player == null) {
-            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-            return true;
-        }
-
-        if (args.length == 0) {
-            setFunction(player, player.getName());
-        } else if (args.length == 1) {
+        if (args.length == 0) setFunction(player, player.getName());
+        else if (args.length == 1)
             setFunction(player, args[0]);
-        } else {
-            sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
-        }
+        else sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
         return true;
     }
 

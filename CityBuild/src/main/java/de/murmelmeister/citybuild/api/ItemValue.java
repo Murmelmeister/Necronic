@@ -69,7 +69,7 @@ public class ItemValue {
             player.sendMessage(" Trying to remove more items than are available.");
         player.getInventory().removeItem(item);
         player.updateInventory();
-        economy.addMoney(player, result);
+        economy.addMoney(player.getUniqueId(), result);
         return result;
     }
 

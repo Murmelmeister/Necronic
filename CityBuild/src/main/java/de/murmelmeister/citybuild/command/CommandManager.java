@@ -7,7 +7,7 @@ import de.murmelmeister.citybuild.configs.Message;
 import de.murmelmeister.citybuild.util.HexColor;
 import de.murmelmeister.citybuild.util.ListUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
-import org.bukkit.Material;
+import de.murmelmeister.citybuild.util.config.Messages;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -16,7 +16,6 @@ import org.bukkit.util.StringUtil;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,6 +54,32 @@ public abstract class CommandManager extends Commands implements TabExecutor {
         else sender.sendMessage(HexColor.format(message));
     }
 
+    public boolean isEnable(CommandSender sender, Configs configs) {
+        if (!(config.getBoolean(configs))) {
+            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
+            return false;
+        } return true;
+    }
+
+    public boolean hasPermission(CommandSender sender, Configs configs) {
+        if (!(sender.hasPermission(config.getString(configs)))) {
+            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
+            return false;
+        } return true;
+    }
+
+    public Player getPlayer(CommandSender sender) {
+        return sender instanceof Player ? (Player) sender : null;
+    }
+
+    public boolean existPlayer(CommandSender sender) {
+        Player player = getPlayer(sender);
+        if (player == null) {
+            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
+            return false;
+        } else return true;
+    }
+
     public List<String> tabCompletePlayers(CommandSender sender, String[] args) {
         List<String> tabComplete = new ArrayList<>();
         String lastWord = args[args.length - 1];
@@ -91,13 +116,6 @@ public abstract class CommandManager extends Commands implements TabExecutor {
         if (args.length == length)
             return tabCompleteOfflinePlayers(sender, args);
         return Collections.emptyList();
-    }
-
-    public List<String> tabCompleteMaterial(String[] args) {
-        List<String> materials = new ArrayList<>();
-        for (Material material : Material.values())
-            materials.add(material.name());
-        return materials.stream().filter(s -> StringUtil.startsWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
     }
 
     public List<String> tabComplete(List<String> list, String[] args) {

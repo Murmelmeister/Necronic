@@ -7,37 +7,26 @@ import de.murmelmeister.citybuild.util.config.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class HomeCommand extends CommandManager {
     public HomeCommand(Main main) {
         super(main);
     }
 
+    /*
+    /home <home>
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_HOME))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_HOME))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_HOME))) return true;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_HOME)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
-
-        Player player = sender instanceof Player ? (Player) sender : null;
-
-        if (player == null) {
-            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-            return true;
-        }
+        Player player = getPlayer(sender);
+        if (!(existPlayer(sender))) return true;
 
         if (args.length != 1) {
             sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
@@ -56,8 +45,6 @@ public class HomeCommand extends CommandManager {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
-        if (args.length == 1)
-            return homes.getHomeList().stream().filter(s -> StringUtil.startsWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
-        return Collections.emptyList();
+        return tabComplete(homes.getHomeList(), args, 1);
     }
 }

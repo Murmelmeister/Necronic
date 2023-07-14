@@ -6,7 +6,6 @@ import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
 import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.HexColor;
-import de.murmelmeister.citybuild.util.ListUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
 import org.bukkit.ChatColor;
@@ -27,7 +26,6 @@ public class Ranks {
     private final CityBuild instance;
     private final Config defaultConfig;
     private final Message message;
-    private final ListUtil listUtil;
     private final SchedulerTask schedulerTask;
 
     private File file;
@@ -40,7 +38,6 @@ public class Ranks {
         this.instance = main.getInstance();
         this.defaultConfig = main.getConfig();
         this.message = main.getMessage();
-        this.listUtil = main.getListUtil();
         this.schedulerTask = main.getSchedulerTask();
     }
 

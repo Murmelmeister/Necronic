@@ -5,13 +5,13 @@ import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.UUID;
 
 public class Economy {
     private final Logger logger;
@@ -25,8 +25,8 @@ public class Economy {
         this.defaultConfig = main.getConfig();
     }
 
-    public void create(Player player) {
-        String fileName = player.getUniqueId() + ".yml";
+    public void create(UUID uuid) {
+        String fileName = uuid + ".yml";
         this.file = new File(String.format("plugins//%s//Economy//UserData//", defaultConfig.getString(Configs.FILE_NAME)), fileName);
         ConfigUtil.createFile(logger, file, fileName);
         this.config = YamlConfiguration.loadConfiguration(file);
@@ -40,20 +40,20 @@ public class Economy {
         }
     }
 
-    public void setUsername(Player player) {
-        create(player);
-        set("Username", player.getName());
+    public void setUsername(UUID uuid, String name) {
+        create(uuid);
+        set("Username", name);
         save();
     }
 
-    public void createAccount(Player player) {
-        create(player);
+    public void createAccount(UUID uuid) {
+        create(uuid);
         if (config.getString("Money") == null) set("Money", defaultMoney());
         save();
     }
 
-    public BigDecimal getMoney(Player player) {
-        create(player);
+    public BigDecimal getMoney(UUID uuid) {
+        create(uuid);
         BigDecimal exactMoney = defaultMoney();
         double money = exactMoney.doubleValue();
         new BigDecimal(money);
@@ -62,40 +62,40 @@ public class Economy {
         return exactMoney;
     }
 
-    public void setMoney(Player player, BigDecimal money) {
-        create(player);
+    public void setMoney(UUID uuid, BigDecimal money) {
+        create(uuid);
         set("Money", money);
         save();
     }
 
-    public void addMoney(Player player, BigDecimal money) {
-        create(player);
-        BigDecimal amount = getMoney(player).add(money, MathContext.DECIMAL128);
+    public void addMoney(UUID uuid, BigDecimal money) {
+        create(uuid);
+        BigDecimal amount = getMoney(uuid).add(money, MathContext.DECIMAL128);
         set("Money", amount);
         save();
     }
 
-    public void removeMoney(Player player, BigDecimal money) {
-        create(player);
-        BigDecimal amount = getMoney(player).subtract(money, MathContext.DECIMAL128);
+    public void removeMoney(UUID uuid, BigDecimal money) {
+        create(uuid);
+        BigDecimal amount = getMoney(uuid).subtract(money, MathContext.DECIMAL128);
         set("Money", amount);
         save();
     }
 
-    public void resetMoney(Player player) {
-        create(player);
+    public void resetMoney(UUID uuid) {
+        create(uuid);
         set("Money", defaultMoney());
         save();
     }
 
-    public void payMoney(Player player, Player target, BigDecimal money) {
+    public void payMoney(UUID player, UUID target, BigDecimal money) {
         removeMoney(player, money);
         addMoney(target, money);
     }
 
-    public boolean hasEnoughMoney(Player player, double money) {
-        create(player);
-        return money <= getMoney(player).doubleValue();
+    public boolean hasEnoughMoney(UUID uuid, double money) {
+        create(uuid);
+        return money <= getMoney(uuid).doubleValue();
     }
 
     public BigDecimal defaultMoney() {

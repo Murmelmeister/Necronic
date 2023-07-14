@@ -22,15 +22,8 @@ public class ItemValueCommand extends CommandManager {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_ITEM_VALUE_COMMAND))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_ITEM_VALUE_COMMAND)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_ITEM_VALUE_COMMAND))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_ITEM_VALUE_COMMAND))) return true;
 
         if (args.length >= 2) {
             switch (args[0]) {
@@ -59,15 +52,8 @@ public class ItemValueCommand extends CommandManager {
     /itemValue get <material>
      */
     private void getItemValue(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_ITEM_VALUE_GET))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_ITEM_VALUE_GET)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_ITEM_VALUE_GET))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_ITEM_VALUE_GET))) return;
 
         String materialName = args[1].toUpperCase();
         if (!(itemValue.existName(materialName))) {
@@ -84,31 +70,31 @@ public class ItemValueCommand extends CommandManager {
                     .replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
     }
 
+    /*
+    /itemValue set <material> <price>
+     */
     private void setItemValue(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_ITEM_VALUE_SET))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_ITEM_VALUE_SET)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_ITEM_VALUE_SET))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_ITEM_VALUE_SET))) return;
 
         String materialName = args[1].toUpperCase();
-        BigDecimal price = new BigDecimal(args[2]);
         if (!(itemValue.existName(materialName))) {
             sendMessage(sender, message.getString(Messages.COMMAND_ITEM_VALUE_MATERIAL_NOT_EXIST).replace("[MATERIAL]", materialName));
             return;
         }
         Material material = Material.valueOf(materialName);
 
-        itemValue.setValue(material, price);
-        if (config.getBoolean(Configs.MATERIAL_CASE))
-            sendMessage(sender, message.getString(Messages.COMMAND_ITEM_VALUE_SET).replace("[ITEM]", material.name().toLowerCase()).replace("[MONEY]", decimalFormat.format(itemValue.getValue(material)))
-                    .replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
-        else
-            sendMessage(sender, message.getString(Messages.COMMAND_ITEM_VALUE_SET).replace("[ITEM]", material.name().toUpperCase()).replace("[MONEY]", decimalFormat.format(itemValue.getValue(material)))
-                    .replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
+        try {
+            BigDecimal price = new BigDecimal(args[2]);
+            itemValue.setValue(material, price);
+            if (config.getBoolean(Configs.MATERIAL_CASE))
+                sendMessage(sender, message.getString(Messages.COMMAND_ITEM_VALUE_SET).replace("[ITEM]", material.name().toLowerCase()).replace("[MONEY]", decimalFormat.format(itemValue.getValue(material)))
+                        .replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
+            else
+                sendMessage(sender, message.getString(Messages.COMMAND_ITEM_VALUE_SET).replace("[ITEM]", material.name().toUpperCase()).replace("[MONEY]", decimalFormat.format(itemValue.getValue(material)))
+                        .replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
+        } catch (NumberFormatException exception) {
+            sendMessage(sender, message.getString(Messages.NO_NUMBER));
+        }
     }
 }

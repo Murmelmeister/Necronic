@@ -18,35 +18,20 @@ public class GodModeCommand extends CommandManager {
         super(main);
     }
 
+    /*
+    /godMode [player]
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_GOD_MODE_COMMAND))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_GOD_MODE_COMMAND)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_GOD_MODE_COMMAND))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_GOD_MODE_COMMAND))) return true;
 
         if (args.length == 0) {
-            if (!(config.getBoolean(Configs.COMMAND_ENABLE_GOD_MODE_USE))) {
-                sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-                return true;
-            }
+            if (!(isEnable(sender, Configs.COMMAND_ENABLE_GOD_MODE_USE))) return true;
+            if (!(hasPermission(sender, Configs.PERMISSION_GOD_MODE_USE))) return true;
 
-            if (!(sender.hasPermission(config.getString(Configs.PERMISSION_GOD_MODE_USE)))) {
-                sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-                return true;
-            }
-
-            Player player = sender instanceof Player ? (Player) sender : null;
-
-            if (player == null) {
-                sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-                return true;
-            }
+            Player player = getPlayer(sender);
+            if (!(existPlayer(sender))) return true;
 
             UUID uuid = player.getUniqueId();
             if (listUtil.getGodMode().contains(uuid)) {
@@ -56,20 +41,11 @@ public class GodModeCommand extends CommandManager {
                 listUtil.getGodMode().add(uuid);
                 sendMessage(player, message.getString(Messages.COMMAND_GOD_MODE_USE_ON));
             }
-
         } else if (args.length == 1) {
-            if (!(config.getBoolean(Configs.COMMAND_ENABLE_GOD_MODE_OTHER))) {
-                sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-                return true;
-            }
-
-            if (!(sender.hasPermission(config.getString(Configs.PERMISSION_GOD_MODE_OTHER)))) {
-                sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-                return true;
-            }
+            if (!(isEnable(sender, Configs.COMMAND_ENABLE_GOD_MODE_OTHER))) return true;
+            if (!(hasPermission(sender, Configs.PERMISSION_GOD_MODE_OTHER))) return true;
 
             Player target = sender.getServer().getPlayer(args[0]);
-
             if (target == null) {
                 sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
                 return true;
@@ -85,10 +61,7 @@ public class GodModeCommand extends CommandManager {
                 sendMessage(target, message.getString(Messages.COMMAND_GOD_MODE_USE_ON));
                 sendMessage(sender, message.getString(Messages.COMMAND_GOD_MODE_OTHER_ON).replace("[PLAYER]", target.getName()));
             }
-
-        } else {
-            sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
-        }
+        } else sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
         return true;
     }
 

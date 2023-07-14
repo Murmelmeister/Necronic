@@ -22,15 +22,8 @@ public class GameModeCommand extends CommandManager {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_GAME_MODE_COMMAND))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_GAME_MODE_COMMAND)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_GAME_MODE_COMMAND))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_GAME_MODE_COMMAND))) return true;
 
         if (args.length == 1) {
             switch (args[0]) {
@@ -104,107 +97,70 @@ public class GameModeCommand extends CommandManager {
         return Collections.emptyList();
     }
 
+    /*
+    /gameMode survival
+     */
     private void gameModeUseSurvival(CommandSender sender) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_GAME_MODE_USE_SURVIVAL))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_GAME_MODE_USE_SURVIVAL))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_GAME_MODE_USE_SURVIVAL))) return;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_GAME_MODE_USE_SURVIVAL)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
-
-        Player player = sender instanceof Player ? (Player) sender : null;
-
-        if (player == null) {
-            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-            return;
-        }
+        Player player = getPlayer(sender);
+        if (!(existPlayer(sender))) return;
 
         player.setGameMode(GameMode.SURVIVAL);
         sendMessage(player, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.SURVIVAL.name().toLowerCase()));
     }
 
+    /*
+    /gameMode creative
+     */
     private void gameModeUseCreative(CommandSender sender) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_GAME_MODE_USE_CREATIVE))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_GAME_MODE_USE_CREATIVE))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_GAME_MODE_USE_CREATIVE))) return;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_GAME_MODE_USE_CREATIVE)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
-
-        Player player = sender instanceof Player ? (Player) sender : null;
-
-        if (player == null) {
-            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-            return;
-        }
+        Player player = getPlayer(sender);
+        if (!(existPlayer(sender))) return;
 
         player.setGameMode(GameMode.CREATIVE);
         sendMessage(player, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.CREATIVE.name().toLowerCase()));
     }
 
+    /*
+    /gameMode adventure
+     */
     private void gameModeUseAdventure(CommandSender sender) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_GAME_MODE_USE_ADVENTURE))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_GAME_MODE_USE_ADVENTURE))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_GAME_MODE_USE_ADVENTURE))) return;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_GAME_MODE_USE_ADVENTURE)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
-
-        Player player = sender instanceof Player ? (Player) sender : null;
-
-        if (player == null) {
-            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-            return;
-        }
+        Player player = getPlayer(sender);
+        if (!(existPlayer(sender))) return;
 
         player.setGameMode(GameMode.ADVENTURE);
         sendMessage(player, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.ADVENTURE.name().toLowerCase()));
     }
 
+    /*
+    /gameMode spectator
+     */
     private void gameModeUseSpectator(CommandSender sender) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_GAME_MODE_USE_SPECTATOR))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_GAME_MODE_USE_SPECTATOR))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_GAME_MODE_USE_SPECTATOR))) return;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_GAME_MODE_USE_SPECTATOR)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
-
-        Player player = sender instanceof Player ? (Player) sender : null;
-
-        if (player == null) {
-            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-            return;
-        }
+        Player player = getPlayer(sender);
+        if (!(existPlayer(sender))) return;
 
         player.setGameMode(GameMode.SPECTATOR);
         sendMessage(player, message.getString(Messages.COMMAND_GAME_MODE_USE).replace("[MODE]", GameMode.SPECTATOR.name().toLowerCase()));
     }
 
+    /*
+    /gameMode survival <player>
+     */
     private void gameModeOtherSurvival(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_GAME_MODE_OTHER_SURVIVAL))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_GAME_MODE_OTHER_SURVIVAL)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_GAME_MODE_OTHER_SURVIVAL))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_GAME_MODE_OTHER_SURVIVAL))) return;
 
         Player target = sender.getServer().getPlayer(args[1]);
-
         if (target == null) {
             sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[1]));
             return;
@@ -215,19 +171,14 @@ public class GameModeCommand extends CommandManager {
         sendMessage(sender, message.getString(Messages.COMMAND_GAME_MODE_OTHER).replace("[MODE]", GameMode.SURVIVAL.name().toLowerCase()).replace("[PLAYER]", target.getName()));
     }
 
+    /*
+    /gameMode creative <player>
+     */
     private void gameModeOtherCreative(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_GAME_MODE_OTHER_CREATIVE))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_GAME_MODE_OTHER_CREATIVE)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_GAME_MODE_OTHER_CREATIVE))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_GAME_MODE_OTHER_CREATIVE))) return;
 
         Player target = sender.getServer().getPlayer(args[1]);
-
         if (target == null) {
             sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[1]));
             return;
@@ -238,19 +189,14 @@ public class GameModeCommand extends CommandManager {
         sendMessage(sender, message.getString(Messages.COMMAND_GAME_MODE_OTHER).replace("[MODE]", GameMode.CREATIVE.name().toLowerCase()).replace("[PLAYER]", target.getName()));
     }
 
+    /*
+    /gameMode adventure <player>
+     */
     private void gameModeOtherAdventure(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_GAME_MODE_OTHER_ADVENTURE))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_GAME_MODE_OTHER_ADVENTURE)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_GAME_MODE_OTHER_ADVENTURE))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_GAME_MODE_OTHER_ADVENTURE))) return;
 
         Player target = sender.getServer().getPlayer(args[1]);
-
         if (target == null) {
             sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[1]));
             return;
@@ -261,19 +207,14 @@ public class GameModeCommand extends CommandManager {
         sendMessage(sender, message.getString(Messages.COMMAND_GAME_MODE_OTHER).replace("[MODE]", GameMode.ADVENTURE.name().toLowerCase()).replace("[PLAYER]", target.getName()));
     }
 
+    /*
+    /gameMode spectator <player>
+     */
     private void gameModeOtherSpectator(CommandSender sender, String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_GAME_MODE_OTHER_SPECTATOR))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_GAME_MODE_OTHER_SPECTATOR)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_GAME_MODE_OTHER_SPECTATOR))) return;
+        if (!(hasPermission(sender, Configs.COMMAND_ENABLE_GAME_MODE_OTHER_SPECTATOR))) return;
 
         Player target = sender.getServer().getPlayer(args[1]);
-
         if (target == null) {
             sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[1]));
             return;

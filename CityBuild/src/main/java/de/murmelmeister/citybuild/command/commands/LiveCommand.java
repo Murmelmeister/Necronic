@@ -18,24 +18,16 @@ public class LiveCommand extends CommandManager {
         super(main);
     }
 
+    /*
+    /live
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_LIVE))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_LIVE))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_LIVE))) return true;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_LIVE)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
-
-        Player player = sender instanceof Player ? (Player) sender : null;
-
-        if (player == null) {
-            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-            return true;
-        }
+        Player player = getPlayer(sender);
+        if (!(existPlayer(sender))) return true;
 
         if (listUtil.getLive().contains(player.getUniqueId())) {
             listUtil.getLive().remove(player.getUniqueId());

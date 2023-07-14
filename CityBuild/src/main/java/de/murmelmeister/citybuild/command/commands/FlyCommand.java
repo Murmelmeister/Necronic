@@ -17,35 +17,20 @@ public class FlyCommand extends CommandManager {
         super(main);
     }
 
+    /*
+    /fly [player]
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_FLY_COMMAND))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
-
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_FLY_COMMAND)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_FLY_COMMAND))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_FLY_COMMAND))) return true;
 
         if (args.length == 0) {
-            if (!(config.getBoolean(Configs.COMMAND_ENABLE_FLY_USE))) {
-                sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-                return true;
-            }
+            if (!(isEnable(sender, Configs.COMMAND_ENABLE_FLY_USE))) return true;
+            if (!(hasPermission(sender, Configs.PERMISSION_FLY_USE))) return true;
 
-            if (!(sender.hasPermission(config.getString(Configs.PERMISSION_FLY_USE)))) {
-                sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-                return true;
-            }
-
-            Player player = sender instanceof Player ? (Player) sender : null;
-
-            if (player == null) {
-                sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-                return true;
-            }
+            Player player = getPlayer(sender);
+            if (!(existPlayer(sender))) return true;
 
             if (player.getAllowFlight()) {
                 player.setAllowFlight(false);
@@ -56,20 +41,11 @@ public class FlyCommand extends CommandManager {
                 player.setFlying(true);
                 sendMessage(player, message.getString(Messages.COMMAND_FLY_USE_ON));
             }
-
         } else if (args.length == 1) {
-            if (!(config.getBoolean(Configs.COMMAND_ENABLE_FLY_OTHER))) {
-                sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-                return true;
-            }
-
-            if (!(sender.hasPermission(config.getString(Configs.PERMISSION_FLY_OTHER)))) {
-                sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-                return true;
-            }
+            if (!(isEnable(sender, Configs.COMMAND_ENABLE_FLY_OTHER))) return true;
+            if (!(hasPermission(sender, Configs.PERMISSION_FLY_OTHER))) return true;
 
             Player target = sender.getServer().getPlayer(args[0]);
-
             if (target == null) {
                 sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
                 return true;
@@ -86,10 +62,7 @@ public class FlyCommand extends CommandManager {
                 sendMessage(target, message.getString(Messages.COMMAND_FLY_USE_ON));
                 sendMessage(sender, message.getString(Messages.COMMAND_FLY_OTHER_ON).replace("[PLAYER]", target.getName()));
             }
-
-        } else {
-            sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
-        }
+        } else sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
         return true;
     }
 

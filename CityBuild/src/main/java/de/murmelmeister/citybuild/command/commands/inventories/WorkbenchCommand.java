@@ -3,7 +3,6 @@ package de.murmelmeister.citybuild.command.commands.inventories;
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.command.CommandManager;
 import de.murmelmeister.citybuild.util.config.Configs;
-import de.murmelmeister.citybuild.util.config.Messages;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -18,24 +17,16 @@ public class WorkbenchCommand extends CommandManager {
         super(main);
     }
 
+    /*
+    /workbench
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_WORKBENCH))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_WORKBENCH))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_WORKBENCH))) return true;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_WORKBENCH)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
-
-        Player player = sender instanceof Player ? (Player) sender : null;
-
-        if (player == null) {
-            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-            return true;
-        }
+        Player player = getPlayer(sender);
+        if (!(existPlayer(sender))) return true;
 
         player.openWorkbench(null, true);
         return true;

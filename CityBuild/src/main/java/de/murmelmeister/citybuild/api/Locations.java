@@ -136,11 +136,6 @@ public class Locations {
         return config.getDouble(path);
     }
 
-    public String getLocationName(String name) {
-        create();
-        return config.getString("Locations." + name + ".Name");
-    }
-
     public List<String> getLocationList() {
         this.locationList = new ArrayList<>();
         if (config.contains("LocationList")) locationList = config.getStringList("LocationList");

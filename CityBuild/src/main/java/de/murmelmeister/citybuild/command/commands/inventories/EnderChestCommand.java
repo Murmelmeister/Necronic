@@ -18,52 +18,29 @@ public class EnderChestCommand extends CommandManager {
         super(main);
     }
 
+    /*
+    /enderChest [player]
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_ENDER_CHEST_COMMAND))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_ENDER_CHEST_COMMAND))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_ENDER_CHEST_COMMAND))) return true;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_ENDER_CHEST_COMMAND)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
-
-        Player player = sender instanceof Player ? (Player) sender : null;
-
-        if (player == null) {
-            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-            return true;
-        }
+        Player player = getPlayer(sender);
+        if (!(existPlayer(sender))) return true;
 
         if (args.length == 0) {
-            if (!(config.getBoolean(Configs.COMMAND_ENABLE_ENDER_CHEST_USE))) {
-                sendMessage(player, message.getString(Messages.DISABLE_COMMAND));
-                return true;
-            }
-
-            if (!(player.hasPermission(config.getString(Configs.PERMISSION_ENDER_CHEST_USE)))) {
-                sendMessage(player, message.getString(Messages.NO_PERMISSION));
-                return true;
-            }
+            if (!(isEnable(sender, Configs.COMMAND_ENABLE_ENDER_CHEST_USE))) return true;
+            if (!(hasPermission(sender, Configs.PERMISSION_ENDER_CHEST_USE))) return true;
 
             Inventory enderChest = player.getEnderChest();
             player.openInventory(enderChest);
 
         } else if (args.length == 1) {
-            if (!(config.getBoolean(Configs.COMMAND_ENABLE_ENDER_CHEST_OTHER))) {
-                sendMessage(player, message.getString(Messages.DISABLE_COMMAND));
-                return true;
-            }
-
-            if (!(player.hasPermission(config.getString(Configs.PERMISSION_ENDER_CHEST_OTHER)))) {
-                sendMessage(player, message.getString(Messages.NO_PERMISSION));
-                return true;
-            }
+            if (!(isEnable(sender, Configs.COMMAND_ENABLE_ENDER_CHEST_OTHER))) return true;
+            if (!(hasPermission(sender, Configs.PERMISSION_ENDER_CHEST_OTHER))) return true;
 
             Player target = player.getServer().getPlayer(args[0]);
-
             if (target == null) {
                 sendMessage(player, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
                 return true;
@@ -72,9 +49,7 @@ public class EnderChestCommand extends CommandManager {
             Inventory enderChest = target.getEnderChest();
             player.openInventory(enderChest);
 
-        } else {
-            sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
-        }
+        } else sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
         return true;
     }
 

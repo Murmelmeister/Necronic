@@ -18,24 +18,16 @@ public class PayCommand extends CommandManager {
         super(main);
     }
 
+    /*
+    /pay <player> <money>
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(config.getBoolean(Configs.COMMAND_ENABLE_PAY))) {
-            sendMessage(sender, message.getString(Messages.DISABLE_COMMAND));
-            return true;
-        }
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_PAY))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_PAY_USE))) return true;
 
-        if (!(sender.hasPermission(config.getString(Configs.PERMISSION_PAY_USE)))) {
-            sendMessage(sender, message.getString(Messages.NO_PERMISSION));
-            return true;
-        }
-
-        Player player = sender instanceof Player ? (Player) sender : null;
-
-        if (player == null) {
-            sendMessage(sender, message.getString(Messages.NO_CONSOLE));
-            return true;
-        }
+        Player player = getPlayer(sender);
+        if (!(existPlayer(sender))) return true;
 
         if (args.length != 2) {
             sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
@@ -43,10 +35,7 @@ public class PayCommand extends CommandManager {
         }
 
         if (args[0].equals("*")) {
-            if (!(player.hasPermission(config.getString(Configs.PERMISSION_PAY_ALL_PLAYERS)))) {
-                sendMessage(player, message.getString(Messages.NO_PERMISSION));
-                return true;
-            }
+            if (!(hasPermission(sender, Configs.PERMISSION_PAY_ALL_PLAYERS))) return true;
 
             if (args[1].equals("*")) {
                 sendMessage(player, message.getString(Messages.COMMAND_PAY_ALL));
@@ -58,7 +47,6 @@ public class PayCommand extends CommandManager {
         }
 
         Player target = sender.getServer().getPlayer(args[0]);
-
         if (target == null) {
             sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[0]));
             return true;
@@ -79,58 +67,67 @@ public class PayCommand extends CommandManager {
     }
 
     private void payAllPlayers(Player player, String[] args) {
-        BigDecimal money = new BigDecimal(args[1]);
+        try {
+            BigDecimal money = new BigDecimal(args[1]);
 
-        if (!(player.hasPermission(config.getString(Configs.PERMISSION_PAY_NEGATIVE))) && -money.doubleValue() >= 0) {
-            sendMessage(player, message.getString(Messages.COMMAND_PAY_MONEY_NEGATIVE));
-            return;
+            if (!(player.hasPermission(config.getString(Configs.PERMISSION_PAY_NEGATIVE))) && -money.doubleValue() >= 0) {
+                sendMessage(player, message.getString(Messages.COMMAND_PAY_MONEY_NEGATIVE));
+                return;
+            }
+
+            if (!(economy.hasEnoughMoney(player.getUniqueId(), money.doubleValue()))) {
+                sendMessage(player, message.getString(Messages.COMMAND_PAY_MONEY_ENOUGH).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
+                return;
+            }
+
+            player.getServer().getOnlinePlayers().forEach(all -> {
+                economy.payMoney(player.getUniqueId(), all.getUniqueId(), money);
+                sendMessage(all, message.getString(Messages.COMMAND_PAY_TARGET).replace("[PLAYER]", player.getName()).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
+            });
+            sendMessage(player, message.getString(Messages.COMMAND_PAY_PLAYER).replace("[PLAYER]", "all").replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
+        } catch (NumberFormatException exception) {
+            sendMessage(player, message.getString(Messages.NO_NUMBER));
         }
-
-        if (!(economy.hasEnoughMoney(player, money.doubleValue()))) {
-            sendMessage(player, message.getString(Messages.COMMAND_PAY_MONEY_ENOUGH).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
-            return;
-        }
-
-        player.getServer().getOnlinePlayers().forEach(all -> {
-            economy.payMoney(player, all, money);
-            sendMessage(all, message.getString(Messages.COMMAND_PAY_TARGET).replace("[PLAYER]", player.getName()).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
-        });
-        sendMessage(player, message.getString(Messages.COMMAND_PAY_PLAYER).replace("[PLAYER]", "all").replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
     }
 
     private void payAllMoney(Player player, Player target) {
-        if (!(player.hasPermission(config.getString(Configs.PERMISSION_PAY_ALL_MONEY)))) {
-            sendMessage(player, message.getString(Messages.NO_PERMISSION));
-            return;
+        if (!(hasPermission(player, Configs.PERMISSION_PAY_ALL_MONEY))) return;
+
+        try {
+            BigDecimal allMoney = economy.getMoney(player.getUniqueId());
+
+            if (!(player.hasPermission(config.getString(Configs.PERMISSION_PAY_NEGATIVE))) && -allMoney.doubleValue() >= 0) {
+                sendMessage(player, message.getString(Messages.COMMAND_PAY_MONEY_NEGATIVE));
+                return;
+            }
+
+            economy.payMoney(player.getUniqueId(), target.getUniqueId(), allMoney);
+            sendMessage(target, message.getString(Messages.COMMAND_PAY_TARGET).replace("[PLAYER]", player.getName()).replace("[MONEY]", decimalFormat.format(allMoney)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
+            sendMessage(player, message.getString(Messages.COMMAND_PAY_PLAYER).replace("[PLAYER]", target.getName()).replace("[MONEY]", decimalFormat.format(allMoney)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
+        } catch (NumberFormatException exception) {
+            sendMessage(player, message.getString(Messages.NO_NUMBER));
         }
-
-        BigDecimal allMoney = economy.getMoney(player);
-
-        if (!(player.hasPermission(config.getString(Configs.PERMISSION_PAY_NEGATIVE))) && -allMoney.doubleValue() >= 0) {
-            sendMessage(player, message.getString(Messages.COMMAND_PAY_MONEY_NEGATIVE));
-            return;
-        }
-
-        economy.payMoney(player, target, allMoney);
-        sendMessage(target, message.getString(Messages.COMMAND_PAY_TARGET).replace("[PLAYER]", player.getName()).replace("[MONEY]", decimalFormat.format(allMoney)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
-        sendMessage(player, message.getString(Messages.COMMAND_PAY_PLAYER).replace("[PLAYER]", target.getName()).replace("[MONEY]", decimalFormat.format(allMoney)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
     }
 
     private void payPlayerMoney(Player player, Player target, String[] args) {
-        BigDecimal money = new BigDecimal(args[1]);
+        try {
+            BigDecimal money = new BigDecimal(args[1]);
 
-        if (!(player.hasPermission(config.getString(Configs.PERMISSION_PAY_NEGATIVE))) && -money.doubleValue() >= 0) {
-            sendMessage(player, message.getString(Messages.COMMAND_PAY_MONEY_NEGATIVE));
-            return;
+            if (!(player.hasPermission(config.getString(Configs.PERMISSION_PAY_NEGATIVE))) && -money.doubleValue() >= 0) {
+                sendMessage(player, message.getString(Messages.COMMAND_PAY_MONEY_NEGATIVE));
+                return;
+            }
+
+            if (!(economy.hasEnoughMoney(player.getUniqueId(), money.doubleValue()))) {
+                sendMessage(player, message.getString(Messages.COMMAND_PAY_MONEY_ENOUGH).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
+                return;
+            }
+
+            economy.payMoney(player.getUniqueId(), target.getUniqueId(), money);
+            sendMessage(target, message.getString(Messages.COMMAND_PAY_TARGET).replace("[PLAYER]", player.getName()).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
+            sendMessage(player, message.getString(Messages.COMMAND_PAY_PLAYER).replace("[PLAYER]", target.getName()).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
+        } catch (NumberFormatException exception) {
+            sendMessage(player, message.getString(Messages.NO_NUMBER));
         }
-
-        if (!(economy.hasEnoughMoney(player, money.doubleValue()))) {
-            sendMessage(player, message.getString(Messages.COMMAND_PAY_MONEY_ENOUGH).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
-            return;
-        }
-
-        economy.payMoney(player, target, money);
-        sendMessage(target, message.getString(Messages.COMMAND_PAY_TARGET).replace("[PLAYER]", player.getName()).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
-        sendMessage(player, message.getString(Messages.COMMAND_PAY_PLAYER).replace("[PLAYER]", target.getName()).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
     }
 }
