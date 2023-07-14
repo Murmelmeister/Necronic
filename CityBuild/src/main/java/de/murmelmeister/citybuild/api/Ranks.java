@@ -86,7 +86,8 @@ public class Ranks {
                     if (team == null) team = scoreboard.registerNewTeam(getTeamID(s));
                     team.setPrefix(HexColor.format(getTabPrefix(s)));
                     team.setSuffix(HexColor.format(getTabSuffix(s)));
-                    team.setColor(ChatColor.valueOf(getTabColor(s)));
+                    //team.setColor(ChatColor.valueOf(ChatColor.getLastColors(getTabColor(s))));
+                    team.setColor(Objects.requireNonNull(ChatColor.getByChar(getTabColor(s).replace("§", ""))));
 
                     for (Player target : server.getOnlinePlayers()) {
                         /*if (team.hasEntry(target.getName()))
