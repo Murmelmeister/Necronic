@@ -193,7 +193,7 @@ public enum Configs {
     RANK_DEFAULT_CHAT_COLOR("Rank.Default.Chat.Color", "&f"),
     RANK_DEFAULT_TAB_PREFIX("Rank.Default.Tab.Prefix", "&7"),
     RANK_DEFAULT_TAB_SUFFIX("Rank.Default.Tab.Suffix", ""),
-    RANK_DEFAULT_TAB_COLOR("Rank.Default.Tab.Color", ChatColor.GRAY.toString()),
+    RANK_DEFAULT_TAB_COLOR("Rank.Default.Tab.Color", ChatColor.GRAY.name()),
     RANK_DEFAULT_TAB_ID("Rank.Default.Tab.ID", "1111"),
     RANK_LIVE_SUFFIX("Rank.Live.Suffix", " &8[&5LIVE&8]"),
     RANK_ENABLE_TAB("Rank.Enable", true),
