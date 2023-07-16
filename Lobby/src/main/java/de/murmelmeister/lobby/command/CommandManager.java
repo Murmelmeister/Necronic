@@ -1,6 +1,8 @@
 package de.murmelmeister.lobby.command;
 
 import de.murmelmeister.lobby.Main;
+import de.murmelmeister.lobby.api.Locations;
+import de.murmelmeister.lobby.api.SchedulerTask;
 import de.murmelmeister.lobby.configs.Config;
 import de.murmelmeister.lobby.configs.Message;
 import de.murmelmeister.lobby.util.HexColor;
@@ -20,11 +22,15 @@ import java.util.stream.Collectors;
 public abstract class CommandManager extends Commands implements TabExecutor {
     public final Config config;
     public final Message message;
+    public final SchedulerTask schedulerTask;
+    public final Locations locations;
 
     public CommandManager(Main main) {
         super(main);
         this.config = main.getConfig();
         this.message = main.getMessage();
+        this.schedulerTask = main.getSchedulerTask();
+        this.locations = main.getLocations();
     }
 
     public void sendMessage(CommandSender sender, String message) {

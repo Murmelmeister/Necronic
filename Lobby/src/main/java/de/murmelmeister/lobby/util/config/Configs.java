@@ -4,7 +4,11 @@ public enum Configs {
 
     PREFIX_ENABLE("Prefix.Enable", true),
     FILE_NAME("FileName", "Necronic"),
-    CURRENT_SERVER("CurrentServer", "Lobby");
+    CURRENT_SERVER("CurrentServer", "Lobby"),
+    PERMISSION_SPAWN("Permission.Spawn", "necronic.command.spawn"),
+    PERMISSION_SET_SPAWN("Permission.SetSpawn", "necronic.command.setspawn"),
+    COMMAND_ENABLE_SPAWN("Command.Enable.Spawn", true),
+    COMMAND_ENABLE_SET_SPAWN("Command.Enable.SetSpawn", true);
 
     private final String path;
     private final Object value;

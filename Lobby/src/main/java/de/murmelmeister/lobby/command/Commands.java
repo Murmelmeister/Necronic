@@ -2,6 +2,8 @@ package de.murmelmeister.lobby.command;
 
 import de.murmelmeister.lobby.Lobby;
 import de.murmelmeister.lobby.Main;
+import de.murmelmeister.lobby.command.commands.SetSpawnCommand;
+import de.murmelmeister.lobby.command.commands.SpawnCommand;
 import org.bukkit.command.TabExecutor;
 
 import java.util.Objects;
@@ -16,6 +18,8 @@ public class Commands {
     }
 
     public void register() {
+        addCommand("setspawn", new SetSpawnCommand(main));
+        addCommand("spawn", new SpawnCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {
