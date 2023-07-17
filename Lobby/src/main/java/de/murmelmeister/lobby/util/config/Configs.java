@@ -7,8 +7,14 @@ public enum Configs {
     CURRENT_SERVER("CurrentServer", "Lobby"),
     PERMISSION_SPAWN("Permission.Spawn", "necronic.command.spawn"),
     PERMISSION_SET_SPAWN("Permission.SetSpawn", "necronic.command.setspawn"),
+    PERMISSION_BUILD_COMMAND("Permission.Build.Command", "necronic.command.build.command"),
+    PERMISSION_BUILD_USE("Permission.Build.Use", "necronic.command.build.use"),
+    PERMISSION_BUILD_OTHER("Permission.Build.Other", "necronic.command.build.other"),
     COMMAND_ENABLE_SPAWN("Command.Enable.Spawn", true),
-    COMMAND_ENABLE_SET_SPAWN("Command.Enable.SetSpawn", true);
+    COMMAND_ENABLE_SET_SPAWN("Command.Enable.SetSpawn", true),
+    COMMAND_BUILD_COMMAND("Command.Build.Command", true),
+    COMMAND_BUILD_USE("Command.Build.Use", true),
+    COMMAND_BUILD_OTHER("Command.Build.Other", true);
 
     private final String path;
     private final Object value;

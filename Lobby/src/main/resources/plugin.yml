@@ -12,3 +12,6 @@ commands:
   spawn:
     usage: /spawn
     description: Teleports you to the spawn.
+  build:
+    usage: /build [player]
+    description: Set you in the build mode.

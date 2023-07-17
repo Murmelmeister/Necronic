@@ -6,9 +6,11 @@ import de.murmelmeister.lobby.command.Commands;
 import de.murmelmeister.lobby.configs.Config;
 import de.murmelmeister.lobby.configs.Message;
 import de.murmelmeister.lobby.listener.Listeners;
+import de.murmelmeister.lobby.util.ListUtil;
 
 public class Main {
     private final Lobby instance;
+    private final ListUtil listUtil;
 
     private final Config config;
     private final Message message;
@@ -20,6 +22,7 @@ public class Main {
 
     public Main(Lobby instance) {
         this.instance = instance;
+        this.listUtil = new ListUtil();
         this.config = new Config(this);
         this.message = new Message(this);
         this.schedulerTask = new SchedulerTask(this);
@@ -43,6 +46,10 @@ public class Main {
 
     public Lobby getInstance() {
         return instance;
+    }
+
+    public ListUtil getListUtil() {
+        return listUtil;
     }
 
     public Config getConfig() {
