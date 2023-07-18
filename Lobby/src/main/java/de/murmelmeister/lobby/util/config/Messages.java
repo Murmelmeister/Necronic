@@ -10,7 +10,13 @@ public enum Messages {
     DISABLE_COMMAND("DisableCommand", "&cThe command is disabled."),
     COMMAND_LOCATION_NOT_EXIST("Command.LocationNotExist", "&7The location &e[LOCATION]&7 does not&c exist&7."),
     COMMAND_SEND_SPAWN("Command.Spawn.Send", "&7You have&a teleport&7 to the&e Spawn&7."),
-    COMMAND_SET_SPAWN("Command.Spawn.Set", "&7You have&a set&7 the&e Spawn&7.");
+    COMMAND_SET_SPAWN("Command.Spawn.Set", "&7You have&a set&7 the&e Spawn&7."),
+    EVENT_PLAYER_JOIN("Event.PlayerJoin", "&d[PLAYER]&7 joined the game."),
+    EVENT_PLAYER_QUIT("Event.PlayerQuit", "&d[PLAYER]&7 left the game."),
+    EVENT_SPAWN_NOT_EXIST("Event.SpawnNotExist", "&8--- &cWARNING &8---\n[PREFIX]&cThe &eSpawn&c does not exist."),
+    EVENT_JOIN_MESSAGE("Event.Join.Message", "&8» &dNeconic.net \n&8»&7 Welcome on citybuild \n&8»&7 Discord&8:&d /discord"),
+    EVENT_JOIN_TITLE("Event.Join.Title", "&7Hey&8, &5[PLAYER]"),
+    EVENT_JOIN_SUB_TITLE("Event.Join.SubTitle", "&7Have fun on the&d CityBuild");
 
     private final String path;
     private final String value;
