@@ -61,6 +61,8 @@ public class ConnectListener extends Listeners {
         if (config.getBoolean(Configs.EVENT_ENABLE_JOIN_TITLE))
             player.sendTitle(HexColor.format(message.getString(Messages.EVENT_JOIN_TITLE)).replace("[PREFIX]", message.prefix()).replace("[PLAYER]", player.getName()),
                     HexColor.format(message.getString(Messages.EVENT_JOIN_SUB_TITLE).replace("[PREFIX]", message.prefix()).replace("[PLAYER]", player.getName())));
+
+        //ranks.testTab(player);
     }
 
     @SuppressWarnings("deprecation")

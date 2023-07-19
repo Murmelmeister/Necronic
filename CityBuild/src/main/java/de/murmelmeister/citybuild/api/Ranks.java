@@ -8,10 +8,14 @@ import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.HexColor;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.slf4j.Logger;
@@ -75,6 +79,18 @@ public class Ranks {
                 defaultConfig.getString(Configs.RANK_DEFAULT_TAB_SUFFIX),
                 defaultConfig.getString(Configs.RANK_DEFAULT_TAB_COLOR),
                 defaultConfig.getString(Configs.RANK_DEFAULT_TAB_ID));
+    }
+
+    public void testTab(Player player) {
+        /*player.sendMessage("DisplayName: §r" + player.getDisplayName());
+        player.sendMessage("PlayerListName: §r" + player.getPlayerListName());
+        player.setDisplayName(HexColor.format("§r" + player.getName()));*/
+
+        schedulerTask.addBukkitTask(player,
+                server.getScheduler().runTaskTimerAsynchronously(instance, () -> rankList.forEach(s -> {
+                    if (player.hasPermission(getPermission(s)))
+                        player.setPlayerListName(HexColor.format(getTabPrefix(s) + player.getName() + getTabSuffix(s)));
+                }), 20L, defaultConfig.getLong(Configs.RANK_UPDATE_TAB_TIMER) * 20L));
     }
 
     public void setTabRank(Player player) {
