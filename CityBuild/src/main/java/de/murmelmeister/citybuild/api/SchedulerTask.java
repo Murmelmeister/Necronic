@@ -6,7 +6,9 @@ import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -54,6 +56,14 @@ public class SchedulerTask {
         this.taskList = getTaskList();
         if (taskList.contains(bukkitTask.toString())) bukkitTask.cancel();
         taskList.remove(bukkitTask.toString());
+        set("TaskList", taskList);
+        save();
+    }
+
+    public void clearBukkitTask(Player player) {
+        create(player);
+        this.taskList = getTaskList();
+        taskList.clear();
         set("TaskList", taskList);
         save();
     }

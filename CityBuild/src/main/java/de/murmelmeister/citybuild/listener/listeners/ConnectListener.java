@@ -38,6 +38,7 @@ public class ConnectListener extends Listeners {
 
         homes.createUsername(player);
         schedulerTask.setUsername(player);
+        schedulerTask.clearBukkitTask(player);
         cooldown.setUsername(player);
         economy.setUsername(player.getUniqueId(), player.getName());
         economy.createAccount(player.getUniqueId());
