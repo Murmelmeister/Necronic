@@ -33,7 +33,7 @@ public class WarpCommand extends CommandManager {
             return true;
         }
 
-        if (!(locations.hasLocation(args[0]))) {
+        if (!(locations.isLocationExist(args[0]))) {
             sendMessage(player, message.getString(Messages.COMMAND_LOCATION_NOT_EXIST).replace("[LOCATION]", args[0]));
             return true;
         }

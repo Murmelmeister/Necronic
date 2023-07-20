@@ -29,7 +29,7 @@ public class SetSpawnCommand extends CommandManager {
         Player player = getPlayer(sender);
         if (!(existPlayer(sender))) return true;
 
-        locations.setLocation(player.getLocation(), "Spawn");
+        locations.setSpawn(player.getLocation());
         sendMessage(player, message.getString(Messages.COMMAND_SET_SPAWN));
         return true;
     }

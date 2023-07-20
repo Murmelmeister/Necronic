@@ -29,12 +29,12 @@ public class SpawnCommand extends CommandManager {
         Player player = getPlayer(sender);
         if (!(existPlayer(sender))) return true;
 
-        if (!(locations.hasLocation("Spawn"))) {
+        if (!(locations.isSpawnExist())) {
             sendMessage(player, message.getString(Messages.COMMAND_LOCATION_NOT_EXIST).replace("[LOCATION]", "Spawn"));
             return true;
         }
 
-        player.teleport(locations.getLocation("Spawn"));
+        player.teleport(locations.getSpawn());
         sendMessage(player, message.getString(Messages.COMMAND_SEND_SPAWN));
         return true;
     }

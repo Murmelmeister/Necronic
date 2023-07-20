@@ -9,15 +9,16 @@ import de.murmelmeister.citybuild.util.HexColor;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -81,11 +82,7 @@ public class Ranks {
                 defaultConfig.getString(Configs.RANK_DEFAULT_TAB_ID));
     }
 
-    public void testTab(Player player) {
-        /*player.sendMessage("DisplayName: §r" + player.getDisplayName());
-        player.sendMessage("PlayerListName: §r" + player.getPlayerListName());
-        player.setDisplayName(HexColor.format("§r" + player.getName()));*/
-
+    public void setPlayerListTab(Player player) {
         schedulerTask.addBukkitTask(player,
                 server.getScheduler().runTaskTimerAsynchronously(instance, () -> rankList.forEach(s -> {
                     if (player.hasPermission(getPermission(s)))

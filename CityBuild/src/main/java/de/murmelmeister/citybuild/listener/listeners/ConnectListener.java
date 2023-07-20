@@ -30,7 +30,7 @@ public class ConnectListener extends Listeners {
             else event.setJoinMessage(null);
         else event.setJoinMessage(null);
 
-        if (locations.hasLocation("Spawn")) {
+        if (locations.isSpawnExist()) {
             if (config.getBoolean(Configs.EVENT_ENABLE_TELEPORT_TO_SPAWN))
                 player.teleport(locations.getLocation("Spawn"));
         } else
@@ -53,8 +53,10 @@ public class ConnectListener extends Listeners {
             sendMessage(player, message.getString(Messages.EVENT_JOIN_AUTO_GOD_MODE));
         }
 
-        if (config.getBoolean(Configs.RANK_ENABLE_TAB))
+        if (config.getBoolean(Configs.RANK_ENABLE_TAB)) {
             ranks.setTabRank(player); // If you don't have the permission for the ranks then you don't have a scoreboard and team
+            ranks.setPlayerListTab(player);
+        }
         if (config.getBoolean(Configs.SCOREBOARD_ENABLE_TAB_LIST)) ranks.setScoreboardTabList(player);
         if (config.getBoolean(Configs.SCOREBOARD_ENABLE_SCOREBOARD)) new TestScoreboard(player, main);
         if (config.getBoolean(Configs.EVENT_ENABLE_JOIN_MESSAGE))
@@ -63,7 +65,6 @@ public class ConnectListener extends Listeners {
             player.sendTitle(HexColor.format(message.getString(Messages.EVENT_JOIN_TITLE)).replace("[PREFIX]", message.prefix()).replace("[PLAYER]", player.getName()),
                     HexColor.format(message.getString(Messages.EVENT_JOIN_SUB_TITLE).replace("[PREFIX]", message.prefix()).replace("[PLAYER]", player.getName())));
 
-        //ranks.testTab(player);
     }
 
     @SuppressWarnings("deprecation")
