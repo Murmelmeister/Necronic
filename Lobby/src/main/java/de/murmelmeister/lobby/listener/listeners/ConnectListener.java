@@ -29,13 +29,14 @@ public class ConnectListener extends Listeners {
             else event.setJoinMessage(null);
         else event.setJoinMessage(null);
 
-        if (locations.hasLocation("Spawn")) {
+        if (locations.isSpawnExist()) {
             if (config.getBoolean(Configs.EVENT_ENABLE_TELEPORT_TO_SPAWN))
-                player.teleport(locations.getLocation("Spawn"));
+                player.teleport(locations.getSpawn());
         } else
             sendMessage(player, message.getString(Messages.EVENT_SPAWN_NOT_EXIST).replace("[PREFIX]", message.prefix()));
 
         schedulerTask.setUsername(player);
+        schedulerTask.clearBukkitTask(player);
 
         if (config.getBoolean(Configs.EVENT_ENABLE_JOIN_MESSAGE))
             player.sendMessage(HexColor.format(message.getString(Messages.EVENT_JOIN_MESSAGE).replace("[PREFIX]", message.prefix()).replace("[PLAYER]", player.getName())));

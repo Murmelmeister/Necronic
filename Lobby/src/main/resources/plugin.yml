@@ -15,3 +15,9 @@ commands:
   build:
     usage: /build [player]
     description: Set you in the build mode.
+  setspawnheight:
+    usage: /setspawnheight
+    description: Set the spawn height.
+  spawnheight:
+    usage: /spawnheight
+    description: Get the spawn height.

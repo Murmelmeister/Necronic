@@ -59,4 +59,12 @@ public class Config {
     public boolean getBoolean(Configs configs) {
         return config.getBoolean(configs.getPath());
     }
+
+    public int getInt(Configs configs) {
+        return config.getInt(configs.getPath());
+    }
+
+    public double getDouble(Configs configs) {
+        return config.getDouble(configs.getPath());
+    }
 }

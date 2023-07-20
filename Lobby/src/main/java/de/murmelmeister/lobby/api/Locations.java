@@ -79,6 +79,17 @@ public class Locations {
         save();
     }
 
+    public void setSpawn(Location location) {
+        setLocation(location, "Spawn");
+    }
+
+    public void setSpawnHeight(Location location) {
+        create();
+        double y = location.getBlockY() + 0.25D;
+        set("Locations.Spawn.SpawnHeight", y);
+        save();
+    }
+
     /**
      * Deletes the location from the config.
      *
@@ -91,6 +102,10 @@ public class Locations {
         set("LocationList", locationList);
         set("Locations." + name, null);
         save();
+    }
+
+    public void removeSpawn() {
+        removeLocation("Spawn");
     }
 
     /**
@@ -113,15 +128,31 @@ public class Locations {
         return new Location(world, x, y, z, (float) yaw, (float) pitch);
     }
 
+    public Location getSpawn() {
+        return getLocation("Spawn");
+    }
+
+    public double getSpawnHeight() {
+        return getDouble("Locations.Spawn.SpawnHeight");
+    }
+
     /**
      * Whether the location exists.
      *
      * @param name The name of the location
      * @return If the name exists in the config
      */
-    public boolean hasLocation(String name) {
+    public boolean isLocationExist(String name) {
         create();
         return config.get("Locations." + name) != null;
+    }
+
+    public boolean isSpawnExist() {
+        return isLocationExist("Spawn");
+    }
+
+    public boolean isSpawnHeightExist() {
+        return config.get("Locations.Spawn.SpawnHeight") != null;
     }
 
     private void set(String path, Object value) {

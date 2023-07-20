@@ -13,24 +13,28 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SetSpawnCommand extends CommandManager {
-    public SetSpawnCommand(Main main) {
+public class SpawnHeightCommand extends CommandManager {
+    public SpawnHeightCommand(Main main) {
         super(main);
     }
 
     /*
-    /setSpawn
+    /spawnHeight
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(isEnable(sender, Configs.COMMAND_ENABLE_SET_SPAWN))) return true;
-        if (!(hasPermission(sender, Configs.PERMISSION_SET_SPAWN))) return true;
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_SPAWN_HEIGHT))) return true;
+        if (!(hasPermission(sender, Configs.PERMISSION_SPAWN_HEIGHT))) return true;
 
         Player player = getPlayer(sender);
         if (!(existPlayer(sender))) return true;
 
-        locations.setSpawn(player.getLocation());
-        sendMessage(player, message.getString(Messages.COMMAND_SET_SPAWN));
+        if (!(locations.isSpawnHeightExist())) {
+            sendMessage(player, message.getString(Messages.COMMAND_EXIST_SPAWN_HEIGHT));
+            return true;
+        }
+
+        sendMessage(player, message.getString(Messages.COMMAND_GET_SPAWN_HEIGHT).replace("[HEIGHT]", String.valueOf(player.getLocation().getBlockY())));
         return true;
     }
 

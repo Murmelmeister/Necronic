@@ -58,6 +58,14 @@ public class SchedulerTask {
         save();
     }
 
+    public void clearBukkitTask(Player player) {
+        create(player);
+        this.taskList = getTaskList();
+        taskList.clear();
+        set("TaskList", taskList);
+        save();
+    }
+
     public void save() {
         try {
             config.save(file);

@@ -2,9 +2,7 @@ package de.murmelmeister.lobby.command;
 
 import de.murmelmeister.lobby.Lobby;
 import de.murmelmeister.lobby.Main;
-import de.murmelmeister.lobby.command.commands.BuildCommand;
-import de.murmelmeister.lobby.command.commands.SetSpawnCommand;
-import de.murmelmeister.lobby.command.commands.SpawnCommand;
+import de.murmelmeister.lobby.command.commands.*;
 import org.bukkit.command.TabExecutor;
 
 import java.util.Objects;
@@ -22,6 +20,8 @@ public class Commands {
         addCommand("setspawn", new SetSpawnCommand(main));
         addCommand("spawn", new SpawnCommand(main));
         addCommand("build", new BuildCommand(main));
+        addCommand("setspawnheight", new SetSpawnHeightCommand(main));
+        addCommand("spawnheight", new SpawnHeightCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {
