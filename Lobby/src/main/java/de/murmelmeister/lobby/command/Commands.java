@@ -22,6 +22,7 @@ public class Commands {
         addCommand("build", new BuildCommand(main));
         addCommand("setspawnheight", new SetSpawnHeightCommand(main));
         addCommand("spawnheight", new SpawnHeightCommand(main));
+        addCommand("rank", new RankCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {

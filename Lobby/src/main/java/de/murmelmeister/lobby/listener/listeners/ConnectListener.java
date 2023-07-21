@@ -38,6 +38,11 @@ public class ConnectListener extends Listeners {
         schedulerTask.setUsername(player);
         schedulerTask.clearBukkitTask(player);
 
+        if (config.getBoolean(Configs.RANK_ENABLE_TAB)) {
+            ranks.setTabRank(player); // If you don't have the permission for the ranks then you don't have a scoreboard and team
+            ranks.setPlayerListTab(player);
+        }
+        if (config.getBoolean(Configs.SCOREBOARD_ENABLE_TAB_LIST)) ranks.setScoreboardTabList(player);
         if (config.getBoolean(Configs.EVENT_ENABLE_JOIN_MESSAGE))
             player.sendMessage(HexColor.format(message.getString(Messages.EVENT_JOIN_MESSAGE).replace("[PREFIX]", message.prefix()).replace("[PLAYER]", player.getName())));
         if (config.getBoolean(Configs.EVENT_ENABLE_JOIN_TITLE))

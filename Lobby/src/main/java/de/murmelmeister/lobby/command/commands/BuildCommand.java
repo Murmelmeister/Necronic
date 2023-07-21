@@ -24,11 +24,11 @@ public class BuildCommand extends CommandManager {
      */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(isEnable(sender, Configs.COMMAND_BUILD_COMMAND))) return true;
+        if (!(isEnable(sender, Configs.COMMAND_ENABLE_BUILD_COMMAND))) return true;
         if (!(hasPermission(sender, Configs.PERMISSION_BUILD_COMMAND))) return true;
 
         if (args.length == 0) {
-            if (!(isEnable(sender, Configs.COMMAND_BUILD_USE))) return true;
+            if (!(isEnable(sender, Configs.COMMAND_ENABLE_BUILD_USE))) return true;
             if (!(hasPermission(sender,Configs.PERMISSION_BUILD_USE))) return true;
 
             Player player = getPlayer(sender);
@@ -44,7 +44,7 @@ public class BuildCommand extends CommandManager {
                 // TODO: Message
             }
         } else if (args.length == 1) {
-            if (!(isEnable(sender, Configs.COMMAND_BUILD_OTHER))) return true;
+            if (!(isEnable(sender, Configs.COMMAND_ENABLE_BUILD_OTHER))) return true;
             if (!(hasPermission(sender,Configs.PERMISSION_BUILD_OTHER))) return true;
 
             Player target = sender.getServer().getPlayer(args[0]);

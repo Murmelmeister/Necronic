@@ -1,6 +1,7 @@
 package de.murmelmeister.lobby;
 
 import de.murmelmeister.lobby.api.Locations;
+import de.murmelmeister.lobby.api.Ranks;
 import de.murmelmeister.lobby.api.SchedulerTask;
 import de.murmelmeister.lobby.command.Commands;
 import de.murmelmeister.lobby.configs.Config;
@@ -16,6 +17,7 @@ public class Main {
     private final Message message;
     private final SchedulerTask schedulerTask;
     private final Locations locations;
+    private final Ranks ranks;
 
     private final Listeners listeners;
     private final Commands commands;
@@ -27,6 +29,7 @@ public class Main {
         this.message = new Message(this);
         this.schedulerTask = new SchedulerTask(this);
         this.locations = new Locations(this);
+        this.ranks = new Ranks(this);
         this.listeners = new Listeners(this);
         this.commands = new Commands(this);
     }
@@ -39,6 +42,7 @@ public class Main {
         config.register();
         message.register();
         locations.create();
+        ranks.register();
 
         listeners.register();
         commands.register();
@@ -66,5 +70,9 @@ public class Main {
 
     public Locations getLocations() {
         return locations;
+    }
+
+    public Ranks getRanks() {
+        return ranks;
     }
 }

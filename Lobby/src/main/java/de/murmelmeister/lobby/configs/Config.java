@@ -67,4 +67,8 @@ public class Config {
     public double getDouble(Configs configs) {
         return config.getDouble(configs.getPath());
     }
+
+    public long getLong(Configs configs) {
+        return config.getLong(configs.getPath());
+    }
 }
