@@ -15,7 +15,8 @@ import org.slf4j.Logger;
 @Plugin(
         id = "essentials",
         name = "Essentials",
-        version = "0.0.1-ALPHA-SNAPSHOT"
+        version = "0.0.1-ALPHA-SNAPSHOT",
+        authors = "Murmelmeister"
 )
 public class Essentials {
 

@@ -43,6 +43,7 @@ public class MySQL {
         save();
         toml = new Toml().read(file);
         for (MySQLConf mySQLConf : MySQLConf.values()) read(mySQLConf);
+        toml.getString("Created");
     }
 
     private void read(MySQLConf mySQLConf) {
