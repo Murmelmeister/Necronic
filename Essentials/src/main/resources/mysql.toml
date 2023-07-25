@@ -1,0 +1,6 @@
+[MySQL]
+    Hostname = "localhost"
+    Port = "3306"
+    Database = "EssentialsBase"
+    Username = "user"
+    Password = "12345"

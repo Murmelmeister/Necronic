@@ -1,75 +1,80 @@
 package de.murmelmeister.essentials.config;
 
+import com.moandjiezana.toml.Toml;
 import de.murmelmeister.essentials.util.MySQLConf;
-import de.murmelmeister.murmelapi.configuration.MurmelConfiguration;
+import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class MySQL {
-    private File file;
-    private MurmelConfiguration config;
+    private final Logger logger;
+    private final File file;
+    private Toml toml;
     private Connection connection;
 
-    public void register() {
+    public MySQL(Logger logger) {
+        this.logger = logger;
+        this.file = new File("plugins//essentials//", "/mysql.toml");
         create();
-        load();
+    }
+
+    private void save() {
+        if (!(file.getParentFile().exists())) {
+            boolean a = file.getParentFile().mkdirs();
+            if (!(a)) logger.info("Cloud not maje a new mysql.toml file.");
+        }
+
+        if (!(file.exists())) {
+            try {
+                Files.copy(Objects.requireNonNull(MySQL.class.getResourceAsStream("/mysql.toml")), file.toPath());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private void create() {
         save();
+        toml = new Toml().read(file);
+        for (MySQLConf mySQLConf : MySQLConf.values()) read(mySQLConf);
     }
 
-    public void create() {
-        String fileName = "mysql.murmel";
-        this.file = new File("plugins//essentials//", fileName);
-        MurmelConfiguration.createFile(file, fileName);
-        this.config = MurmelConfiguration.decodedLoadConfiguration(file);
+    private void read(MySQLConf mySQLConf) {
+        toml.getString(mySQLConf.getPath());
     }
 
-    public void load() {
-        for (MySQLConf mySQLConf : MySQLConf.values()) if (get(mySQLConf) == null) set(mySQLConf);
+    private String getString(MySQLConf mySQLConf) {
+        return toml.getString(mySQLConf.getPath());
     }
 
-    public void save() {
+    public void connected() {
+        if (connection != null) return;
         try {
-            config.decodedSave(file);
-        } catch (IOException e) {
+            this.connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%s/%s?autoReconnect=true&useUnicode=yes",
+                    getString(MySQLConf.MYSQL_HOSTNAME), getString(MySQLConf.MYSQL_PORT), getString(MySQLConf.MYSQL_DATABASE)), getString(MySQLConf.MYSQL_USERNAME), getString(MySQLConf.MYSQL_PASSWORD));
+            logger.info("MySQL connected.");
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void connected() {
-        if (!(isConnected()))
-            try {
-                this.connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%s/%s?autoReconnect=true&useUnicode=yes", get(MySQLConf.MYSQL_HOSTNAME), get(MySQLConf.MYSQL_PORT), get(MySQLConf.MYSQL_DATABASE)), get(MySQLConf.MYSQL_USERNAME).toString(), get(MySQLConf.MYSQL_PASSWORD).toString());
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-    }
-
     public void disconnected() {
-        if (isConnected())
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-    }
-
-    private void set(MySQLConf mySQLConf) {
-        config.set(mySQLConf.getPath(), mySQLConf.getValue());
-    }
-
-    private Object get(MySQLConf mySQLConf) {
-        return config.get(mySQLConf.getPath());
+        if (connection == null) return;
+        try {
+            connection.close();
+            logger.info("MySQL disconnected.");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Connection getConnection() {
         return connection;
-    }
-
-    private boolean isConnected() {
-        return connection != null;
     }
 }

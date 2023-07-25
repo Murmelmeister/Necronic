@@ -1,11 +1,11 @@
 package de.murmelmeister.essentials.util;
 
 public enum MySQLConf {
-    MYSQL_HOSTNAME("Hostname", "localhost"),
-    MYSQL_PORT("Port", 3306),
-    MYSQL_DATABASE("Database", "essentials"),
-    MYSQL_USERNAME("Username", "user"),
-    MYSQL_PASSWORD("Password", "12345");
+    MYSQL_HOSTNAME("MySQL.Hostname", "localhost"),
+    MYSQL_PORT("MySQL.Port", "3306"),
+    MYSQL_DATABASE("MySQL.Database", "EssentialsBase"),
+    MYSQL_USERNAME("MySQL.Username", "user"),
+    MYSQL_PASSWORD("MySQL.Password", "12345");
     private final String path;
     private final Object value;
 
