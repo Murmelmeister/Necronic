@@ -6,9 +6,12 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
+import de.murmelmeister.essentials.command.PermissionCommand;
 import de.murmelmeister.essentials.command.PlayTimeCommand;
 import de.murmelmeister.essentials.config.MySQL;
+import de.murmelmeister.essentials.listener.PermissionListener;
 import de.murmelmeister.essentials.listener.PlayTimeListener;
+import de.murmelmeister.murmelapi.permission.Permission;
 import de.murmelmeister.murmelapi.playtime.PlayTime;
 import org.slf4j.Logger;
 
@@ -31,8 +34,12 @@ public class Essentials {
     public void onProxyInitialization(ProxyInitializeEvent event) {
         this.mySQL = new MySQL(logger);
         mySQL.connected();
+        Permission permission = new Permission(mySQL.getConnection());
+        permission.createAllTables();
         PlayTime playTime = new PlayTime(mySQL.getConnection());
         playTime.createTable();
+        proxyServer.getEventManager().register(this, new PermissionListener(permission));
+        proxyServer.getCommandManager().register("murmelperms", new PermissionCommand(permission));
         proxyServer.getEventManager().register(this, new PlayTimeListener(this, proxyServer, playTime));
         proxyServer.getCommandManager().register("playtime", new PlayTimeCommand(playTime));
     }
