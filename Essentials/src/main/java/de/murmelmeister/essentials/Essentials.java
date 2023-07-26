@@ -6,6 +6,7 @@ import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
+import de.murmelmeister.essentials.api.CustomPermission;
 import de.murmelmeister.essentials.command.PermissionCommand;
 import de.murmelmeister.essentials.command.PlayTimeCommand;
 import de.murmelmeister.essentials.config.MySQL;
@@ -36,6 +37,8 @@ public class Essentials {
         mySQL.connected();
         Permission permission = new Permission(mySQL.getConnection());
         permission.createAllTables();
+        CustomPermission.updatePermission(this, proxyServer, permission);
+        permission.defaultGroup("default");
         PlayTime playTime = new PlayTime(mySQL.getConnection());
         playTime.createTable();
         proxyServer.getEventManager().register(this, new PermissionListener(permission));
