@@ -1,6 +1,7 @@
 package de.murmelmeister.lobby.util.config;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 
 public enum Configs {
 
@@ -76,6 +77,9 @@ public enum Configs {
     RANK_ENABLE_TAB("Rank.Enable", true),
     SCOREBOARD_ENABLE_TAB_LIST("Scoreboard.Enable.TabList", true),
     SCOREBOARD_UPDATE_TAB_LIST("Scoreboard.Update.TabList", 2L),
+    LOBBY_ITEMS_NAVIGATOR_MATERIAL("Lobby.Items.Navigator.Material", Material.RECOVERY_COMPASS.name()),
+    LOBBY_ITEMS_NAVIGATOR_DISPLAY_NAME("Lobby.Items.Navigator.DisplayName", "&8» &5Navigator &8« &7(RIGHT CLICK)"),
+    LOBBY_ITEMS_NAVIGATOR_INVENTORY_NAME("Lobby.Items.Navigator.InventoryName", "&5Navigator"),
     ;
 
     private final String path;

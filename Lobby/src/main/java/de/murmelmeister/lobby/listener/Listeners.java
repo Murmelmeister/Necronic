@@ -7,10 +7,7 @@ import de.murmelmeister.lobby.api.Ranks;
 import de.murmelmeister.lobby.api.SchedulerTask;
 import de.murmelmeister.lobby.configs.Config;
 import de.murmelmeister.lobby.configs.Message;
-import de.murmelmeister.lobby.listener.listeners.ColorListener;
-import de.murmelmeister.lobby.listener.listeners.ConnectListener;
-import de.murmelmeister.lobby.listener.listeners.OtherListener;
-import de.murmelmeister.lobby.listener.listeners.RankListener;
+import de.murmelmeister.lobby.listener.listeners.*;
 import de.murmelmeister.lobby.util.HexColor;
 import de.murmelmeister.lobby.util.ListUtil;
 import de.murmelmeister.lobby.util.config.Configs;
@@ -43,6 +40,7 @@ public class Listeners implements Listener {
         addListener(new ColorListener(main));
         addListener(new RankListener(main));
         addListener(new OtherListener(main));
+        addListener(new LobbyItemsListener(main));
         addListener(new ConnectListener(main));
     }
 

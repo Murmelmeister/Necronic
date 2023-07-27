@@ -3,6 +3,7 @@ package de.murmelmeister.lobby.listener.listeners;
 import de.murmelmeister.lobby.Main;
 import de.murmelmeister.lobby.listener.Listeners;
 import de.murmelmeister.lobby.util.HexColor;
+import de.murmelmeister.lobby.util.Items;
 import de.murmelmeister.lobby.util.config.Configs;
 import de.murmelmeister.lobby.util.config.Messages;
 import org.bukkit.entity.Player;
@@ -48,6 +49,8 @@ public class ConnectListener extends Listeners {
         if (config.getBoolean(Configs.EVENT_ENABLE_JOIN_TITLE))
             player.sendTitle(HexColor.format(message.getString(Messages.EVENT_JOIN_TITLE)).replace("[PREFIX]", message.prefix()).replace("[PLAYER]", player.getName()),
                     HexColor.format(message.getString(Messages.EVENT_JOIN_SUB_TITLE).replace("[PREFIX]", message.prefix()).replace("[PLAYER]", player.getName())));
+
+        Items.setLobbyItems(config, player);
     }
 
     @SuppressWarnings("deprecation")
