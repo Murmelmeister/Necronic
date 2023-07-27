@@ -1,5 +1,12 @@
 package de.murmelmeister.essentials.command;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.ArgumentBuilder;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
+import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import com.velocitypowered.api.command.BrigadierCommand;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
@@ -37,7 +44,7 @@ public class PlayTimeCommand implements SimpleCommand {
                 sender.sendMessage(Component.text(String.format("§cThe player §e%s§c does not exist.", target)));
                 return;
             }
-            UUID uuid = playTime.getUUID(target);
+            UUID uuid = playTime.uuid(target);
             String time = PlayTimeUtil.format(playTime, uuid);
             sender.sendMessage(Component.text(String.format("§3PlayTime from §e%s§3: §e%s", target, time)));
         } else sender.sendMessage(Component.text("§7Syntax: §c/playtime [player]"));
@@ -46,7 +53,7 @@ public class PlayTimeCommand implements SimpleCommand {
     @Override
     public List<String> suggest(Invocation invocation) {
         if (invocation.arguments().length == 1)
-            return playTime.getNames().stream().filter(s -> s.startsWith(invocation.arguments()[0])).sorted().collect(Collectors.toList());
+            return playTime.usernames().stream().filter(s -> s.startsWith(invocation.arguments()[0])).sorted().collect(Collectors.toList());
         return Collections.emptyList();
     }
 }
