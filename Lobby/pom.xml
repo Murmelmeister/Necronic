@@ -71,11 +71,5 @@
             <version>1.20.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>de.murmelmeister</groupId>
-            <artifactId>CityBuild</artifactId>
-            <version>0.0.1-ALPHA-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
 </project>
