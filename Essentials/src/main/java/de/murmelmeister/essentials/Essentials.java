@@ -37,8 +37,8 @@ public class Essentials {
         mySQL.connected();
         Permission permission = new Permission(mySQL.getConnection());
         permission.createAllTables();
-        CustomPermission.updatePermission(this, proxyServer, permission);
         permission.defaultGroup("default");
+        CustomPermission.updatePermission(this, proxyServer, permission);
         PlayTime playTime = new PlayTime(mySQL.getConnection());
         playTime.createTable();
         proxyServer.getEventManager().register(this, new PermissionListener(permission));
