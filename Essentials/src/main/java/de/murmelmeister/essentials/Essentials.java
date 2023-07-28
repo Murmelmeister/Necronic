@@ -42,7 +42,7 @@ public class Essentials {
         PlayTime playTime = new PlayTime(mySQL.getConnection());
         playTime.createTable();
         proxyServer.getEventManager().register(this, new PermissionListener(permission));
-        proxyServer.getCommandManager().register("murmelperms", new PermissionCommand(permission));
+        proxyServer.getCommandManager().register("permission", new PermissionCommand(permission));
         proxyServer.getEventManager().register(this, new PlayTimeListener(this, proxyServer, playTime));
         proxyServer.getCommandManager().register("playtime", new PlayTimeCommand(playTime));
     }
