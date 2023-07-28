@@ -11,9 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
@@ -59,6 +57,17 @@ public class OtherListener extends Listeners {
     public void handlePlayerLevelChange(PlayerLevelChangeEvent event) {
         event.getPlayer().setLevel(config.getInt(Configs.EVENT_PROTECTED_PLAYER_CHANGE_LEVEL));
         event.getPlayer().setExp((float) config.getDouble(Configs.EVENT_PROTECTED_PLAYER_CHANGE_EXP));
+    }
+
+    @EventHandler
+    public void handleAttackDamage(EntityDamageByEntityEvent event) {
+        if (config.getBoolean(Configs.EVENT_PROTECTED_ATTACK_DAMAGE)) event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void handleFallDamage(EntityDamageEvent event) {
+        if (config.getBoolean(Configs.EVENT_PROTECTED_FALL_DAMAGE)) if (event.getEntity() instanceof Player)
+            event.setCancelled(event.getCause().equals(EntityDamageEvent.DamageCause.FALL));
     }
 
     @EventHandler

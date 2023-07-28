@@ -35,7 +35,7 @@ public class Main {
     }
 
     public void disable() {
-
+        instance.getServer().getMessenger().unregisterOutgoingPluginChannel(instance);
     }
 
     public void enable() {
@@ -46,6 +46,7 @@ public class Main {
 
         listeners.register();
         commands.register();
+        instance.getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");
     }
 
     public Lobby getInstance() {

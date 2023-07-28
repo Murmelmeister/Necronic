@@ -27,6 +27,7 @@ public enum Messages {
     EVENT_JOIN_MESSAGE("Event.Join.Message", "&8» &dNeconic.net \n&8»&7 Welcome on citybuild \n&8»&7 Discord&8:&d /discord"),
     EVENT_JOIN_TITLE("Event.Join.Title", "&7Hey&8, &5[PLAYER]"),
     EVENT_JOIN_SUB_TITLE("Event.Join.SubTitle", "&7Have fun on the&d CityBuild"),
+    EVENT_LOBBY_ITEMS_SEND_CITY_BUILD("Command.LobbyItems.Send.CityBuild", "&7Connect to CityBuild..."),
     SCOREBOARD_TAB_LIST_HEADER("Scoreboard.TabList.Header", "\n &8» &5Necronic &8« \n &7Server &8» &d[SERVER] \n &7Current players &8» &d[CURRENT_PLAYERS]&8/&d[MAX_PLAYERS] \n"),
     SCOREBOARD_TAB_LIST_FOOTER("Scoreboard.TabList.Footer", "\n &7Discord &8»&d dsc.gg/NecronicNET \n &7Website &8»&d www.necronic.com"),
     ;

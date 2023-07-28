@@ -11,7 +11,8 @@ import java.util.Objects;
 
 public class Items {
     public static void setLobbyItems(Config config, Player player) {
-        player.getOpenInventory().setItem(4, createNavigator(config));
+        player.getInventory().clear();
+        player.getOpenInventory().setItem(config.getInt(Configs.LOBBY_ITEMS_NAVIGATOR_SLOT), createNavigator(config));
     }
 
     private static ItemStack createNavigator(Config config) {

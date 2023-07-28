@@ -60,8 +60,11 @@ public enum Configs {
     EVENT_PROTECTED_PLAYER_PICKUP_ITEM("Event.Protected.PlayerPickupItem", true),
     EVENT_PROTECTED_ENTITY_EXPLODE("Event.Protected.EntityExplode", true),
     EVENT_PROTECTED_BLOCK_EXPLODE("Event.Protected.BlockExplode", true),
+    EVENT_PROTECTED_ATTACK_DAMAGE("Event.Protected.AttackDamage", true),
+    EVENT_PROTECTED_FALL_DAMAGE("Event.Protected.FallDamage", true),
     EVENT_PROTECTED_PLAYER_CHANGE_LEVEL("Event.Protected.PlayerChange.Level", 2023),
     EVENT_PROTECTED_PLAYER_CHANGE_EXP("Event.Protected.PlayerChange.Exp", 1.0F / 12 * 6),
+    EVENT_LOBBY_ITEMS_CITY_BUILD("Event.LobbyItems.CityBuild", "CityBuild"),
     RANK_CHAT_PREFIX_MESSAGE("Rank.Chat.PrefixMessage", " &8» &r"),
     RANK_UPDATE_TAB_TIMER("Rank.Update.TabTimer", 2L),
     RANK_PRE_PERMISSION("Rank.DefaultPrePermission", "necronic.rank."),
@@ -80,6 +83,7 @@ public enum Configs {
     LOBBY_ITEMS_NAVIGATOR_MATERIAL("Lobby.Items.Navigator.Material", Material.RECOVERY_COMPASS.name()),
     LOBBY_ITEMS_NAVIGATOR_DISPLAY_NAME("Lobby.Items.Navigator.DisplayName", "&8» &5Navigator &8« &7(RIGHT CLICK)"),
     LOBBY_ITEMS_NAVIGATOR_INVENTORY_NAME("Lobby.Items.Navigator.InventoryName", "&5Navigator"),
+    LOBBY_ITEMS_NAVIGATOR_SLOT("Lobby.Items.Navigator.Slot", 40),
     ;
 
     private final String path;
