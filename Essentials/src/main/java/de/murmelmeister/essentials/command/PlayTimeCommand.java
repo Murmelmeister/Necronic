@@ -12,6 +12,7 @@ import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import de.murmelmeister.murmelapi.playtime.PlayTime;
 import de.murmelmeister.murmelapi.playtime.PlayTimeUtil;
+import de.murmelmeister.murmelapi.util.StringUtils;
 import net.kyori.adventure.text.Component;
 
 import java.util.Collections;
@@ -52,8 +53,9 @@ public class PlayTimeCommand implements SimpleCommand {
 
     @Override
     public List<String> suggest(Invocation invocation) {
+        String[] args = invocation.arguments();
         if (invocation.arguments().length == 1)
-            return playTime.usernames().stream().filter(s -> s.startsWith(invocation.arguments()[0])).sorted().collect(Collectors.toList());
+            return playTime.usernames().stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         return Collections.emptyList();
     }
 }
