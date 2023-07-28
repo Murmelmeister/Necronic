@@ -38,6 +38,9 @@ public class PermissionCommand implements SimpleCommand {
                 case "groups":
                     groups(source, group, args);
                     break;
+                case "grouplist":
+                    source.sendMessage(Component.text("§3Groups: §e" + group.groups()));
+                    break;
                 default:
                     syntax(source);
                     break;
@@ -171,7 +174,140 @@ public class PermissionCommand implements SimpleCommand {
     }
 
     private void groups(CommandSource source, Group group, String[] args) {
+        String name = args[1];
+        if (!(group.exists(name))) {
+            if (args[2].equals("create")) {
+                group.create(name);
+                source.sendMessage(Component.text(String.format("§aThe Group §e%s§a was created.", name)));
+            } else {
+                source.sendMessage(Component.text(String.format("§cThe Group §e%s§c does not exist.", name)));
+            }
+            return;
+        }
 
+        switch (args[2]) {
+            case "delete":
+                group.delete(name);
+                source.sendMessage(Component.text(String.format("§aThe Group §e%s§a was deleted.", name)));
+                break;
+            case "rename":
+                String newName = args[3];
+                group.rename(name, newName);
+                source.sendMessage(Component.text(String.format("§aThe Group §e%s§a was changed name to §e%s§a.", name, newName)));
+                break;
+            case "edit":
+                groupEdit(source, name, group, args);
+                break;
+            case "parent":
+                groupParent(source, name, group, args);
+                break;
+            case "permission":
+                groupPermission(source, name, group, args);
+                break;
+            default:
+                syntax(source);
+                break;
+        }
+    }
+
+    private void groupEdit(CommandSource source, String name, Group group, String[] args) {
+
+    }
+
+    private void groupParent(CommandSource source, String name, Group group, String[] args) {
+        if (args.length == 3) {
+            source.sendMessage(Component.text("§3Parents: §e" + group.getAllParent(name)));
+            return;
+        }
+
+        if (args.length == 4 && (args[3].equals("add") || args[3].equals("remove") || args[3].equals("created") || args[3].equals("expired"))) {
+            syntax(source);
+            return;
+        }
+
+        String parent;
+        switch (args[3]) {
+            case "add":
+                parent = args[4];
+                if (args.length == 5) {
+                    group.addParent(name, parent);
+                    source.sendMessage(Component.text("§3Parent added §e" + parent));
+                    break;
+                }
+                group.addTempParent(name, parent, formatTime(source, args));
+                source.sendMessage(Component.text("§3Parent added §e" + parent));
+                break;
+            case "remove":
+                parent = args[4];
+                group.removeParent(name, parent);
+                group.removeTempParent(name, parent);
+                source.sendMessage(Component.text("§3Parent removed §e" + parent));
+                break;
+            case "clear":
+                group.clearParent(name);
+                group.clearTempParent(name);
+                source.sendMessage(Component.text("§3Parent cleared"));
+                break;
+            case "created":
+                parent = args[4];
+                source.sendMessage(Component.text("§3Created: §e" + group.getTempParentCreated(name, parent)));
+                break;
+            case "expired":
+                parent = args[4];
+                source.sendMessage(Component.text("§3Expired: §e" + group.getTempParentExpired(name, parent)));
+                break;
+            default:
+                syntax(source);
+                break;
+        }
+    }
+
+    private void groupPermission(CommandSource source, String name, Group group, String[] args) {
+        if (args.length == 3) {
+            source.sendMessage(Component.text("§3Permission: §e" + group.getAllPermission(name)));
+            return;
+        }
+
+        if (args.length == 4 && (args[3].equals("add") || args[3].equals("remove") || args[3].equals("created") || args[3].equals("expired"))) {
+            syntax(source);
+            return;
+        }
+
+        String permission;
+        switch (args[3]) {
+            case "add":
+                permission = args[4];
+                if (args.length == 5) {
+                    group.addPermission(name, permission);
+                    source.sendMessage(Component.text("§3Permission added §e" + permission));
+                    break;
+                }
+                group.addTempPermission(name, permission, formatTime(source, args));
+                source.sendMessage(Component.text("§3Permission added §e" + permission));
+                break;
+            case "remove":
+                permission = args[4];
+                group.removePermission(name, permission);
+                group.removeTempPermission(name, permission);
+                source.sendMessage(Component.text("§3Permission removed §e" + permission));
+                break;
+            case "clear":
+                group.clearPermission(name);
+                group.clearTempPermission(name);
+                source.sendMessage(Component.text("§3Permission cleared"));
+                break;
+            case "created":
+                permission = args[4];
+                source.sendMessage(Component.text("§3Created: §e" + group.getTempPermissionCreated(name, permission)));
+                break;
+            case "expired":
+                permission = args[4];
+                source.sendMessage(Component.text("§3Expired: §e" + group.getTempPermissionExpired(name, permission)));
+                break;
+            default:
+                syntax(source);
+                break;
+        }
     }
 
     private long formatTime(CommandSource source, String[] args) {
@@ -215,19 +351,35 @@ public class PermissionCommand implements SimpleCommand {
 
     private void syntax(CommandSource source) {
         source.sendMessage(Component.text("§8--- §cSyntax §8---§r"
-                + "\n- /permission users <username> parent"
-                + "\n- /permission users <username> parent add <parent> [duration]"
-                + "\n- /permission users <username> parent remove <parent>"
-                + "\n- /permission users <username> parent clear"
-                + "\n- /permission users <username> parent created <parent>"
-                + "\n- /permission users <username> parent expired <parent>"
-                + "\n- /permission users <username> permission"
-                + "\n- /permission users <username> permission all"
-                + "\n- /permission users <username> permission add <permission> [duration]"
-                + "\n- /permission users <username> permission remove <permission>"
-                + "\n- /permission users <username> permission clear"
-                + "\n- /permission users <username> permission created <permission>"
-                + "\n- /permission users <username> permission expired <permission>"
+                + "\n- /permission §9users§r <username> parent"
+                + "\n- /permission §9users§r <username> parent add <parent> [duration]"
+                + "\n- /permission §9users§r <username> parent remove <parent>"
+                + "\n- /permission §9users§r <username> parent clear"
+                + "\n- /permission §9users§r <username> parent created <parent>"
+                + "\n- /permission §9users§r <username> parent expired <parent>"
+                + "\n- /permission §9users§r <username> permission"
+                + "\n- /permission §9users§r <username> permission all"
+                + "\n- /permission §9users§r <username> permission add <permission> [duration]"
+                + "\n- /permission §9users§r <username> permission remove <permission>"
+                + "\n- /permission §9users§r <username> permission clear"
+                + "\n- /permission §9users§r <username> permission created <permission>"
+                + "\n- /permission §9users§r <username> permission expired <permission>"
+
+                + "\n- /permission §3groups§r <name> create"
+                + "\n- /permission §3groups§r <name> delete"
+                + "\n- /permission §3groups§r <name> rename <newName>"
+                + "\n- /permission §3groups§r <name> parent"
+                + "\n- /permission §3groups§r <name> parent add <parent> [duration]"
+                + "\n- /permission §3groups§r <name> parent remove <parent>"
+                + "\n- /permission §3groups§r <name> parent clear"
+                + "\n- /permission §3groups§r <name> parent created <parent>"
+                + "\n- /permission §3groups§r <name> parent expired <parent>"
+                + "\n- /permission §3groups§r <name> permission"
+                + "\n- /permission §3groups§r <name> permission add <permission> [duration]"
+                + "\n- /permission §3groups§r <name> permission remove <permission>"
+                + "\n- /permission §3groups§r <name> permission clear"
+                + "\n- /permission §3groups§r <name> permission created <permission>"
+                + "\n- /permission §3groups§r <name> permission expired <permission>"
         ));
     }
 }
