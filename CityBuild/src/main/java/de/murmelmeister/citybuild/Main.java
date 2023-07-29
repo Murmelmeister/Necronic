@@ -4,8 +4,12 @@ import de.murmelmeister.citybuild.api.*;
 import de.murmelmeister.citybuild.command.Commands;
 import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
+import de.murmelmeister.citybuild.configs.MySQL;
 import de.murmelmeister.citybuild.listener.Listeners;
 import de.murmelmeister.citybuild.util.ListUtil;
+import de.murmelmeister.murmelapi.permission.Permission;
+
+import java.sql.Connection;
 
 public class Main {
     private final CityBuild instance;
@@ -13,13 +17,15 @@ public class Main {
 
     private final Config config;
     private final Message message;
+    private final MySQL mySQL;
     private final SchedulerTask schedulerTask;
     private final Cooldown cooldown;
     private final Locations locations;
     private final Homes homes;
-    private final Ranks ranks;
     private final Economy economy;
     private final ItemValue itemValue;
+
+    private Permission permission;
 
     private final Listeners listeners;
     private final Commands commands;
@@ -29,11 +35,11 @@ public class Main {
         this.listUtil = new ListUtil();
         this.config = new Config(this);
         this.message = new Message(this);
+        this.mySQL = new MySQL(this);
         this.schedulerTask = new SchedulerTask(this);
         this.cooldown = new Cooldown(this);
         this.locations = new Locations(this);
         this.homes = new Homes(this);
-        this.ranks = new Ranks(this);
         this.economy = new Economy(this);
         this.itemValue = new ItemValue(this);
         this.listeners = new Listeners(this);
@@ -42,18 +48,24 @@ public class Main {
 
     public void disable() {
         instance.getServer().getMessenger().unregisterOutgoingPluginChannel(instance);
+        mySQL.disconnected();
     }
 
     public void enable() {
         config.register();
         message.register();
         locations.create();
-        ranks.register();
         itemValue.register();
 
+        mySQL.connected();
+        tables(mySQL.getConnection());
         listeners.register();
         commands.register();
         instance.getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");
+    }
+
+    private void tables(Connection connection) {
+        this.permission = new Permission(connection);
     }
 
     public CityBuild getInstance() {
@@ -88,15 +100,19 @@ public class Main {
         return homes;
     }
 
-    public Ranks getRanks() {
-        return ranks;
-    }
-
     public Economy getEconomy() {
         return economy;
     }
 
     public ItemValue getItemValue() {
         return itemValue;
+    }
+
+    public MySQL getMySQL() {
+        return mySQL;
+    }
+
+    public Permission getPermission() {
+        return permission;
     }
 }

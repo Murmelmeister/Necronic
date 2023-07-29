@@ -66,6 +66,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>de.murmelmeister.murmelapi</groupId>
+            <artifactId>MurmelAPI</artifactId>
+            <version>0.0.1-ALPHA-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
             <version>1.20.1-R0.1-SNAPSHOT</version>

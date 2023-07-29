@@ -28,7 +28,6 @@ public abstract class CommandManager extends Commands implements TabExecutor {
     public final Cooldown cooldown;
     public final Locations locations;
     public final Homes homes;
-    public final Ranks ranks;
     public final Economy economy;
     public final ItemValue itemValue;
     public final DecimalFormat decimalFormat;
@@ -42,7 +41,6 @@ public abstract class CommandManager extends Commands implements TabExecutor {
         this.cooldown = main.getCooldown();
         this.locations = main.getLocations();
         this.homes = main.getHomes();
-        this.ranks = main.getRanks();
         this.economy = main.getEconomy();
         this.itemValue = main.getItemValue();
         this.decimalFormat = new DecimalFormat(config.getString(Configs.PATTERN_DECIMAL));

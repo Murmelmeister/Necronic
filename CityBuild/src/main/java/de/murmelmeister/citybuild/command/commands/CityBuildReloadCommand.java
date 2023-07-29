@@ -28,7 +28,6 @@ public class CityBuildReloadCommand extends CommandManager {
         this.config.create();
         this.message.create();
         this.locations.create();
-        this.ranks.create();
         this.itemValue.create();
         sendMessage(sender, message.getString(Messages.COMMAND_RELOAD));
         return true;

@@ -44,7 +44,6 @@ public class Commands {
         addCommand("heal", new HealCommand(main));
         addCommand("fly", new FlyCommand(main));
         addCommand("godmode", new GodModeCommand(main));
-        addCommand("rank", new RankCommand(main));
         addCommand("lobby", new LobbyCommand(main));
         addCommand("live", new LiveCommand(main));
         addCommand("day", new DayCommand(main));

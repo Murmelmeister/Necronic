@@ -6,6 +6,7 @@ import de.murmelmeister.lobby.util.HexColor;
 import de.murmelmeister.lobby.util.Items;
 import de.murmelmeister.lobby.util.config.Configs;
 import de.murmelmeister.lobby.util.config.Messages;
+import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -39,11 +40,7 @@ public class ConnectListener extends Listeners {
         schedulerTask.setUsername(player);
         schedulerTask.clearBukkitTask(player);
 
-        if (config.getBoolean(Configs.RANK_ENABLE_TAB)) {
-            ranks.setTabRank(player); // If you don't have the permission for the ranks then you don't have a scoreboard and team
-            ranks.setPlayerListTab(player);
-        }
-        if (config.getBoolean(Configs.SCOREBOARD_ENABLE_TAB_LIST)) ranks.setScoreboardTabList(player);
+        if (config.getBoolean(Configs.SCOREBOARD_ENABLE_TAB_LIST)) setScoreboardTabList(player, instance.getServer());
         if (config.getBoolean(Configs.EVENT_ENABLE_JOIN_MESSAGE))
             player.sendMessage(HexColor.format(message.getString(Messages.EVENT_JOIN_MESSAGE).replace("[PREFIX]", message.prefix()).replace("[PLAYER]", player.getName())));
         if (config.getBoolean(Configs.EVENT_ENABLE_JOIN_TITLE))
@@ -67,5 +64,12 @@ public class ConnectListener extends Listeners {
         else event.setQuitMessage(null);
         listUtil.getBuild().remove(player.getUniqueId());
         player.getServer().getScheduler().getPendingTasks().forEach(bukkitTask -> schedulerTask.removeBukkitTask(player, bukkitTask));
+    }
+
+    public void setScoreboardTabList(Player player, Server server) {
+        schedulerTask.addBukkitTask(player,
+                server.getScheduler().runTaskTimerAsynchronously(instance, () -> player.setPlayerListHeaderFooter(HexColor.format(message.getString(Messages.SCOREBOARD_TAB_LIST_HEADER)
+                                .replace("[CURRENT_PLAYERS]", String.valueOf(server.getOnlinePlayers().size())).replace("[MAX_PLAYERS]", String.valueOf(server.getMaxPlayers())).replace("[SERVER]", config.getString(Configs.CURRENT_SERVER))),
+                        HexColor.format(message.getString(Messages.SCOREBOARD_TAB_LIST_FOOTER))), 20L, config.getLong(Configs.SCOREBOARD_UPDATE_TAB_LIST) * 20L));
     }
 }

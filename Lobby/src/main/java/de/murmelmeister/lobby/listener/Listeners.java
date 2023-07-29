@@ -3,7 +3,6 @@ package de.murmelmeister.lobby.listener;
 import de.murmelmeister.lobby.Lobby;
 import de.murmelmeister.lobby.Main;
 import de.murmelmeister.lobby.api.Locations;
-import de.murmelmeister.lobby.api.Ranks;
 import de.murmelmeister.lobby.api.SchedulerTask;
 import de.murmelmeister.lobby.configs.Config;
 import de.murmelmeister.lobby.configs.Message;
@@ -20,7 +19,6 @@ public class Listeners implements Listener {
     public final ListUtil listUtil;
     public final SchedulerTask schedulerTask;
     public final Locations locations;
-    public final Ranks ranks;
 
     public final Config config;
     public final Message message;
@@ -33,12 +31,9 @@ public class Listeners implements Listener {
         this.message = main.getMessage();
         this.schedulerTask = main.getSchedulerTask();
         this.locations = main.getLocations();
-        this.ranks = main.getRanks();
     }
 
     public void register() {
-        addListener(new ColorListener(main));
-        addListener(new RankListener(main));
         addListener(new OtherListener(main));
         addListener(new LobbyItemsListener(main));
         addListener(new ConnectListener(main));

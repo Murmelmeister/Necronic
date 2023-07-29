@@ -3,13 +3,13 @@ package de.murmelmeister.citybuild.util.scoreboard;
 import de.murmelmeister.citybuild.CityBuild;
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.api.Economy;
-import de.murmelmeister.citybuild.api.Ranks;
 import de.murmelmeister.citybuild.api.SchedulerTask;
 import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
 import de.murmelmeister.citybuild.util.HexColor;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
+import de.murmelmeister.murmelapi.permission.User;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -44,15 +44,15 @@ public class TestScoreboard extends ScoreboardBuilder {
         this.server = main.getInstance().getServer();
         this.config = main.getConfig();
         Message message = main.getMessage();
-        Ranks ranks = main.getRanks();
+        User user = main.getPermission().getUser();
         Economy economy = main.getEconomy();
         DecimalFormat decimalFormat = new DecimalFormat(config.getString(Configs.PATTERN_DECIMAL));
         setDisplayName(HexColor.format(message.getString(Messages.SCOREBOARD_SCORE_DISPLAY_NAME)));
-        ranks.getRankList().forEach(s -> {
+        /*ranks.getRankList().forEach(s -> {
             if (player.hasPermission(ranks.getPermission(s))) {
                 if (config.getBoolean(Configs.SCOREBOARD_ENABLE_SCORE_15))
                     setScoreTeam(HexColor.format(message.getString(Messages.SCOREBOARD_SCORE_15)
-                            .replace("[RANK_COLOR]", ranks.getTabColor(s)).replace("[RANK]", ranks.getScoreboard(s)).replace("[SERVER]", config.getString(Configs.CURRENT_SERVER))
+                            .replace("[RANK_COLOR]", user.getTabColor(s)).replace("[RANK]", ranks.getScoreboard(s)).replace("[SERVER]", config.getString(Configs.CURRENT_SERVER))
                             .replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)).replace("[MONEY]", decimalFormat.format(economy.getMoney(player.getUniqueId())))), 15);
                 if (config.getBoolean(Configs.SCOREBOARD_ENABLE_SCORE_14))
                     setScoreTeam(HexColor.format(message.getString(Messages.SCOREBOARD_SCORE_14)
@@ -115,6 +115,6 @@ public class TestScoreboard extends ScoreboardBuilder {
                             .replace("[RANK_COLOR]", ranks.getTabColor(s)).replace("[RANK]", ranks.getScoreboard(s)).replace("[SERVER]", config.getString(Configs.CURRENT_SERVER))
                             .replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)).replace("[MONEY]", decimalFormat.format(economy.getMoney(player.getUniqueId())))), 0);
             }
-        });
+        });*/
     }
 }

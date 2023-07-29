@@ -1,13 +1,16 @@
 package de.murmelmeister.lobby;
 
 import de.murmelmeister.lobby.api.Locations;
-import de.murmelmeister.lobby.api.Ranks;
 import de.murmelmeister.lobby.api.SchedulerTask;
 import de.murmelmeister.lobby.command.Commands;
 import de.murmelmeister.lobby.configs.Config;
 import de.murmelmeister.lobby.configs.Message;
+import de.murmelmeister.lobby.configs.MySQL;
 import de.murmelmeister.lobby.listener.Listeners;
 import de.murmelmeister.lobby.util.ListUtil;
+import de.murmelmeister.murmelapi.permission.Permission;
+
+import java.sql.Connection;
 
 public class Main {
     private final Lobby instance;
@@ -15,9 +18,11 @@ public class Main {
 
     private final Config config;
     private final Message message;
+    private final MySQL mySQL;
     private final SchedulerTask schedulerTask;
     private final Locations locations;
-    private final Ranks ranks;
+
+    private Permission permission;
 
     private final Listeners listeners;
     private final Commands commands;
@@ -27,26 +32,33 @@ public class Main {
         this.listUtil = new ListUtil();
         this.config = new Config(this);
         this.message = new Message(this);
+        this.mySQL = new MySQL(this);
         this.schedulerTask = new SchedulerTask(this);
         this.locations = new Locations(this);
-        this.ranks = new Ranks(this);
         this.listeners = new Listeners(this);
         this.commands = new Commands(this);
     }
 
     public void disable() {
         instance.getServer().getMessenger().unregisterOutgoingPluginChannel(instance);
+        mySQL.disconnected();
     }
 
     public void enable() {
         config.register();
         message.register();
+        mySQL.register();
         locations.create();
-        ranks.register();
 
+        mySQL.connected();
+        tables(mySQL.getConnection());
         listeners.register();
         commands.register();
         instance.getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");
+    }
+
+    private void tables(Connection connection) {
+        this.permission = new Permission(connection);
     }
 
     public Lobby getInstance() {
@@ -73,7 +85,11 @@ public class Main {
         return locations;
     }
 
-    public Ranks getRanks() {
-        return ranks;
+    public MySQL getMySQL() {
+        return mySQL;
+    }
+
+    public Permission getPermission() {
+        return permission;
     }
 }
