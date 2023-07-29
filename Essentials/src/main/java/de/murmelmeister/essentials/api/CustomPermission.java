@@ -34,6 +34,6 @@ public class CustomPermission implements PermissionProvider, PermissionFunction 
     }
 
     public static void updatePermission(Essentials instance, ProxyServer proxyServer, Permission permission) {
-        proxyServer.getScheduler().buildTask(instance, permission::expired).repeat(100L, TimeUnit.MILLISECONDS).schedule();
+        proxyServer.getScheduler().buildTask(instance, permission::expired).repeat(1000L, TimeUnit.MILLISECONDS).schedule();
     }
 }

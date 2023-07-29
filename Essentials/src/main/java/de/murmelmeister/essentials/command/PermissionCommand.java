@@ -75,6 +75,10 @@ public class PermissionCommand implements SimpleCommand {
             return Stream.of("add", "remove", "clear", "created", "expired").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 4 && args[0].equals("users") && args[2].equals("permission"))
             return Stream.of("all", "add", "remove", "clear", "created", "expired").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+        if (args.length == 5 && args[0].equals("users") && args[2].equals("permission") && (args[3].equals("remove") || args[3].equals("created") || args[3].equals("expired")))
+            return user.getAllPermission(user.uuid(args[1])).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+        if (args.length == 5 && args[0].equals("users") && args[2].equals("parent") && (args[3].equals("remove") || args[3].equals("created") || args[3].equals("expired")))
+            return user.getAllParent(user.uuid(args[1])).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 3 && args[0].equals("groups"))
             return Stream.of("create", "delete", "rename", "edit", "parent", "permission").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 4 && args[0].equals("groups") && (args[2].equals("parent") || args[2].equals("permission")))
@@ -82,6 +86,10 @@ public class PermissionCommand implements SimpleCommand {
         if (args.length == 4 && args[0].equals("groups") && args[2].equals("edit"))
             return Stream.of("chatprefix", "chatsuffix", "chatcolor", "groupprefix", "groupsuffix", "groupcolor", "tabprefix",
                     "tabsuffix", "tabcolor", "tabid", "teamid", "scoreboardprefix", "scoreboardsuffix").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+        if (args.length == 5 && args[0].equals("groups") && args[2].equals("permission") && (args[3].equals("remove") || args[3].equals("created") || args[3].equals("expired")))
+            return group.getAllPermission(args[1]).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+        if (args.length == 5 && args[0].equals("groups") && args[2].equals("parent") && (args[3].equals("remove") || args[3].equals("created") || args[3].equals("expired")))
+            return group.getAllParent(args[1]).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         return Collections.emptyList();
     }
 
@@ -254,110 +262,118 @@ public class PermissionCommand implements SimpleCommand {
             return;
         }
 
+        StringBuilder builder = new StringBuilder();
+        for (int i = 4; i < args.length; i++)
+            builder.append(args[i]).append(" ");
+        String message = builder.toString();
+        message = message.trim();
+        message = message.replace("\"", "").replace("'", "");
+
         switch (args[3]) {
             case "chatprefix":
                 if (args.length == 4) {
                     source.sendMessage(Component.text("§3ChatPrefix: §e" + group.chatPrefix(name)));
                     break;
                 }
-                group.chatPrefix(name, args[4]);
-                source.sendMessage(Component.text("§3New ChatPrefix: §e" + args[4]));
+                group.chatPrefix(name, message);
+                source.sendMessage(Component.text("§3New ChatPrefix: §e" + message));
                 break;
             case "chatsuffix":
                 if (args.length == 4) {
                     source.sendMessage(Component.text("§3ChatSuffix: §e" + group.chatSuffix(name)));
                     break;
                 }
-                group.chatSuffix(name, args[4]);
-                source.sendMessage(Component.text("§3New ChatSuffix: §e" + args[4]));
+                group.chatSuffix(name, message);
+                source.sendMessage(Component.text("§3New ChatSuffix: §e" + message));
                 break;
             case "chatcolor":
                 if (args.length == 4) {
                     source.sendMessage(Component.text("§3ChatColor: §e" + group.chatColor(name)));
                     break;
                 }
-                group.chatColor(name, args[4]);
-                source.sendMessage(Component.text("§3New ChatColor: §e" + args[4]));
+                group.chatColor(name, message);
+                source.sendMessage(Component.text("§3New ChatColor: §e" + message));
                 break;
             case "groupprefix":
                 if (args.length == 4) {
                     source.sendMessage(Component.text("§3GroupPrefix: §e" + group.groupPrefix(name)));
                     break;
                 }
-                group.groupPrefix(name, args[4]);
-                source.sendMessage(Component.text("§3New GroupPrefix: §e" + args[4]));
+                group.groupPrefix(name, message);
+                source.sendMessage(Component.text("§3New GroupPrefix: §e" + message));
                 break;
             case "groupsuffix":
                 if (args.length == 4) {
                     source.sendMessage(Component.text("§3GroupSuffix: §e" + group.groupSuffix(name)));
                     break;
                 }
-                group.groupSuffix(name, args[4]);
-                source.sendMessage(Component.text("§3New GroupSuffix: §e" + args[4]));
+                group.groupSuffix(name, message);
+                source.sendMessage(Component.text("§3New GroupSuffix: §e" + message));
                 break;
             case "groupcolor":
                 if (args.length == 4) {
                     source.sendMessage(Component.text("§3GroupColor: §e" + group.groupColor(name)));
                     break;
                 }
-                group.groupColor(name, args[4]);
-                source.sendMessage(Component.text("§3New GroupColor: §e" + args[4]));
+                group.groupColor(name, message);
+                source.sendMessage(Component.text("§3New GroupColor: §e" + message));
                 break;
             case "tabprefix":
                 if (args.length == 4) {
                     source.sendMessage(Component.text("§3TabPrefix: §e" + group.tabPrefix(name)));
                     break;
                 }
-                group.tabPrefix(name, args[4]);
-                source.sendMessage(Component.text("§3New TabPrefix: §e" + args[4]));
+                group.tabPrefix(name, message);
+                source.sendMessage(Component.text("§3New TabPrefix: §e" + message));
                 break;
             case "tabsuffix":
                 if (args.length == 4) {
                     source.sendMessage(Component.text("§3TabSuffix: §e" + group.tabSuffix(name)));
                     break;
                 }
-                group.tabSuffix(name, args[4]);
-                source.sendMessage(Component.text("§3New TabSuffix: §e" + args[4]));
+                group.tabSuffix(name, message);
+                source.sendMessage(Component.text("§3New TabSuffix: §e" + message));
                 break;
             case "tabcolor":
                 if (args.length == 4) {
                     source.sendMessage(Component.text("§3TabColor: §e" + group.tabColor(name)));
                     break;
                 }
-                group.tabColor(name, args[4]);
-                source.sendMessage(Component.text("§3New TabColor: §e" + args[4]));
+                group.tabColor(name, message);
+                source.sendMessage(Component.text("§3New TabColor: §e" + message));
                 break;
             case "tabid":
                 if (args.length == 4) {
                     source.sendMessage(Component.text("§3TabID: §e" + group.tabID(name)));
                     break;
                 }
-                group.tabID(name, args[4]);
-                source.sendMessage(Component.text("§3New TabID: §e" + args[4]));
+                group.tabID(name, message);
+                group.teamID(name, message + name);
+                source.sendMessage(Component.text("§3New TabID: §e" + message));
                 break;
             case "teamid":
                 if (args.length == 4) {
                     source.sendMessage(Component.text("§3TeamID: §e" + group.teamID(name)));
                     break;
                 }
-                group.teamID(name, args[4]);
-                source.sendMessage(Component.text("§3New TeamID: §e" + args[4]));
+                group.teamID(name, message);
+                source.sendMessage(Component.text("§3New TeamID: §e" + message));
                 break;
             case "scoreboardprefix":
                 if (args.length == 4) {
                     source.sendMessage(Component.text("§3ScoreboardPrefix: §e" + group.scoreboardPrefix(name)));
                     break;
                 }
-                group.scoreboardPrefix(name, args[4]);
-                source.sendMessage(Component.text("§3New ScoreboardPrefix: §e" + args[4]));
+                group.scoreboardPrefix(name, message);
+                source.sendMessage(Component.text("§3New ScoreboardPrefix: §e" + message));
                 break;
             case "scoreboardcolor":
                 if (args.length == 4) {
                     source.sendMessage(Component.text("§3ScoreboardColor: §e" + group.scoreboardColor(name)));
                     break;
                 }
-                group.scoreboardColor(name, args[4]);
-                source.sendMessage(Component.text("§3New ScoreboardColor: §e" + args[4]));
+                group.scoreboardColor(name, message);
+                source.sendMessage(Component.text("§3New ScoreboardColor: §e" + message));
                 break;
             default:
                 syntax(source);

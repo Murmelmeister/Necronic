@@ -4,3 +4,11 @@ main: de.murmelmeister.murmelessentials.MurmelEssentials
 api-version: '1.20'
 authors: [ Murmelmeister ]
 website: https://www.youtube.com/Murmelmeister
+
+commands:
+  murmelessentialsreload:
+    usage: /murmelessentialsreload
+    description: Reload the configuration.
+    aliases:
+      - mereload
+      - merl

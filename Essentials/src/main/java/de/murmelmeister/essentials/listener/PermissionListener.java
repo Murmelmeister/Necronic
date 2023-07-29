@@ -7,6 +7,9 @@ import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.proxy.Player;
 import de.murmelmeister.essentials.api.CustomPermission;
 import de.murmelmeister.murmelapi.permission.Permission;
+import de.murmelmeister.murmelapi.permission.User;
+
+import java.util.UUID;
 
 public class PermissionListener {
     private final Permission permission;
@@ -34,8 +37,11 @@ public class PermissionListener {
     @Subscribe
     public void onConnect(ServerConnectedEvent event) {
         Player player = event.getPlayer();
-        permission.getUser().create(player.getUniqueId(), player.getUsername());
-        permission.getUser().renameUsername(player.getUniqueId(), player.getUsername());
-        permission.getUser().addParent(player.getUniqueId(), player.getUsername(), permission.defaultGroup());
+        UUID uuid = player.getUniqueId();
+        String username = player.getUsername();
+        User user = permission.getUser();
+        user.create(uuid, username);
+        user.renameUsername(uuid, username);
+        //user.addParent(uuid, username, permission.defaultGroup());
     }
 }
