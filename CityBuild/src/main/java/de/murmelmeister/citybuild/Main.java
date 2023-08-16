@@ -54,6 +54,7 @@ public class Main {
     public void enable() {
         config.register();
         message.register();
+        mySQL.register();
         locations.create();
         itemValue.register();
 
@@ -106,10 +107,6 @@ public class Main {
 
     public ItemValue getItemValue() {
         return itemValue;
-    }
-
-    public MySQL getMySQL() {
-        return mySQL;
     }
 
     public Permission getPermission() {

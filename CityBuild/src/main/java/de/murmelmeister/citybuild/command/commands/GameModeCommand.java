@@ -212,7 +212,7 @@ public class GameModeCommand extends CommandManager {
      */
     private void gameModeOtherSpectator(CommandSender sender, String[] args) {
         if (!(isEnable(sender, Configs.COMMAND_ENABLE_GAME_MODE_OTHER_SPECTATOR))) return;
-        if (!(hasPermission(sender, Configs.COMMAND_ENABLE_GAME_MODE_OTHER_SPECTATOR))) return;
+        if (!(hasPermission(sender, Configs.PERMISSION_GAME_MODE_OTHER_SPECTATOR))) return;
 
         Player target = sender.getServer().getPlayer(args[1]);
         if (target == null) {
