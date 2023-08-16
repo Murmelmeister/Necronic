@@ -1,10 +1,8 @@
 package de.murmelmeister.murmelessentials.listener.listeners;
 
-import de.murmelmeister.murmelapi.permission.User;
 import de.murmelmeister.murmelessentials.Main;
 import de.murmelmeister.murmelessentials.api.CustomPermission;
 import de.murmelmeister.murmelessentials.listener.Listeners;
-import de.murmelmeister.murmelessentials.util.config.Configs;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerLoginEvent;
@@ -28,8 +26,5 @@ public class PermissionListener extends Listeners {
         } catch (NoSuchFieldException | ClassNotFoundException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-        User user = permission.getUser();
-        if (user.getCreatedData(player.getUniqueId()) == null)
-            user.addParent(player.getUniqueId(), player.getName(), config.getString(Configs.DEFAULT_GROUP));
     }
 }

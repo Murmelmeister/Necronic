@@ -40,8 +40,8 @@ public class PermissionListener {
         UUID uuid = player.getUniqueId();
         String username = player.getUsername();
         User user = permission.getUser();
+        if (user.getCreatedDate(uuid) == null) user.addParent(uuid, username, permission.defaultGroup(), -1);
         user.create(uuid, username);
         user.renameUsername(uuid, username);
-        //user.addParent(uuid, username, permission.defaultGroup());
     }
 }

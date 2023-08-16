@@ -8,7 +8,9 @@ import com.velocitypowered.api.permission.Tristate;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import de.murmelmeister.essentials.Essentials;
+import de.murmelmeister.murmelapi.permission.Group;
 import de.murmelmeister.murmelapi.permission.Permission;
+import de.murmelmeister.murmelapi.permission.PermissionConfig;
 
 import java.util.concurrent.TimeUnit;
 
@@ -34,6 +36,11 @@ public class CustomPermission implements PermissionProvider, PermissionFunction 
     }
 
     public static void updatePermission(Essentials instance, ProxyServer proxyServer, Permission permission) {
-        proxyServer.getScheduler().buildTask(instance, permission::expired).repeat(1000L, TimeUnit.MILLISECONDS).schedule();
+        proxyServer.getScheduler().buildTask(instance, permission::expired).repeat(permission.getValueLong(PermissionConfig.UPDATE_SCHEDULE_RANK_EXPIRED) * 1000L, TimeUnit.MILLISECONDS).schedule();
+    }
+
+    public static void updateRankPermission(Permission permission) {
+        Group group = permission.getGroup();
+        group.groups().forEach(s -> group.addPermission(s, permission.getValueString(PermissionConfig.DEFAULT_PRE_PERMISSION) + s, -1));
     }
 }

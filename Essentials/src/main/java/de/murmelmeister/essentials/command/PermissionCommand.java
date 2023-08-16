@@ -4,13 +4,12 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import de.murmelmeister.murmelapi.permission.Group;
 import de.murmelmeister.murmelapi.permission.Permission;
+import de.murmelmeister.murmelapi.permission.PermissionConfig;
 import de.murmelmeister.murmelapi.permission.User;
 import de.murmelmeister.murmelapi.util.StringUtils;
 import net.kyori.adventure.text.Component;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -43,13 +42,32 @@ public class PermissionCommand implements SimpleCommand {
             return;
         }
 
+        if (args.length == 2) {
+            if (args[0].equals("config")) {
+                String id = args[1];
+                id = id.toUpperCase();
+                try {
+                    PermissionConfig config = PermissionConfig.valueOf(id);
+                    source.sendMessage(Component.text("§3Config: "));
+                    source.sendMessage(Component.text("§r- §bID: §e" + config.getId()));
+                    source.sendMessage(Component.text("§r- §bValue: §e" + permission.getValueString(config)));
+                } catch (IllegalArgumentException e) {
+                    source.sendMessage(Component.text("§cUse a valid ID."));
+                }
+            } else syntax(source);
+            return;
+        }
+
         if (args.length >= 3) {
             switch (args[0]) {
                 case "users":
                     users(source, user, args);
                     break;
                 case "groups":
-                    groups(source, group, args);
+                    groups(source, group, user, args);
+                    break;
+                case "config":
+                    setConfig(source, args);
                     break;
                 default:
                     syntax(source);
@@ -64,7 +82,7 @@ public class PermissionCommand implements SimpleCommand {
         Group group = permission.getGroup();
         User user = permission.getUser();
         if (args.length == 1)
-            return Stream.of("users", "groups", "grouplist").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+            return Stream.of("users", "groups", "grouplist", "config").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 2 && args[0].equals("users"))
             return user.usernames().stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 2 && args[0].equals("groups"))
@@ -76,26 +94,56 @@ public class PermissionCommand implements SimpleCommand {
         if (args.length == 4 && args[0].equals("users") && args[2].equals("permission"))
             return Stream.of("all", "add", "remove", "clear", "created", "expired").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 5 && args[0].equals("users") && args[2].equals("permission") && (args[3].equals("remove") || args[3].equals("created") || args[3].equals("expired")))
-            return user.getAllPermission(user.uuid(args[1])).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+            return user.getPermissions(user.uuid(args[1])).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 5 && args[0].equals("users") && args[2].equals("parent") && (args[3].equals("remove") || args[3].equals("created") || args[3].equals("expired")))
-            return user.getAllParent(user.uuid(args[1])).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+            return user.getParents(user.uuid(args[1])).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+        if (args.length == 5 && args[0].equals("users") && args[2].equals("parent") && args[3].equals("add"))
+            return group.groups().stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 3 && args[0].equals("groups"))
             return Stream.of("create", "delete", "rename", "edit", "parent", "permission").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 4 && args[0].equals("groups") && (args[2].equals("parent") || args[2].equals("permission")))
             return Stream.of("add", "remove", "clear", "created", "expired").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 4 && args[0].equals("groups") && args[2].equals("edit"))
             return Stream.of("chatprefix", "chatsuffix", "chatcolor", "groupprefix", "groupsuffix", "groupcolor", "tabprefix",
-                    "tabsuffix", "tabcolor", "tabid", "teamid", "scoreboardprefix", "scoreboardsuffix").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+                    "tabsuffix", "tabcolor", "tabid", "teamid", "scoreboardprefix", "scoreboardcolor").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 5 && args[0].equals("groups") && args[2].equals("permission") && (args[3].equals("remove") || args[3].equals("created") || args[3].equals("expired")))
-            return group.getAllPermission(args[1]).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+            return group.getAllPermissions(args[1]).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 5 && args[0].equals("groups") && args[2].equals("parent") && (args[3].equals("remove") || args[3].equals("created") || args[3].equals("expired")))
-            return group.getAllParent(args[1]).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+            return group.getParents(args[1]).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+        if (args.length == 5 && args[0].equals("groups") && args[2].equals("parent") && args[3].equals("add"))
+            return group.groups().stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+        if (args.length == 2 && args[0].equals("config")) {
+            List<String> ids = new ArrayList<>();
+            for (PermissionConfig value : PermissionConfig.values()) ids.add(value.getId());
+            return ids.stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+        }
         return Collections.emptyList();
+    }
+
+    private void setConfig(CommandSource source, String[] args) {
+        String id = args[1];
+        id = id.toUpperCase();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 2; i < args.length; i++)
+            builder.append(args[i]).append(" ");
+        String message = builder.toString();
+        message = message.trim();
+        message = message.replace("\"", "").replace("'", "");
+        try {
+            PermissionConfig config = PermissionConfig.valueOf(id);
+            config.setValue(message);
+            permission.setConfigValue(config);
+            source.sendMessage(Component.text("§3Config: "));
+            source.sendMessage(Component.text("§r- §bID: §e" + config.getId()));
+            source.sendMessage(Component.text("§r- §bNew value: §e" + permission.getValueString(config)));
+        } catch (IllegalArgumentException e) {
+            source.sendMessage(Component.text("§cUse a valid ID."));
+        }
     }
 
     private void users(CommandSource source, User user, String[] args) {
         String username = args[1];
-        if (!(user.convertUsernameToUUID(username))) {
+        if (!(user.hasUUID(username))) {
             source.sendMessage(Component.text(String.format("§cThe player §e%s§c does not exist.", username)));
             return;
         }
@@ -117,7 +165,7 @@ public class PermissionCommand implements SimpleCommand {
     private void userParent(CommandSource source, UUID uuid, String username, User user, String[] args) {
         if (args.length == 3) {
             source.sendMessage(Component.text("§3Parents: "));
-            for (String all : user.getAllParent(uuid))
+            for (String all : user.getParents(uuid))
                 source.sendMessage(Component.text("§r- §e" + all));
             return;
         }
@@ -132,31 +180,34 @@ public class PermissionCommand implements SimpleCommand {
             case "add":
                 parent = args[4];
                 if (args.length == 5) {
-                    user.addParent(uuid, username, parent);
+                    user.addParent(uuid, username, parent, -1);
                     source.sendMessage(Component.text("§3Parent added §e" + parent));
                     break;
                 }
-                user.addTempParent(uuid, username, parent, formatTime(source, args));
+                user.addParent(uuid, username, parent, formatTime(source, args));
                 source.sendMessage(Component.text("§3Parent added §e" + parent));
                 break;
             case "remove":
                 parent = args[4];
+                if (parent.equals(permission.defaultGroup())) {
+                    source.sendMessage(Component.text("§cYou can not remove the default group."));
+                    break;
+                }
                 user.removeParent(uuid, parent);
-                user.removeTempParent(uuid, parent);
                 source.sendMessage(Component.text("§3Parent removed §e" + parent));
                 break;
             case "clear":
                 user.clearParent(uuid);
-                user.clearTempParent(uuid);
+                user.addParent(uuid, username, permission.defaultGroup(), -1);
                 source.sendMessage(Component.text("§3Parent cleared"));
                 break;
             case "created":
                 parent = args[4];
-                source.sendMessage(Component.text("§3Created: §e" + user.getTempParentCreated(uuid, parent)));
+                source.sendMessage(Component.text("§3Created: §e" + user.getParentCreated(uuid, parent)));
                 break;
             case "expired":
                 parent = args[4];
-                source.sendMessage(Component.text("§3Expired: §e" + user.getTempParentExpired(uuid, parent)));
+                source.sendMessage(Component.text("§3Expired: §e" + user.getParentExpired(uuid, parent)));
                 break;
             default:
                 syntax(source);
@@ -167,7 +218,7 @@ public class PermissionCommand implements SimpleCommand {
     private void userPermission(CommandSource source, UUID uuid, String username, User user, String[] args) {
         if (args.length == 3) {
             source.sendMessage(Component.text("§3Permission: "));
-            for (String all : user.getAllPermission(uuid))
+            for (String all : user.getPermissions(uuid))
                 source.sendMessage(Component.text("§r- §e" + all));
             return;
         }
@@ -181,37 +232,35 @@ public class PermissionCommand implements SimpleCommand {
         switch (args[3]) {
             case "all":
                 source.sendMessage(Component.text("§3All permission: "));
-                for (String all : this.permission.getFinalPermission(uuid))
+                for (String all : this.permission.getFinalPermissions(uuid))
                     source.sendMessage(Component.text("§r- §e" + all));
                 break;
             case "add":
                 permission = args[4];
                 if (args.length == 5) {
-                    user.addPermission(uuid, username, permission);
+                    user.addPermission(uuid, username, permission, -1);
                     source.sendMessage(Component.text("§3Permission added §e" + permission));
                     break;
                 }
-                user.addTempPermission(uuid, username, permission, formatTime(source, args));
+                user.addPermission(uuid, username, permission, formatTime(source, args));
                 source.sendMessage(Component.text("§3Permission added §e" + permission));
                 break;
             case "remove":
                 permission = args[4];
                 user.removePermission(uuid, permission);
-                user.removeTempPermission(uuid, permission);
                 source.sendMessage(Component.text("§3Permission removed §e" + permission));
                 break;
             case "clear":
                 user.clearPermission(uuid);
-                user.clearTempPermission(uuid);
                 source.sendMessage(Component.text("§3Permission cleared"));
                 break;
             case "created":
                 permission = args[4];
-                source.sendMessage(Component.text("§3Created: §e" + user.getTempPermissionCreated(uuid, permission)));
+                source.sendMessage(Component.text("§3Created: §e" + user.getPermissionCreated(uuid, permission)));
                 break;
             case "expired":
                 permission = args[4];
-                source.sendMessage(Component.text("§3Expired: §e" + user.getTempPermissionExpired(uuid, permission)));
+                source.sendMessage(Component.text("§3Expired: §e" + user.getPermissionExpired(uuid, permission)));
                 break;
             default:
                 syntax(source);
@@ -219,11 +268,12 @@ public class PermissionCommand implements SimpleCommand {
         }
     }
 
-    private void groups(CommandSource source, Group group, String[] args) {
+    private void groups(CommandSource source, Group group, User user, String[] args) {
         String name = args[1];
         if (!(group.exists(name))) {
             if (args[2].equals("create")) {
                 group.create(name);
+                group.addPermission(name, permission.getValueString(PermissionConfig.DEFAULT_PRE_PERMISSION) + name, -1);
                 source.sendMessage(Component.text(String.format("§aThe Group §e%s§a was created.", name)));
             } else {
                 source.sendMessage(Component.text(String.format("§cThe Group §e%s§c does not exist.", name)));
@@ -233,6 +283,8 @@ public class PermissionCommand implements SimpleCommand {
 
         switch (args[2]) {
             case "delete":
+                for (UUID uuid : user.uuids())
+                    if (user.containsParent(uuid, name)) user.removeParent(uuid, name);
                 group.delete(name);
                 source.sendMessage(Component.text(String.format("§aThe Group §e%s§a was deleted.", name)));
                 break;
@@ -384,7 +436,7 @@ public class PermissionCommand implements SimpleCommand {
     private void groupParent(CommandSource source, String name, Group group, String[] args) {
         if (args.length == 3) {
             source.sendMessage(Component.text("§3Parents: "));
-            for (String all : group.getAllParent(name))
+            for (String all : group.getParents(name))
                 source.sendMessage(Component.text("§r- §e" + all));
             return;
         }
@@ -399,31 +451,29 @@ public class PermissionCommand implements SimpleCommand {
             case "add":
                 parent = args[4];
                 if (args.length == 5) {
-                    group.addParent(name, parent);
+                    group.addParent(name, parent, -1);
                     source.sendMessage(Component.text("§3Parent added §e" + parent));
                     break;
                 }
-                group.addTempParent(name, parent, formatTime(source, args));
+                group.addParent(name, parent, formatTime(source, args));
                 source.sendMessage(Component.text("§3Parent added §e" + parent));
                 break;
             case "remove":
                 parent = args[4];
                 group.removeParent(name, parent);
-                group.removeTempParent(name, parent);
                 source.sendMessage(Component.text("§3Parent removed §e" + parent));
                 break;
             case "clear":
                 group.clearParent(name);
-                group.clearTempParent(name);
                 source.sendMessage(Component.text("§3Parent cleared"));
                 break;
             case "created":
                 parent = args[4];
-                source.sendMessage(Component.text("§3Created: §e" + group.getTempParentCreated(name, parent)));
+                source.sendMessage(Component.text("§3Created: §e" + group.getParentCreated(name, parent)));
                 break;
             case "expired":
                 parent = args[4];
-                source.sendMessage(Component.text("§3Expired: §e" + group.getTempParentExpired(name, parent)));
+                source.sendMessage(Component.text("§3Expired: §e" + group.getParentExpired(name, parent)));
                 break;
             default:
                 syntax(source);
@@ -434,7 +484,7 @@ public class PermissionCommand implements SimpleCommand {
     private void groupPermission(CommandSource source, String name, Group group, String[] args) {
         if (args.length == 3) {
             source.sendMessage(Component.text("§3Permission: "));
-            for (String all : group.getAllPermission(name))
+            for (String all : group.getAllPermissions(name))
                 source.sendMessage(Component.text("§r- §e" + all));
             return;
         }
@@ -449,31 +499,34 @@ public class PermissionCommand implements SimpleCommand {
             case "add":
                 permission = args[4];
                 if (args.length == 5) {
-                    group.addPermission(name, permission);
+                    group.addPermission(name, permission, -1);
                     source.sendMessage(Component.text("§3Permission added §e" + permission));
                     break;
                 }
-                group.addTempPermission(name, permission, formatTime(source, args));
+                group.addPermission(name, permission, formatTime(source, args));
                 source.sendMessage(Component.text("§3Permission added §e" + permission));
                 break;
             case "remove":
                 permission = args[4];
+                if (permission.equals(this.permission.getValueString(PermissionConfig.DEFAULT_PRE_PERMISSION) + name)) {
+                    source.sendMessage(Component.text("§cThe default permission can not be removed."));
+                    break;
+                }
                 group.removePermission(name, permission);
-                group.removeTempPermission(name, permission);
                 source.sendMessage(Component.text("§3Permission removed §e" + permission));
                 break;
             case "clear":
                 group.clearPermission(name);
-                group.clearTempPermission(name);
+                group.addPermission(name, this.permission.getValueString(PermissionConfig.DEFAULT_PRE_PERMISSION) + name, -1);
                 source.sendMessage(Component.text("§3Permission cleared"));
                 break;
             case "created":
                 permission = args[4];
-                source.sendMessage(Component.text("§3Created: §e" + group.getTempPermissionCreated(name, permission)));
+                source.sendMessage(Component.text("§3Created: §e" + group.getPermissionCreated(name, permission)));
                 break;
             case "expired":
                 permission = args[4];
-                source.sendMessage(Component.text("§3Expired: §e" + group.getTempPermissionExpired(name, permission)));
+                source.sendMessage(Component.text("§3Expired: §e" + group.getPermissionExpired(name, permission)));
                 break;
             default:
                 syntax(source);
@@ -563,7 +616,8 @@ public class PermissionCommand implements SimpleCommand {
                 + "\n- /permission §3groups§r <name> permission clear"
                 + "\n- /permission §3groups§r <name> permission created <permission>"
                 + "\n- /permission §3groups§r <name> permission expired <permission>"
-                + "\n- /permission §dgrouplist"
+                + "\n- /permission §dgrouplist§r"
+                + "\n- /permission §bconfig§r <id> <value>"
         ));
     }
 }

@@ -8,7 +8,6 @@ import de.murmelmeister.murmelessentials.configs.Config;
 import de.murmelmeister.murmelessentials.configs.Message;
 import de.murmelmeister.murmelessentials.configs.MySQL;
 import de.murmelmeister.murmelessentials.listener.Listeners;
-import de.murmelmeister.murmelessentials.util.config.Configs;
 
 import java.sql.Connection;
 
@@ -49,20 +48,17 @@ public class Main {
         register();
         listeners.register();
         commands.register();
-        CustomPermission.updateRankPermission(this);
         CustomPermission.updatePermission(this);
-        ranks.updatePlayerList(instance, instance.getServer(), permission.getGroup());
-        ranks.updatePlayerTeams(instance, instance.getServer(), permission.getGroup());
+        ranks.updatePlayerList(instance, instance.getServer(), permission);
+        ranks.updatePlayerTeams(instance, instance.getServer(), permission);
     }
 
     private void tables(Connection connection) {
         this.permission = new Permission(connection);
-        permission.createAllTables();
-        permission.defaultGroup(config.getString(Configs.DEFAULT_GROUP));
     }
 
     private void register() {
-        this.ranks = new Ranks(this);
+        this.ranks = new Ranks();
     }
 
     public MurmelEssentials getInstance() {

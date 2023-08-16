@@ -1,12 +1,5 @@
 package de.murmelmeister.essentials.command;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.ArgumentBuilder;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.tree.CommandNode;
-import com.mojang.brigadier.tree.LiteralCommandNode;
-import com.velocitypowered.api.command.BrigadierCommand;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
@@ -41,7 +34,7 @@ public class PlayTimeCommand implements SimpleCommand {
             player.sendMessage(Component.text("§3PlayTime: §e" + time));
         } else if (args.length == 1) {
             String target = args[0];
-            if (!(playTime.convertUsernameToUUID(target))) {
+            if (!(playTime.hasUUID(target))) {
                 sender.sendMessage(Component.text(String.format("§cThe player §e%s§c does not exist.", target)));
                 return;
             }

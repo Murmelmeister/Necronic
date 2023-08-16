@@ -1,6 +1,5 @@
 package de.murmelmeister.murmelessentials.listener.listeners;
 
-import de.murmelmeister.murmelapi.permission.Group;
 import de.murmelmeister.murmelessentials.Main;
 import de.murmelmeister.murmelessentials.listener.Listeners;
 import org.bukkit.entity.Player;
@@ -16,7 +15,6 @@ public class RankListener extends Listeners {
     @EventHandler
     public void playerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        Group group = permission.getGroup();
-        ranks.setRankChat(event, group, player);
+        ranks.setRankChat(event, permission, player);
     }
 }
