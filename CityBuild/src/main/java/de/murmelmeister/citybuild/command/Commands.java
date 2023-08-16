@@ -64,6 +64,7 @@ public class Commands {
         addCommand("pay", new PayCommand(main));
         addCommand("sell", new SellCommand(main));
         addCommand("itemvalue", new ItemValueCommand(main));
+        addCommand("settings", new SettingsCommand(main));
     }
 
     private void addCommand(String name, TabExecutor executor) {

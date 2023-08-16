@@ -144,3 +144,6 @@ commands:
     description: Edit the item values.
     aliases:
       - iv
+  settings:
+    usage: /settings <setting> [modes]
+    description: Set you on profile.

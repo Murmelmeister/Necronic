@@ -24,6 +24,7 @@ public class Main {
     private final Homes homes;
     private final Economy economy;
     private final ItemValue itemValue;
+    private final Settings settings;
 
     private Permission permission;
 
@@ -42,6 +43,7 @@ public class Main {
         this.homes = new Homes(this);
         this.economy = new Economy(this);
         this.itemValue = new ItemValue(this);
+        this.settings = new Settings(this);
         this.listeners = new Listeners(this);
         this.commands = new Commands(this);
     }
@@ -111,5 +113,9 @@ public class Main {
 
     public Permission getPermission() {
         return permission;
+    }
+
+    public Settings getSettings() {
+        return settings;
     }
 }

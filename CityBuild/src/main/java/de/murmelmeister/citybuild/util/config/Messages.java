@@ -81,6 +81,7 @@ public enum Messages {
     COMMAND_ITEM_VALUE_GET("Command.ItemValue.Get", "&7Item price of&c [ITEM]&7:&d [MONEY] [CURRENCY]&7."),
     COMMAND_ITEM_VALUE_SET("Command.ItemValue.Set", "&7Item &c[ITEM]&7 price set to&d [MONEY] [CURRENCY]&7."),
     COMMAND_ITEM_VALUE_MATERIAL_NOT_EXIST("Command.ItemValue.Material.NotExist", "&cThis item&d [MATERIAL]&c does not exist."),
+    COMMAND_SETTINGS_SCOREBOARD("Command.Settings.Scoreboard", "&7You scoreboard is &e[MODE]&7."),
     INVENTORY_TRASH("Inventory.Trash", "&cTrash"),
     EVENT_PLAYER_JOIN("Event.PlayerJoin", "&d[PLAYER]&7 joined the game."),
     EVENT_PLAYER_QUIT("Event.PlayerQuit", "&d[PLAYER]&7 left the game."),
@@ -108,7 +109,9 @@ public enum Messages {
     SCOREBOARD_SCORE_3("Scoreboard.Score.3", "&8| &5IP-Address:"),
     SCOREBOARD_SCORE_2("Scoreboard.Score.2", "&8» &dNecronic.net"),
     SCOREBOARD_SCORE_1("Scoreboard.Score.1", "&8&m-----&r &7v0.0.1 &8&m-----"),
-    SCOREBOARD_SCORE_0("Scoreboard.Score.0", "Test 0");
+    SCOREBOARD_SCORE_0("Scoreboard.Score.0", "Test 0"),
+    SETTINGS_DISABLE_SCOREBOARD("Settings.Disable.Scoreboard", "&cPlease rejoin the server to disable/enable the scoreboard for you."),
+    ;
 
     private final String path;
     private final String value;
