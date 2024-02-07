@@ -34,7 +34,7 @@ public class AddHomeCommand extends CommandManager {
             return true;
         }
 
-        if (homes.hasHome(player, args[0])) {
+        if (homes.hasHome(player.getUniqueId(), args[0])) {
             sendMessage(player, message.getString(Messages.COMMAND_EXIST_HOME).replace("[HOME]", args[0]));
             return true;
         }

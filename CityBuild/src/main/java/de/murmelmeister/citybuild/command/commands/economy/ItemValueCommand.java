@@ -27,15 +27,10 @@ public class ItemValueCommand extends CommandManager {
 
         if (args.length >= 2) {
             switch (args[0]) {
-                case "get":
-                    getItemValue(sender, args);
-                    break;
-                case "set":
-                    setItemValue(sender, args);
-                    break;
-                default:
-                    sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
-                    break;
+                case "get" -> getItemValue(sender, args);
+                case "set" -> setItemValue(sender, args);
+                default ->
+                        sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
             }
         } else sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
         return true;

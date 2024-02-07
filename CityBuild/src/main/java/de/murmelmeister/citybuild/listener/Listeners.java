@@ -5,8 +5,7 @@ import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.api.*;
 import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
-import de.murmelmeister.citybuild.listener.listeners.ConnectListener;
-import de.murmelmeister.citybuild.listener.listeners.GodModeListener;
+import de.murmelmeister.citybuild.listener.listeners.*;
 import de.murmelmeister.citybuild.util.HexColor;
 import de.murmelmeister.citybuild.util.ListUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
@@ -27,6 +26,7 @@ public class Listeners implements Listener {
     public final Economy economy;
     public final ItemValue itemValue;
     public final Settings settings;
+    public final EnderChest enderChest;
 
     public Listeners(Main main) {
         this.main = main;
@@ -41,11 +41,15 @@ public class Listeners implements Listener {
         this.economy = main.getEconomy();
         this.itemValue = main.getItemValue();
         this.settings = main.getSettings();
+        this.enderChest = main.getEnderChest();
     }
 
     public void register() {
         addListener(new GodModeListener(main));
         addListener(new ConnectListener(main));
+        addListener(new EnderChestListener(main));
+        //addListener(new ItemValueListener(main));
+        //addListener(new TestItem(main));
     }
 
     private void addListener(Listener listener) {

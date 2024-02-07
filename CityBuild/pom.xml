@@ -4,15 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.murmelmeister</groupId>
+    <groupId>de.murmelmeister.necronic</groupId>
     <artifactId>CityBuild</artifactId>
-    <version>0.0.1-ALPHA-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>CityBuild</name>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -21,7 +21,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.11.0</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -30,7 +30,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.5.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -54,6 +54,10 @@
 
     <repositories>
         <repository>
+            <id>byteminer</id>
+            <url>https://www.byteminer.net/maven/</url>
+        </repository>
+        <repository>
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
@@ -67,8 +71,8 @@
         <dependency>
             <groupId>de.murmelmeister.murmelapi</groupId>
             <artifactId>MurmelAPI</artifactId>
-            <version>0.0.1-ALPHA-SNAPSHOT</version>
-            <scope>provided</scope>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>

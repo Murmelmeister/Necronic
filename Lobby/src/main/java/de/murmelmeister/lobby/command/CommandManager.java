@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class CommandManager extends Commands implements TabExecutor {
+    public final Logger logger;
     public final ListUtil listUtil;
     public final Config config;
     public final Message message;
@@ -29,6 +31,7 @@ public abstract class CommandManager extends Commands implements TabExecutor {
 
     public CommandManager(Main main) {
         super(main);
+        this.logger = main.getLogger();
         this.listUtil = main.getListUtil();
         this.config = main.getConfig();
         this.message = main.getMessage();

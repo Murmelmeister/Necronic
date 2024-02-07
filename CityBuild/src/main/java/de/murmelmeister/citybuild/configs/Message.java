@@ -1,10 +1,10 @@
 package de.murmelmeister.citybuild.configs;
 
 import de.murmelmeister.citybuild.Main;
-import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.HexColor;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
+import de.murmelmeister.murmelapi.util.ConfigUtil;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.slf4j.Logger;
 
@@ -19,7 +19,7 @@ public class Message {
     private YamlConfiguration config;
 
     public Message(Main main) {
-        this.logger = main.getInstance().getSLF4JLogger();
+        this.logger = main.getLogger();
         this.defaultConfig = main.getConfig();
     }
 

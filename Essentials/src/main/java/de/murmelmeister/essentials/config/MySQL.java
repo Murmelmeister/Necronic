@@ -1,81 +1,58 @@
 package de.murmelmeister.essentials.config;
 
 import com.moandjiezana.toml.Toml;
-import de.murmelmeister.essentials.util.MySQLConf;
+import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Objects;
 
 public class MySQL {
     private final Logger logger;
-    private final File file;
+    private File file;
     private Toml toml;
-    private Connection connection;
+    private HikariDataSource dataSource;
 
     public MySQL(Logger logger) {
         this.logger = logger;
-        this.file = new File("plugins//essentials//", "/mysql.toml");
-        create();
+        load();
     }
 
-    private void save() {
-        if (!(file.getParentFile().exists())) {
-            boolean a = file.getParentFile().mkdirs();
-            if (!(a)) logger.info("Cloud not maje a new mysql.toml file.");
+    private void load() {
+        this.file =  new File("plugins//Essentials//", "/mysql.toml");
+        if (!file.getParentFile().exists()) {
+            boolean b = file.getParentFile().mkdirs();
+            if (!b) logger.info("Cloud not maje a new mysql.toml file.");
         }
-
-        if (!(file.exists())) {
+        if (!file.exists()) {
             try {
                 Files.copy(Objects.requireNonNull(MySQL.class.getResourceAsStream("/mysql.toml")), file.toPath());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-    }
-
-    private void create() {
-        save();
         toml = new Toml().read(file);
-        for (MySQLConf mySQLConf : MySQLConf.values()) read(mySQLConf);
-        toml.getString("Created");
     }
 
-    private void read(MySQLConf mySQLConf) {
-        toml.getString(mySQLConf.getPath());
+    public void initConnectionPool() {
+        if (!file.exists()) throw new RuntimeException("The MySQL-Config file does not exist.");
+        this.dataSource = new HikariDataSource();
+        dataSource.setJdbcUrl(String.format("jdbc:%s://%s:%s/%s?autoReconnect=true&useUnicode=yes", read("MySQL.Driver").toLowerCase(), read("MySQL.Hostname"), read("MySQL.Port"), read("MySQL.Database")));
+        dataSource.setUsername(read("MySQL.Username"));
+        dataSource.setPassword(read("MySQL.Password"));
     }
 
-    private String getString(MySQLConf mySQLConf) {
-        return toml.getString(mySQLConf.getPath());
+    public void closeConnectionPool() {
+        dataSource.close();
     }
 
-    public void connected() {
-        if (connection != null) return;
-        try {
-            this.connection = DriverManager.getConnection(String.format("jdbc:mysql://%s:%s/%s?autoReconnect=true&useUnicode=yes",
-                    getString(MySQLConf.MYSQL_HOSTNAME), getString(MySQLConf.MYSQL_PORT), getString(MySQLConf.MYSQL_DATABASE)), getString(MySQLConf.MYSQL_USERNAME), getString(MySQLConf.MYSQL_PASSWORD));
-            logger.info("MySQL connected.");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public HikariDataSource getDataSource() {
+        return dataSource;
     }
 
-    public void disconnected() {
-        if (connection == null) return;
-        try {
-            connection.close();
-            logger.info("MySQL disconnected.");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Connection getConnection() {
-        return connection;
+    private String read(String path) {
+        return toml.getString(path);
     }
 }

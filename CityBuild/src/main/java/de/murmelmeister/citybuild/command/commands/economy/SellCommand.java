@@ -41,15 +41,10 @@ public class SellCommand extends CommandManager {
         }
 
         switch (args[0]) {
-            case "hand":
-                sellHand(player, itemStack);
-                break;
-            case "price":
-                sellPrice(player, itemStack);
-                break;
-            default:
-                sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
-                break;
+            case "hand" -> sellHand(player, itemStack);
+            case "price" -> sellPrice(player, itemStack);
+            default ->
+                    sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
         }
         return true;
     }

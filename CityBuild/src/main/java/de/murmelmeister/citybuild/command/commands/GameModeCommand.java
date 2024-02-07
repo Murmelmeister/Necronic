@@ -27,63 +27,29 @@ public class GameModeCommand extends CommandManager {
 
         if (args.length == 1) {
             switch (args[0]) {
-                case "survival":
-                    gameModeUseSurvival(sender);
-                    break;
-                case "creative":
-                    gameModeUseCreative(sender);
-                    break;
-                case "adventure":
-                    gameModeUseAdventure(sender);
-                    break;
-                case "spectator":
-                    gameModeUseSpectator(sender);
-                    break;
-                case "0":
-                    gameModeUseSurvival(sender);
-                    break;
-                case "1":
-                    gameModeUseCreative(sender);
-                    break;
-                case "2":
-                    gameModeUseAdventure(sender);
-                    break;
-                case "3":
-                    gameModeUseSpectator(sender);
-                    break;
-                default:
-                    sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
-                    break;
+                case "survival" -> gameModeUseSurvival(sender);
+                case "creative" -> gameModeUseCreative(sender);
+                case "adventure" -> gameModeUseAdventure(sender);
+                case "spectator" -> gameModeUseSpectator(sender);
+                case "0" -> gameModeUseSurvival(sender);
+                case "1" -> gameModeUseCreative(sender);
+                case "2" -> gameModeUseAdventure(sender);
+                case "3" -> gameModeUseSpectator(sender);
+                default ->
+                        sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
             }
         } else if (args.length == 2) {
             switch (args[0]) {
-                case "survival":
-                    gameModeOtherSurvival(sender, args);
-                    break;
-                case "creative":
-                    gameModeOtherCreative(sender, args);
-                    break;
-                case "adventure":
-                    gameModeOtherAdventure(sender, args);
-                    break;
-                case "spectator":
-                    gameModeOtherSpectator(sender, args);
-                    break;
-                case "0":
-                    gameModeOtherSurvival(sender, args);
-                    break;
-                case "1":
-                    gameModeOtherCreative(sender, args);
-                    break;
-                case "2":
-                    gameModeOtherAdventure(sender, args);
-                    break;
-                case "3":
-                    gameModeOtherSpectator(sender, args);
-                    break;
-                default:
-                    sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
-                    break;
+                case "survival" -> gameModeOtherSurvival(sender, args);
+                case "creative" -> gameModeOtherCreative(sender, args);
+                case "adventure" -> gameModeOtherAdventure(sender, args);
+                case "spectator" -> gameModeOtherSpectator(sender, args);
+                case "0" -> gameModeOtherSurvival(sender, args);
+                case "1" -> gameModeOtherCreative(sender, args);
+                case "2" -> gameModeOtherAdventure(sender, args);
+                case "3" -> gameModeOtherSpectator(sender, args);
+                default ->
+                        sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
             }
         } else sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
         return true;

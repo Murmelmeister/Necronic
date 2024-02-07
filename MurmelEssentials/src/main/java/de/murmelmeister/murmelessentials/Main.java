@@ -1,22 +1,23 @@
 package de.murmelmeister.murmelessentials;
 
+import com.zaxxer.hikari.HikariDataSource;
 import de.murmelmeister.murmelapi.permission.Permission;
+import de.murmelmeister.murmelapi.util.MySQL;
 import de.murmelmeister.murmelessentials.api.CustomPermission;
 import de.murmelmeister.murmelessentials.api.Ranks;
 import de.murmelmeister.murmelessentials.command.Commands;
 import de.murmelmeister.murmelessentials.configs.Config;
 import de.murmelmeister.murmelessentials.configs.Message;
-import de.murmelmeister.murmelessentials.configs.MySQL;
 import de.murmelmeister.murmelessentials.listener.Listeners;
-
-import java.sql.Connection;
+import de.murmelmeister.murmelessentials.util.config.Configs;
+import org.slf4j.Logger;
 
 public class Main {
     private final MurmelEssentials instance;
+    private final Logger logger;
 
     private final Config config;
     private final Message message;
-    private final MySQL mySQL;
 
     private Permission permission;
 
@@ -27,24 +28,24 @@ public class Main {
 
     public Main(MurmelEssentials instance) {
         this.instance = instance;
+        this.logger = instance.getSLF4JLogger();
         this.config = new Config(this);
         this.message = new Message(this);
-        this.mySQL = new MySQL(this);
         this.listeners = new Listeners(this);
         this.commands = new Commands(this);
     }
 
     public void disable() {
-        mySQL.disconnected();
+        MySQL.closeConnectionPool();
     }
 
     public void enable() {
         config.register();
         message.register();
-        mySQL.register();
+        MySQL.registerFile(logger, String.format("plugins//%s//", config.getString(Configs.FILE_NAME)), "mysql");
 
-        mySQL.connected();
-        tables(mySQL.getConnection());
+        MySQL.initConnectionPool();
+        tables(MySQL.getDataSource());
         register();
         listeners.register();
         commands.register();
@@ -53,8 +54,8 @@ public class Main {
         ranks.updatePlayerTeams(instance, instance.getServer(), permission);
     }
 
-    private void tables(Connection connection) {
-        this.permission = new Permission(connection);
+    private void tables(HikariDataSource dataSource) {
+        this.permission = new Permission(dataSource);
     }
 
     private void register() {
@@ -65,16 +66,16 @@ public class Main {
         return instance;
     }
 
+    public Logger getLogger() {
+        return logger;
+    }
+
     public Config getConfig() {
         return config;
     }
 
     public Message getMessage() {
         return message;
-    }
-
-    public MySQL getMySQL() {
-        return mySQL;
     }
 
     public Permission getPermission() {

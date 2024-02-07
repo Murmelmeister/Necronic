@@ -1,12 +1,11 @@
 package de.murmelmeister.citybuild.util.config;
 
+import org.bukkit.Material;
+
 public enum Configs {
 
     PREFIX_ENABLE("Prefix.Enable", true),
     FILE_NAME("FileName", "CityBuild"),
-    TIMEZONE_ENABLE("TimeZone.Enable", true),
-    TIMEZONE_CONFIG_ENABLE("TimeZone.Config.Enable", false),
-    TIMEZONE_ZONE("TimeZone.Zone", "Europe/Berlin"),
     CURRENT_SERVER("CurrentServer", "CityBuild"),
     PATTERN_CONFIG("Pattern.Config", "yyyy-MM-dd HH:mm:ss.SSS"),
     PATTERN_DECIMAL("Pattern.Decimal", "###,###,###.##"),
@@ -14,6 +13,7 @@ public enum Configs {
     PERMISSION_ENDER_CHEST_COMMAND("Permission.EnderChest.Command", "citybuild.command.enderchest.command"),
     PERMISSION_ENDER_CHEST_USE("Permission.EnderChest.Use", "citybuild.command.enderchest.use"),
     PERMISSION_ENDER_CHEST_OTHER("Permission.EnderChest.Other", "citybuild.command.enderchest.other"),
+    PERMISSION_ENDER_CHEST_SLOTS("Permission.EnderChest.Slots", "citybuild.command.enderchest.slot"),
     PERMISSION_RELOAD("Permission.Reload", "citybuild.command.reload"),
     PERMISSION_SPAWN("Permission.Spawn", "citybuild.command.spawn"),
     PERMISSION_SET_SPAWN("Permission.SetSpawn", "citybuild.command.setspawn"),
@@ -189,7 +189,9 @@ public enum Configs {
     ECONOMY_CURRENCY("Economy.Currency", "Money"),
     ECONOMY_DEFAULT_MONEY("Economy.Default.Money", 0L),
     ECONOMY_DEFAULT_ITEM_SELL_PRICE("Economy.Default.ItemSellPrice", 0L),
-    MATERIAL_CASE("Material.Case", false);
+    MATERIAL_CASE("Material.Case", false),
+    ENDER_CHEST_MATERIAL_UNLOCKED("EnderChest.Material.Unlocked", Material.LIME_STAINED_GLASS_PANE.toString()),
+    ENDER_CHEST_MATERIAL_LOCKED("EnderChest.Material.Locked", Material.RED_STAINED_GLASS_PANE.toString());
 
     private final String path;
     private final Object value;

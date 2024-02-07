@@ -101,13 +101,15 @@ public class PermissionCommand implements SimpleCommand {
             return group.groups().stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 3 && args[0].equals("groups"))
             return Stream.of("create", "delete", "rename", "edit", "parent", "permission").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
-        if (args.length == 4 && args[0].equals("groups") && (args[2].equals("parent") || args[2].equals("permission")))
+        if (args.length == 4 && args[0].equals("groups") && args[2].equals("parent"))
             return Stream.of("add", "remove", "clear", "created", "expired").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+        if (args.length == 4 && args[0].equals("groups") && args[2].equals("permission"))
+            return Stream.of("all", "add", "remove", "clear", "created", "expired").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 4 && args[0].equals("groups") && args[2].equals("edit"))
             return Stream.of("chatprefix", "chatsuffix", "chatcolor", "groupprefix", "groupsuffix", "groupcolor", "tabprefix",
                     "tabsuffix", "tabcolor", "tabid", "teamid", "scoreboardprefix", "scoreboardcolor").filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 5 && args[0].equals("groups") && args[2].equals("permission") && (args[3].equals("remove") || args[3].equals("created") || args[3].equals("expired")))
-            return group.getAllPermissions(args[1]).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
+            return group.getPermissions(args[1]).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 5 && args[0].equals("groups") && args[2].equals("parent") && (args[3].equals("remove") || args[3].equals("created") || args[3].equals("expired")))
             return group.getParents(args[1]).stream().filter(s -> StringUtils.startWithIgnoreCase(s, args[args.length - 1])).sorted().collect(Collectors.toList());
         if (args.length == 5 && args[0].equals("groups") && args[2].equals("parent") && args[3].equals("add"))
@@ -484,7 +486,7 @@ public class PermissionCommand implements SimpleCommand {
     private void groupPermission(CommandSource source, String name, Group group, String[] args) {
         if (args.length == 3) {
             source.sendMessage(Component.text("§3Permission: "));
-            for (String all : group.getAllPermissions(name))
+            for (String all : group.getPermissions(name))
                 source.sendMessage(Component.text("§r- §e" + all));
             return;
         }
@@ -496,6 +498,11 @@ public class PermissionCommand implements SimpleCommand {
 
         String permission;
         switch (args[3]) {
+            case "all":
+                source.sendMessage(Component.text("§3All permission: "));
+                for (String all : group.getAllPermissions(name))
+                    source.sendMessage(Component.text("§r- §e" + all));
+                break;
             case "add":
                 permission = args[4];
                 if (args.length == 5) {
@@ -611,6 +618,7 @@ public class PermissionCommand implements SimpleCommand {
                 + "\n- /permission §3groups§r <name> parent created <parent>"
                 + "\n- /permission §3groups§r <name> parent expired <parent>"
                 + "\n- /permission §3groups§r <name> permission"
+                + "\n- /permission §3groups§r <name> permission all"
                 + "\n- /permission §3groups§r <name> permission add <permission> [duration]"
                 + "\n- /permission §3groups§r <name> permission remove <permission>"
                 + "\n- /permission §3groups§r <name> permission clear"

@@ -2,8 +2,8 @@ package de.murmelmeister.citybuild.api;
 
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.configs.Config;
-import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
+import de.murmelmeister.murmelapi.util.ConfigUtil;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.slf4j.Logger;
 
@@ -21,7 +21,7 @@ public class Economy {
     private YamlConfiguration config;
 
     public Economy(Main main) {
-        this.logger = main.getInstance().getSLF4JLogger();
+        this.logger = main.getLogger();
         this.defaultConfig = main.getConfig();
     }
 

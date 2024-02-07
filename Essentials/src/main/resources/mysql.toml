@@ -1,4 +1,5 @@
 [MySQL]
+    Driver = "MariaDB"
     Hostname = "localhost"
     Port = "3306"
     Database = "EssentialsBase"

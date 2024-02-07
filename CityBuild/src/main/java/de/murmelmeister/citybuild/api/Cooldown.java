@@ -2,17 +2,16 @@ package de.murmelmeister.citybuild.api;
 
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.configs.Config;
-import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
+import de.murmelmeister.murmelapi.util.ConfigUtil;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.slf4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
+import java.util.UUID;
 
 public class Cooldown {
     private final Logger logger;
@@ -22,30 +21,29 @@ public class Cooldown {
     private YamlConfiguration config;
 
     public Cooldown(Main main) {
-        this.logger = main.getInstance().getSLF4JLogger();
+        this.logger = main.getLogger();
         this.defaultConfig = main.getConfig();
     }
 
-    public void create(Player player) {
-        String fileName = player.getUniqueId() + ".yml";
+    public void create(UUID uuid) {
+        String fileName = uuid + ".yml";
         this.file = new File(String.format("plugins//%s//Cooldown//", defaultConfig.getString(Configs.FILE_NAME)), fileName);
         ConfigUtil.createFile(logger, file, fileName);
         this.config = YamlConfiguration.loadConfiguration(file);
     }
 
-    public void setUsername(Player player) {
-        create(player);
-        set("Username", player.getName());
+    public void setUsername(UUID uuid, String name) {
+        create(uuid);
+        set("Username", name);
         save();
     }
 
-    public void addCooldown(Player player, String cooldownName, long time) {
-        create(player);
+    public void addCooldown(UUID uuid, String cooldownName, long time) {
+        create(uuid);
         long duration = time + System.currentTimeMillis();
         SimpleDateFormat format = new SimpleDateFormat(defaultConfig.getString(Configs.PATTERN_CONFIG));
-        if (defaultConfig.getBoolean(Configs.TIMEZONE_CONFIG_ENABLE)) format.setTimeZone(TimeZone.getTimeZone(defaultConfig.getString(Configs.TIMEZONE_ZONE)));
         String created = format.format(new Date());
-        String expired = format.format(duration); // TimeZone UTC
+        String expired = format.format(duration);
         String path = "Cooldown." + cooldownName;
         set(path + ".Name", cooldownName);
         set(path + ".Duration", duration);
@@ -54,24 +52,24 @@ public class Cooldown {
         save();
     }
 
-    public void removeCooldown(Player player, String cooldownName) {
-        create(player);
+    public void removeCooldown(UUID uuid, String cooldownName) {
+        create(uuid);
         set("Cooldown." + cooldownName, null);
         save();
     }
 
-    public boolean hasCooldown(Player player, String cooldownName) {
-        create(player);
+    public boolean hasCooldown(UUID uuid, String cooldownName) {
+        create(uuid);
         return config.get("Cooldown." + cooldownName) != null;
     }
 
-    public long getDuration(Player player, String cooldownName) {
-        create(player);
+    public long getDuration(UUID uuid, String cooldownName) {
+        create(uuid);
         return config.getLong("Cooldown." + cooldownName + ".Duration");
     }
 
-    public String getExpired(Player player, String cooldownName) {
-        create(player);
+    public String getExpired(UUID uuid, String cooldownName) {
+        create(uuid);
         return config.getString("Cooldown." + cooldownName + ".Expired");
     }
 

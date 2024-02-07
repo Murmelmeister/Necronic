@@ -1,23 +1,24 @@
 package de.murmelmeister.citybuild;
 
+import com.zaxxer.hikari.HikariDataSource;
 import de.murmelmeister.citybuild.api.*;
 import de.murmelmeister.citybuild.command.Commands;
 import de.murmelmeister.citybuild.configs.Config;
 import de.murmelmeister.citybuild.configs.Message;
-import de.murmelmeister.citybuild.configs.MySQL;
 import de.murmelmeister.citybuild.listener.Listeners;
 import de.murmelmeister.citybuild.util.ListUtil;
+import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.murmelapi.permission.Permission;
-
-import java.sql.Connection;
+import de.murmelmeister.murmelapi.util.MySQL;
+import org.slf4j.Logger;
 
 public class Main {
     private final CityBuild instance;
+    private final Logger logger;
     private final ListUtil listUtil;
 
     private final Config config;
     private final Message message;
-    private final MySQL mySQL;
     private final SchedulerTask schedulerTask;
     private final Cooldown cooldown;
     private final Locations locations;
@@ -25,6 +26,7 @@ public class Main {
     private final Economy economy;
     private final ItemValue itemValue;
     private final Settings settings;
+    private final EnderChest enderChest;
 
     private Permission permission;
 
@@ -33,10 +35,10 @@ public class Main {
 
     public Main(CityBuild instance) {
         this.instance = instance;
+        this.logger = instance.getSLF4JLogger();
         this.listUtil = new ListUtil();
         this.config = new Config(this);
         this.message = new Message(this);
-        this.mySQL = new MySQL(this);
         this.schedulerTask = new SchedulerTask(this);
         this.cooldown = new Cooldown(this);
         this.locations = new Locations(this);
@@ -44,35 +46,40 @@ public class Main {
         this.economy = new Economy(this);
         this.itemValue = new ItemValue(this);
         this.settings = new Settings(this);
+        this.enderChest = new EnderChest(this);
         this.listeners = new Listeners(this);
         this.commands = new Commands(this);
     }
 
     public void disable() {
         instance.getServer().getMessenger().unregisterOutgoingPluginChannel(instance);
-        mySQL.disconnected();
+        MySQL.closeConnectionPool();
     }
 
     public void enable() {
         config.register();
         message.register();
-        mySQL.register();
+        MySQL.registerFile(logger, String.format("plugins//%s//", config.getString(Configs.FILE_NAME)), "mysql");
         locations.create();
         itemValue.register();
 
-        mySQL.connected();
-        tables(mySQL.getConnection());
+        MySQL.initConnectionPool();
+        tables(MySQL.getDataSource());
         listeners.register();
         commands.register();
         instance.getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");
     }
 
-    private void tables(Connection connection) {
-        this.permission = new Permission(connection);
+    private void tables(HikariDataSource dataSource) {
+        this.permission = new Permission(dataSource);
     }
 
     public CityBuild getInstance() {
         return instance;
+    }
+
+    public Logger getLogger() {
+        return logger;
     }
 
     public ListUtil getListUtil() {
@@ -117,5 +124,9 @@ public class Main {
 
     public Settings getSettings() {
         return settings;
+    }
+
+    public EnderChest getEnderChest() {
+        return enderChest;
     }
 }

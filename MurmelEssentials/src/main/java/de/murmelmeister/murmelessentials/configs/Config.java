@@ -1,7 +1,7 @@
 package de.murmelmeister.murmelessentials.configs;
 
+import de.murmelmeister.murmelapi.util.ConfigUtil;
 import de.murmelmeister.murmelessentials.Main;
-import de.murmelmeister.murmelessentials.util.ConfigUtil;
 import de.murmelmeister.murmelessentials.util.config.Configs;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.slf4j.Logger;
@@ -16,7 +16,7 @@ public class Config {
     private YamlConfiguration config;
 
     public Config(Main main) {
-        this.logger = main.getInstance().getSLF4JLogger();
+        this.logger = main.getLogger();
     }
 
     public void register() {

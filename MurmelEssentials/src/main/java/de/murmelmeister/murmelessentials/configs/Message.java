@@ -1,7 +1,7 @@
 package de.murmelmeister.murmelessentials.configs;
 
+import de.murmelmeister.murmelapi.util.ConfigUtil;
 import de.murmelmeister.murmelessentials.Main;
-import de.murmelmeister.murmelessentials.util.ConfigUtil;
 import de.murmelmeister.murmelessentials.util.HexColor;
 import de.murmelmeister.murmelessentials.util.config.Configs;
 import de.murmelmeister.murmelessentials.util.config.Messages;
@@ -19,7 +19,7 @@ public class Message {
     private YamlConfiguration config;
 
     public Message(Main main) {
-        this.logger = main.getInstance().getSLF4JLogger();
+        this.logger = main.getLogger();
         this.defaultConfig = main.getConfig();
     }
 

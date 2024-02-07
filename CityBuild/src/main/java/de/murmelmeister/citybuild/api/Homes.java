@@ -2,9 +2,10 @@ package de.murmelmeister.citybuild.api;
 
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.configs.Config;
-import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
+import de.murmelmeister.murmelapi.util.ConfigUtil;
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -19,18 +20,19 @@ import java.util.UUID;
 public class Homes {
     private final Logger logger;
     private final Config defaultConfig;
+    private final Server server;
 
     private File file;
     private YamlConfiguration config;
     private List<String> homeList;
 
     public Homes(Main main) {
-        this.logger = main.getInstance().getSLF4JLogger();
+        this.logger = main.getLogger();
         this.defaultConfig = main.getConfig();
+        this.server = main.getInstance().getServer();
     }
 
-    public void create(Player player) {
-        UUID uuid = player.getUniqueId();
+    public void create(UUID uuid) {
         String fileName = uuid + ".yml";
         this.file = new File(String.format("plugins//%s//Homes//", defaultConfig.getString(Configs.FILE_NAME)), fileName);
         ConfigUtil.createFile(logger, file, fileName);
@@ -45,9 +47,9 @@ public class Homes {
         }
     }
 
-    public void createUsername(Player player) {
-        create(player);
-        set("Username", player.getName());
+    public void createUsername(UUID uuid, String name) {
+        create(uuid);
+        set("Username", name);
         this.homeList = getHomeList();
         set("HomeList", homeList);
         save();
@@ -65,7 +67,7 @@ public class Homes {
         double yaw = Math.round(location.getYaw() / 45.0F) * 45;
         double pitch = Math.round(location.getPitch() / 45.0F) * 45;
 
-        create(player);
+        create(player.getUniqueId());
         this.homeList = getHomeList();
         if (!(homeList.contains(name))) {
             homeList.add(name);
@@ -83,8 +85,38 @@ public class Homes {
         save();
     }
 
-    public void removeHome(Player player, String name) {
-        create(player);
+    public void addHome(UUID target, Player player, String name) {
+        Location location = player.getLocation();
+        String path = "Homes." + name;
+
+        String worldName = location.getWorld().getName();
+        String environment = location.getWorld().getEnvironment().name();
+        double x = location.getBlockX() + 0.5D;
+        double y = location.getBlockY() + 0.25D;
+        double z = location.getBlockZ() + 0.5D;
+        double yaw = Math.round(location.getYaw() / 45.0F) * 45;
+        double pitch = Math.round(location.getPitch() / 45.0F) * 45;
+
+        create(target);
+        this.homeList = getHomeList();
+        if (!(homeList.contains(name))) {
+            homeList.add(name);
+            set("HomeList", homeList);
+        }
+
+        set(path + ".Name", name);
+        set(path + ".WorldName", worldName);
+        set(path + ".Environment", environment);
+        set(path + ".X", x);
+        set(path + ".Y", y);
+        set(path + ".Z", z);
+        set(path + ".Yaw", yaw);
+        set(path + ".Pitch", pitch);
+        save();
+    }
+
+    public void removeHome(UUID uuid, String name) {
+        create(uuid);
         this.homeList = getHomeList();
         homeList.remove(name);
         set("HomeList", homeList);
@@ -92,8 +124,8 @@ public class Homes {
         save();
     }
 
-    public Location getHome(Player player, String name) {
-        create(player);
+    public Location getHome(UUID uuid, String name) {
+        create(uuid);
         String path = "Homes." + name;
         String worldName = getString(path + ".WorldName");
         double x = getDouble(path + ".X");
@@ -102,12 +134,12 @@ public class Homes {
         double yaw = getDouble(path + ".Yaw");
         double pitch = getDouble(path + ".Pitch");
 
-        World world = player.getServer().getWorld(worldName);
+        World world = server.getWorld(worldName);
         return new Location(world, x, y, z, (float) yaw, (float) pitch);
     }
 
-    public boolean hasHome(Player player, String name) {
-        create(player);
+    public boolean hasHome(UUID uuid, String name) {
+        create(uuid);
         return config.get("Homes." + name) != null;
     }
 

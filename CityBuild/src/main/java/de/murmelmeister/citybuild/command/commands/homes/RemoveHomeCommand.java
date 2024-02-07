@@ -33,12 +33,12 @@ public class RemoveHomeCommand extends CommandManager {
             return true;
         }
 
-        if (!(homes.hasHome(player, args[0]))) {
+        if (!(homes.hasHome(player.getUniqueId(), args[0]))) {
             sendMessage(player, message.getString(Messages.COMMAND_NOT_EXIST_HOME).replace("[HOME]", args[0]));
             return true;
         }
 
-        homes.removeHome(player, args[0]);
+        homes.removeHome(player.getUniqueId(), args[0]);
         sendMessage(player, message.getString(Messages.COMMAND_REMOVE_HOME).replace("[HOME]", args[0]));
         return true;
     }

@@ -4,7 +4,6 @@ import de.murmelmeister.murmelapi.permission.Permission;
 import de.murmelmeister.murmelessentials.Main;
 import de.murmelmeister.murmelessentials.configs.Config;
 import de.murmelmeister.murmelessentials.configs.Message;
-import de.murmelmeister.murmelessentials.configs.MySQL;
 import de.murmelmeister.murmelessentials.util.HexColor;
 import de.murmelmeister.murmelessentials.util.config.Configs;
 import de.murmelmeister.murmelessentials.util.config.Messages;
@@ -13,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,16 +20,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class CommandManager extends Commands implements TabExecutor {
+    public final Logger logger;
     public final Config config;
     public final Message message;
-    public final MySQL mySQL;
     public final Permission permission;
 
     public CommandManager(Main main) {
         super(main);
+        this.logger = main.getLogger();
         this.config = main.getConfig();
         this.message = main.getMessage();
-        this.mySQL = main.getMySQL();
         this.permission = main.getPermission();
     }
 

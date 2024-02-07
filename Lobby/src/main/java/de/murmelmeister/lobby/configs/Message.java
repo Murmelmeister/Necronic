@@ -1,10 +1,10 @@
 package de.murmelmeister.lobby.configs;
 
 import de.murmelmeister.lobby.Main;
-import de.murmelmeister.lobby.util.ConfigUtil;
 import de.murmelmeister.lobby.util.HexColor;
 import de.murmelmeister.lobby.util.config.Configs;
 import de.murmelmeister.lobby.util.config.Messages;
+import de.murmelmeister.murmelapi.util.ConfigUtil;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.slf4j.Logger;
 
@@ -19,7 +19,7 @@ public class Message {
     private YamlConfiguration config;
 
     public Message(Main main) {
-        this.logger = main.getInstance().getSLF4JLogger();
+        this.logger = main.getLogger();
         this.defaultConfig = main.getConfig();
     }
 

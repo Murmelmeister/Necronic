@@ -2,8 +2,8 @@ package de.murmelmeister.citybuild.api;
 
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.configs.Config;
-import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
+import de.murmelmeister.murmelapi.util.ConfigUtil;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.slf4j.Logger;
@@ -20,7 +20,7 @@ public class Settings {
     private YamlConfiguration config;
 
     public Settings(Main main) {
-        this.logger = main.getInstance().getSLF4JLogger();
+        this.logger = main.getLogger();
         this.defaultConfig = main.getConfig();
     }
 
@@ -39,9 +39,9 @@ public class Settings {
         }
     }
 
-    public void setUsername(Player player) {
-        create(player.getUniqueId());
-        set("Username", player.getName());
+    public void setUsername(UUID uuid, String name) {
+        create(uuid);
+        set("Username", name);
         save();
     }
 

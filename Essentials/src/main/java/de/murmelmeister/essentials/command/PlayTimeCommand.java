@@ -27,7 +27,7 @@ public class PlayTimeCommand implements SimpleCommand {
         if (args.length == 0) {
             Player player = sender instanceof Player ? (Player) sender : null;
             if (player == null) {
-                sender.sendMessage(Component.text("§cThe command cna not use in the proxy console."));
+                sender.sendMessage(Component.text("§cThe command can not use in the proxy console."));
                 return;
             }
             String time = PlayTimeUtil.format(playTime, player.getUniqueId());

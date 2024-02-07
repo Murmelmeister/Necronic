@@ -9,6 +9,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import de.murmelmeister.essentials.api.CustomPermission;
 import de.murmelmeister.essentials.command.DefaultCommand;
 import de.murmelmeister.essentials.command.PermissionCommand;
+import de.murmelmeister.essentials.command.PingCommand;
 import de.murmelmeister.essentials.command.PlayTimeCommand;
 import de.murmelmeister.essentials.config.MySQL;
 import de.murmelmeister.essentials.listener.PermissionListener;
@@ -36,22 +37,23 @@ public class Essentials {
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
         this.mySQL = new MySQL(logger);
-        mySQL.connected();
-        Permission permission = new Permission(mySQL.getConnection());
+        mySQL.initConnectionPool();
+        Permission permission = new Permission(mySQL.getDataSource());
         permission.defaultGroup(permission.getValueString(PermissionConfig.DEFAULT_GROUP));
         CustomPermission.updatePermission(this, proxyServer, permission);
         CustomPermission.updateRankPermission(permission);
-        PlayTime playTime = new PlayTime(mySQL.getConnection());
+        PlayTime playTime = new PlayTime(mySQL.getDataSource());
         playTime.createTable();
         proxyServer.getEventManager().register(this, new PermissionListener(permission));
         proxyServer.getCommandManager().register("permission", new PermissionCommand(permission));
         proxyServer.getEventManager().register(this, new PlayTimeListener(this, proxyServer, playTime));
         proxyServer.getCommandManager().register("playtime", new PlayTimeCommand(playTime));
         proxyServer.getCommandManager().register("default", new DefaultCommand(permission));
+        proxyServer.getCommandManager().register("ping", new PingCommand(proxyServer));
     }
 
     @Subscribe
     public void onProxyShutdown(ProxyShutdownEvent event) {
-        mySQL.disconnected();
+        mySQL.closeConnectionPool();
     }
 }

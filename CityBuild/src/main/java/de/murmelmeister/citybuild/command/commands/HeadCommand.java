@@ -50,15 +50,15 @@ public class HeadCommand extends CommandManager {
             return;
         }
 
-        if (cooldown.getDuration(player, "Head") <= System.currentTimeMillis())
-            cooldown.removeCooldown(player, "Head");
+        if (cooldown.getDuration(player.getUniqueId(), "Head") <= System.currentTimeMillis())
+            cooldown.removeCooldown(player.getUniqueId(), "Head");
 
-        if (cooldown.hasCooldown(player, "Head")) {
-            sendMessage(player, message.getString(Messages.COOLDOWN_MESSAGE).replace("[DATE]", cooldown.getExpired(player, "Head").replace(" ", message.getString(Messages.COOLDOWN_DATE))));
+        if (cooldown.hasCooldown(player.getUniqueId(), "Head")) {
+            sendMessage(player, message.getString(Messages.COOLDOWN_MESSAGE).replace("[DATE]", cooldown.getExpired(player.getUniqueId(), "Head").replace(" ", message.getString(Messages.COOLDOWN_DATE))));
             return;
         }
 
-        cooldown.addCooldown(player, "Head", config.getLong(Configs.TIME_HEAD_COOLDOWN));
+        cooldown.addCooldown(player.getUniqueId(), "Head", config.getLong(Configs.TIME_HEAD_COOLDOWN));
         player.getInventory().addItem(addHead(name));
     }
 

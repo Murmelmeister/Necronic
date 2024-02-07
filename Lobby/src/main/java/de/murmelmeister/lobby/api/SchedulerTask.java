@@ -2,8 +2,8 @@ package de.murmelmeister.lobby.api;
 
 import de.murmelmeister.lobby.Main;
 import de.murmelmeister.lobby.configs.Config;
-import de.murmelmeister.lobby.util.ConfigUtil;
 import de.murmelmeister.lobby.util.config.Configs;
+import de.murmelmeister.murmelapi.util.ConfigUtil;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -24,7 +24,7 @@ public class SchedulerTask {
     private List<String> taskList;
 
     public SchedulerTask(Main main) {
-        this.logger = main.getInstance().getSLF4JLogger();
+        this.logger = main.getLogger();
         this.defaultConfig = main.getConfig();
     }
 

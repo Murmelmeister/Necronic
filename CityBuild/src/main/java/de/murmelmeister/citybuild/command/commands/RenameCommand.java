@@ -52,15 +52,15 @@ public class RenameCommand extends CommandManager {
             return true;
         }
 
-        if (cooldown.getDuration(player, "Rename") <= System.currentTimeMillis())
-            cooldown.removeCooldown(player, "Rename");
+        if (cooldown.getDuration(player.getUniqueId(), "Rename") <= System.currentTimeMillis())
+            cooldown.removeCooldown(player.getUniqueId(), "Rename");
 
-        if (cooldown.hasCooldown(player, "Rename")) {
-            sendMessage(player, message.getString(Messages.COOLDOWN_MESSAGE).replace("[DATE]", cooldown.getExpired(player, "Rename").replace(" ", message.getString(Messages.COOLDOWN_DATE))));
+        if (cooldown.hasCooldown(player.getUniqueId(), "Rename")) {
+            sendMessage(player, message.getString(Messages.COOLDOWN_MESSAGE).replace("[DATE]", cooldown.getExpired(player.getUniqueId(), "Rename").replace(" ", message.getString(Messages.COOLDOWN_DATE))));
             return true;
         }
 
-        cooldown.addCooldown(player, "Rename", config.getLong(Configs.TIME_RENAME_COOLDOWN));
+        cooldown.addCooldown(player.getUniqueId(), "Rename", config.getLong(Configs.TIME_RENAME_COOLDOWN));
         createItem(player.getItemInHand(), messages);
         return true;
     }

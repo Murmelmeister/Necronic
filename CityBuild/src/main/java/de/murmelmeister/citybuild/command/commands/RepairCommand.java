@@ -39,15 +39,15 @@ public class RepairCommand extends CommandManager {
             return true;
         }
 
-        if (cooldown.getDuration(player, "Repair") <= System.currentTimeMillis())
-            cooldown.removeCooldown(player, "Repair");
+        if (cooldown.getDuration(player.getUniqueId(), "Repair") <= System.currentTimeMillis())
+            cooldown.removeCooldown(player.getUniqueId(), "Repair");
 
-        if (cooldown.hasCooldown(player, "Repair")) {
-            sendMessage(player, message.getString(Messages.COOLDOWN_MESSAGE).replace("[DATE]", cooldown.getExpired(player, "Repair").replace(" ", message.getString(Messages.COOLDOWN_DATE))));
+        if (cooldown.hasCooldown(player.getUniqueId(), "Repair")) {
+            sendMessage(player, message.getString(Messages.COOLDOWN_MESSAGE).replace("[DATE]", cooldown.getExpired(player.getUniqueId(), "Repair").replace(" ", message.getString(Messages.COOLDOWN_DATE))));
             return true;
         }
 
-        cooldown.addCooldown(player, "Repair", config.getLong(Configs.TIME_REPAIR_COOLDOWN));
+        cooldown.addCooldown(player.getUniqueId(), "Repair", config.getLong(Configs.TIME_REPAIR_COOLDOWN));
         createItem(player.getItemInHand());
         return true;
     }

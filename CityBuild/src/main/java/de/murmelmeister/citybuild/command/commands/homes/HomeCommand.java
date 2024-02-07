@@ -33,12 +33,12 @@ public class HomeCommand extends CommandManager {
             return true;
         }
 
-        if (!(homes.hasHome(player, args[0]))) {
+        if (!(homes.hasHome(player.getUniqueId(), args[0]))) {
             sendMessage(player, message.getString(Messages.COMMAND_NOT_EXIST_HOME).replace("[HOME]", args[0]));
             return true;
         }
 
-        player.teleport(homes.getHome(player, args[0]));
+        player.teleport(homes.getHome(player.getUniqueId(), args[0]));
         sendMessage(player, message.getString(Messages.COMMAND_SEND_HOME).replace("[HOME]", args[0]));
         return true;
     }

@@ -2,8 +2,8 @@ package de.murmelmeister.citybuild.api;
 
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.configs.Config;
-import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
+import de.murmelmeister.murmelapi.util.ConfigUtil;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -25,7 +25,7 @@ public class Locations {
     private List<String> locationList;
 
     public Locations(Main main) {
-        this.logger = main.getInstance().getSLF4JLogger();
+        this.logger = main.getLogger();
         this.server = main.getInstance().getServer();
         this.defaultConfig = main.getConfig();
     }

@@ -1,24 +1,25 @@
 package de.murmelmeister.lobby;
 
+import com.zaxxer.hikari.HikariDataSource;
 import de.murmelmeister.lobby.api.Locations;
 import de.murmelmeister.lobby.api.SchedulerTask;
 import de.murmelmeister.lobby.command.Commands;
 import de.murmelmeister.lobby.configs.Config;
 import de.murmelmeister.lobby.configs.Message;
-import de.murmelmeister.lobby.configs.MySQL;
 import de.murmelmeister.lobby.listener.Listeners;
 import de.murmelmeister.lobby.util.ListUtil;
+import de.murmelmeister.lobby.util.config.Configs;
 import de.murmelmeister.murmelapi.permission.Permission;
-
-import java.sql.Connection;
+import de.murmelmeister.murmelapi.util.MySQL;
+import org.slf4j.Logger;
 
 public class Main {
     private final Lobby instance;
+    private final Logger logger;
     private final ListUtil listUtil;
 
     private final Config config;
     private final Message message;
-    private final MySQL mySQL;
     private final SchedulerTask schedulerTask;
     private final Locations locations;
 
@@ -29,10 +30,10 @@ public class Main {
 
     public Main(Lobby instance) {
         this.instance = instance;
+        this.logger = instance.getSLF4JLogger();
         this.listUtil = new ListUtil();
         this.config = new Config(this);
         this.message = new Message(this);
-        this.mySQL = new MySQL(this);
         this.schedulerTask = new SchedulerTask(this);
         this.locations = new Locations(this);
         this.listeners = new Listeners(this);
@@ -41,28 +42,32 @@ public class Main {
 
     public void disable() {
         instance.getServer().getMessenger().unregisterOutgoingPluginChannel(instance);
-        mySQL.disconnected();
+        MySQL.closeConnectionPool();
     }
 
     public void enable() {
         config.register();
         message.register();
-        mySQL.register();
+        MySQL.registerFile(logger, String.format("plugins//%s//", config.getString(Configs.FILE_NAME)), "mysql");
         locations.create();
 
-        mySQL.connected();
-        tables(mySQL.getConnection());
+        MySQL.initConnectionPool();
+        tables(MySQL.getDataSource());
         listeners.register();
         commands.register();
         instance.getServer().getMessenger().registerOutgoingPluginChannel(instance, "BungeeCord");
     }
 
-    private void tables(Connection connection) {
-        this.permission = new Permission(connection);
+    private void tables(HikariDataSource dataSource) {
+        this.permission = new Permission(dataSource);
     }
 
     public Lobby getInstance() {
         return instance;
+    }
+
+    public Logger getLogger() {
+        return logger;
     }
 
     public ListUtil getListUtil() {
@@ -83,10 +88,6 @@ public class Main {
 
     public Locations getLocations() {
         return locations;
-    }
-
-    public MySQL getMySQL() {
-        return mySQL;
     }
 
     public Permission getPermission() {

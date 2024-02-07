@@ -55,8 +55,8 @@ public class TpaAcceptCommand extends CommandManager {
             sendMessage(targetAccept, message.getString(Messages.COMMAND_TPA_ACCEPT_PLAYER).replace("[PLAYER]", player.getName()));
             sendMessage(player, message.getString(Messages.COMMAND_TPA_ACCEPT_TARGET).replace("[PLAYER]", targetAccept.getName()));
             listUtil.getTpa().remove(player.getUniqueId(), targetAccept.getUniqueId());
-        } else if (!(listUtil.getTpaHere().containsKey(player.getUniqueId())) && listUtil.getTpaHere().containsKey(player.getUniqueId())) {
-            if (!(listUtil.getTpa().containsValue(target.getUniqueId()))) {
+        } else if (!(listUtil.getTpa().containsKey(player.getUniqueId())) && listUtil.getTpaHere().containsKey(player.getUniqueId())) {
+            if (!(listUtil.getTpaHere().containsValue(target.getUniqueId()))) {
                 sendMessage(player, message.getString(Messages.COMMAND_TPA_DENY_NO_REQUEST));
                 return true;
             }

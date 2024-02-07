@@ -34,11 +34,11 @@ public class MoneyCommand extends CommandManager {
             if (!(hasPermission(sender, Configs.PERMISSION_MONEY_USE))) return true;
             sendMessage(player, message.getString(Messages.COMMAND_MONEY_USE).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)).replace("[MONEY]", decimalFormat.format(economy.getMoney(player.getUniqueId()))));
         } else if (args.length == 1) {
+            if (!(isEnable(sender, Configs.COMMAND_ENABLE_MONEY_OTHER))) return true;
+            if (!(hasPermission(sender, Configs.PERMISSION_MONEY_OTHER))) return true;
             Player target = sender.getServer().getPlayer(args[0]);
 
             if (target == null) {
-                if (!(isEnable(sender, Configs.COMMAND_ENABLE_MONEY_OTHER))) return true;
-                if (!(hasPermission(sender, Configs.PERMISSION_MONEY_OTHER))) return true;
                 OfflinePlayer offlinePlayer = sender.getServer().getOfflinePlayer(args[0]);
                 if (offlinePlayer.isOnline() || offlinePlayer.hasPlayedBefore()) {
                     sendMessage(player, message.getString(Messages.COMMAND_MONEY_OTHER).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY))

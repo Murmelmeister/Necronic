@@ -28,21 +28,12 @@ public class EconomyCommand extends CommandManager {
 
         if (args.length >= 2) {
             switch (args[0]) {
-                case "set":
-                    economySet(sender, args);
-                    break;
-                case "add":
-                    economyAdd(sender, args);
-                    break;
-                case "remove":
-                    economyRemove(sender, args);
-                    break;
-                case "reset":
-                    economyReset(sender, args);
-                    break;
-                default:
-                    sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
-                    break;
+                case "set" -> economySet(sender, args);
+                case "add" -> economyAdd(sender, args);
+                case "remove" -> economyRemove(sender, args);
+                case "reset" -> economyReset(sender, args);
+                default ->
+                        sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
             }
         } else sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
         return true;
@@ -73,7 +64,7 @@ public class EconomyCommand extends CommandManager {
                     economy.setMoney(offlinePlayer.getUniqueId(), money);
                     sendMessage(sender, message.getString(Messages.COMMAND_ECONOMY_SET)
                             .replace("[PLAYER]", args[1]).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
-                } catch (NumberFormatException exception) {
+                } catch (NumberFormatException | ArrayIndexOutOfBoundsException exception) {
                     sendMessage(sender, message.getString(Messages.NO_NUMBER));
                 }
             } else sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[1]));
@@ -85,7 +76,7 @@ public class EconomyCommand extends CommandManager {
             economy.setMoney(target.getUniqueId(), money);
             sendMessage(sender, message.getString(Messages.COMMAND_ECONOMY_SET)
                     .replace("[PLAYER]", target.getName()).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
-        } catch (NumberFormatException exception) {
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException exception) {
             sendMessage(sender, message.getString(Messages.NO_NUMBER));
         }
     }
@@ -108,7 +99,7 @@ public class EconomyCommand extends CommandManager {
                     economy.addMoney(offlinePlayer.getUniqueId(), money);
                     sendMessage(sender, message.getString(Messages.COMMAND_ECONOMY_ADD)
                             .replace("[PLAYER]", args[1]).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
-                } catch (NumberFormatException exception) {
+                } catch (NumberFormatException | ArrayIndexOutOfBoundsException exception) {
                     sendMessage(sender, message.getString(Messages.NO_NUMBER));
                 }
             } else sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[1]));
@@ -120,7 +111,7 @@ public class EconomyCommand extends CommandManager {
             economy.addMoney(target.getUniqueId(), money);
             sendMessage(sender, message.getString(Messages.COMMAND_ECONOMY_ADD)
                     .replace("[PLAYER]", target.getName()).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
-        } catch (NumberFormatException exception) {
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException exception) {
             sendMessage(sender, message.getString(Messages.NO_NUMBER));
         }
     }
@@ -143,7 +134,7 @@ public class EconomyCommand extends CommandManager {
                     economy.removeMoney(offlinePlayer.getUniqueId(), money);
                     sendMessage(sender, message.getString(Messages.COMMAND_ECONOMY_REMOVE)
                             .replace("[PLAYER]", args[1]).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
-                } catch (NumberFormatException exception) {
+                } catch (NumberFormatException | ArrayIndexOutOfBoundsException exception) {
                     sendMessage(sender, message.getString(Messages.NO_NUMBER));
                 }
             } else sendMessage(sender, message.getString(Messages.NO_PLAYER_EXIST).replace("[PLAYER]", args[1]));
@@ -155,7 +146,7 @@ public class EconomyCommand extends CommandManager {
             economy.removeMoney(target.getUniqueId(), money);
             sendMessage(sender, message.getString(Messages.COMMAND_ECONOMY_REMOVE)
                     .replace("[PLAYER]", target.getName()).replace("[MONEY]", decimalFormat.format(money)).replace("[CURRENCY]", config.getString(Configs.ECONOMY_CURRENCY)));
-        } catch (NumberFormatException exception) {
+        } catch (NumberFormatException | ArrayIndexOutOfBoundsException exception) {
             sendMessage(sender, message.getString(Messages.NO_NUMBER));
         }
     }

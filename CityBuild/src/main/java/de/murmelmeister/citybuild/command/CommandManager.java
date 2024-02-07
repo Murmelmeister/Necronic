@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
+import org.slf4j.Logger;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class CommandManager extends Commands implements TabExecutor {
+    public final Logger logger;
     public final ListUtil listUtil;
     public final Config config;
     public final Message message;
@@ -31,10 +33,12 @@ public abstract class CommandManager extends Commands implements TabExecutor {
     public final Economy economy;
     public final ItemValue itemValue;
     public final Settings settings;
+    public final EnderChest enderChest;
     public final DecimalFormat decimalFormat;
 
     public CommandManager(Main main) {
         super(main);
+        this.logger = main.getLogger();
         this.listUtil = main.getListUtil();
         this.config = main.getConfig();
         this.message = main.getMessage();
@@ -45,6 +49,7 @@ public abstract class CommandManager extends Commands implements TabExecutor {
         this.economy = main.getEconomy();
         this.itemValue = main.getItemValue();
         this.settings = main.getSettings();
+        this.enderChest = main.getEnderChest();
         this.decimalFormat = new DecimalFormat(config.getString(Configs.PATTERN_DECIMAL));
     }
 

@@ -37,14 +37,18 @@ public class ConnectListener extends Listeners {
         } else
             sendMessage(player, message.getString(Messages.EVENT_SPAWN_NOT_EXIST).replace("[PREFIX]", message.prefix()));
 
-        homes.createUsername(player);
+        homes.createUsername(player.getUniqueId(), player.getName());
         schedulerTask.setUsername(player);
         schedulerTask.clearBukkitTask(player);
-        cooldown.setUsername(player);
+        cooldown.setUsername(player.getUniqueId(), player.getName());
         economy.setUsername(player.getUniqueId(), player.getName());
         economy.createAccount(player.getUniqueId());
-        settings.setUsername(player);
+        settings.setUsername(player.getUniqueId(), player.getName());
         settings.createAccount(player.getUniqueId());
+
+        for (int i = 1; i < 10; i++)
+            enderChest.setAccess(player.getUniqueId(), i, player.hasPermission(config.getString(Configs.PERMISSION_ENDER_CHEST_SLOTS) + "." + i));
+
         if (player.hasPermission(config.getString(Configs.PERMISSION_JOIN_FLY))) {
             player.setAllowFlight(true);
             player.setFlying(true);

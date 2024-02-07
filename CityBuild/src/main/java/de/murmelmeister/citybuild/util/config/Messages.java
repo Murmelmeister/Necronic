@@ -9,7 +9,7 @@ public enum Messages {
     COMMAND_SYNTAX("Command.Syntax", "&7Syntax: &c[USAGE]"),
     DISABLE_COMMAND("DisableCommand", "&cThe command is disabled."),
     NO_NUMBER("NoNumber", "&cUse numbers."),
-    COOLDOWN_MESSAGE("Cooldown.Message", "&cYou can only use this again on&e [DATE] UTC&c."),
+    COOLDOWN_MESSAGE("Cooldown.Message", "&cYou can only use this again on&e [DATE]&c."),
     COOLDOWN_DATE("Cooldown.Date", " at "),
     COMMAND_RELOAD("Command.Reload", "&7The configurations have been&a reloaded&7."),
     COMMAND_LOCATION_NOT_EXIST("Command.LocationNotExist", "&7The location &e[LOCATION]&7 does not&c exist&7."),
@@ -48,7 +48,7 @@ public enum Messages {
     COMMAND_LIVE_OFF("Command.Live.Off", "&7You were put out of&c live mode&7."),
     COMMAND_DAY("Command.Day", "&7You have set the time to&a day&7."),
     COMMAND_NIGHT("Command.Night", "&7You have set the time to&a night&7."),
-    COMMAND_SIGN_CREATE("Command.Sign.Created", "&e[NAME]&7 created it on&d [DATE] CEST&7."),
+    COMMAND_SIGN_CREATE("Command.Sign.Created", "&e[NAME]&7 created it on&d [DATE]&7."),
     COMMAND_SIGN_DATE("Command.Sign.Date", " at "),
     COMMAND_TP_TO_TARGET("Command.Tp.ToTarget", "&7You have been&a teleported&7 to the player&e [PLAYER]&7."),
     COMMAND_TP_TARGET_TO_TARGET("Command.Tp.TargetToTarget", "&7You&a teleported&7 the player&e [PLAYER1]&7 to&d [PLAYER2]&7."),
@@ -111,6 +111,10 @@ public enum Messages {
     SCOREBOARD_SCORE_1("Scoreboard.Score.1", "&8&m-----&r &7v0.0.1 &8&m-----"),
     SCOREBOARD_SCORE_0("Scoreboard.Score.0", "Test 0"),
     SETTINGS_DISABLE_SCOREBOARD("Settings.Disable.Scoreboard", "&cPlease rejoin the server to disable/enable the scoreboard for you."),
+    ENDER_CHEST_MENU_USE("EnderChest.Menu.Use", "&5EnderChest - Menu"),
+    ENDER_CHEST_MENU_OTHER("EnderChest.Menu.Other", "&5EnderChest - Menu - [PLAYER]"),
+    ENDER_CHEST_MATERIAL_UNLOCKED("EnderChest.Material.Unlocked", "&aSlot [SLOT]"),
+    ENDER_CHEST_MATERIAL_LOCKED("EnderChest.Material.Locked", "&cNot unlocked"),
     ;
 
     private final String path;

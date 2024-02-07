@@ -39,15 +39,15 @@ public class UnSignCommand extends CommandManager {
             return true;
         }
 
-        if (cooldown.getDuration(player, "UnSign") <= System.currentTimeMillis())
-            cooldown.removeCooldown(player, "UnSign");
+        if (cooldown.getDuration(player.getUniqueId(), "UnSign") <= System.currentTimeMillis())
+            cooldown.removeCooldown(player.getUniqueId(), "UnSign");
 
-        if (cooldown.hasCooldown(player, "UnSign")) {
-            sendMessage(player, message.getString(Messages.COOLDOWN_MESSAGE).replace("[DATE]", cooldown.getExpired(player, "UnSign").replace(" ", message.getString(Messages.COOLDOWN_DATE))));
+        if (cooldown.hasCooldown(player.getUniqueId(), "UnSign")) {
+            sendMessage(player, message.getString(Messages.COOLDOWN_MESSAGE).replace("[DATE]", cooldown.getExpired(player.getUniqueId(), "UnSign").replace(" ", message.getString(Messages.COOLDOWN_DATE))));
             return true;
         }
 
-        cooldown.addCooldown(player, "Sign", config.getLong(Configs.TIME_UN_SIGN_COOLDOWN));
+        cooldown.addCooldown(player.getUniqueId(), "Sign", config.getLong(Configs.TIME_UN_SIGN_COOLDOWN));
         createItem(player.getItemInHand());
         return true;
     }

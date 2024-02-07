@@ -1,8 +1,8 @@
 package de.murmelmeister.lobby.configs;
 
 import de.murmelmeister.lobby.Main;
-import de.murmelmeister.lobby.util.ConfigUtil;
 import de.murmelmeister.lobby.util.config.Configs;
+import de.murmelmeister.murmelapi.util.ConfigUtil;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.slf4j.Logger;
 
@@ -16,7 +16,7 @@ public class Config {
     private YamlConfiguration config;
 
     public Config(Main main) {
-        this.logger = main.getInstance().getSLF4JLogger();
+        this.logger = main.getLogger();
     }
 
     public void register() {

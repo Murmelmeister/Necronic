@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.murmelmeister.necronic</groupId>
-    <artifactId>Lobby</artifactId>
+    <artifactId>MurmelEssentials</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Lobby</name>
+    <name>MurmelEssentials</name>
 
     <properties>
         <java.version>17</java.version>

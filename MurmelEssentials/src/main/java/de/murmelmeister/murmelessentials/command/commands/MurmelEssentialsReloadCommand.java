@@ -1,5 +1,6 @@
 package de.murmelmeister.murmelessentials.command.commands;
 
+import de.murmelmeister.murmelapi.util.MySQL;
 import de.murmelmeister.murmelessentials.Main;
 import de.murmelmeister.murmelessentials.command.CommandManager;
 import de.murmelmeister.murmelessentials.util.config.Configs;
@@ -27,7 +28,7 @@ public class MurmelEssentialsReloadCommand extends CommandManager {
 
         this.config.create();
         this.message.create();
-        this.mySQL.create();
+        MySQL.createFile(logger, String.format("plugins//%s//", config.getString(Configs.FILE_NAME)), "mysql");
         sendMessage(sender, message.getString(Messages.COMMAND_RELOAD));
         return true;
     }

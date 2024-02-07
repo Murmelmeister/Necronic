@@ -35,15 +35,15 @@ public class DayCommand extends CommandManager {
             return true;
         }
 
-        if (cooldown.getDuration(player, "Day") <= System.currentTimeMillis())
-            cooldown.removeCooldown(player, "Day");
+        if (cooldown.getDuration(player.getUniqueId(), "Day") <= System.currentTimeMillis())
+            cooldown.removeCooldown(player.getUniqueId(), "Day");
 
-        if (cooldown.hasCooldown(player, "Day")) {
-            sendMessage(player, message.getString(Messages.COOLDOWN_MESSAGE).replace("[DATE]", cooldown.getExpired(player, "Day").replace(" ", message.getString(Messages.COOLDOWN_DATE))));
+        if (cooldown.hasCooldown(player.getUniqueId(), "Day")) {
+            sendMessage(player, message.getString(Messages.COOLDOWN_MESSAGE).replace("[DATE]", cooldown.getExpired(player.getUniqueId(), "Day").replace(" ", message.getString(Messages.COOLDOWN_DATE))));
             return true;
         }
 
-        cooldown.addCooldown(player, "Day", config.getLong(Configs.TIME_DAY_COOLDOWN));
+        cooldown.addCooldown(player.getUniqueId(), "Day", config.getLong(Configs.TIME_DAY_COOLDOWN));
         player.getWorld().setTime(config.getLong(Configs.TIME_DAY_TIME));
         sendMessage(player, message.getString(Messages.COMMAND_DAY));
         return true;

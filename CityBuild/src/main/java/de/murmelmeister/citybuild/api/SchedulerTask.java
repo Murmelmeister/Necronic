@@ -2,13 +2,11 @@ package de.murmelmeister.citybuild.api;
 
 import de.murmelmeister.citybuild.Main;
 import de.murmelmeister.citybuild.configs.Config;
-import de.murmelmeister.citybuild.util.ConfigUtil;
 import de.murmelmeister.citybuild.util.config.Configs;
+import de.murmelmeister.murmelapi.util.ConfigUtil;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -26,7 +24,7 @@ public class SchedulerTask {
     private List<String> taskList;
 
     public SchedulerTask(Main main) {
-        this.logger = main.getInstance().getSLF4JLogger();
+        this.logger = main.getLogger();
         this.defaultConfig = main.getConfig();
     }
 
