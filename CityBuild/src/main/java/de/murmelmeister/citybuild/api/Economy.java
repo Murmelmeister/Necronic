@@ -2,45 +2,47 @@ package de.murmelmeister.citybuild.api;
 
 import de.murmelmeister.citybuild.files.ConfigFile;
 import de.murmelmeister.citybuild.util.config.Configs;
-import de.murmelmeister.murmelapi.utils.Database;
+import de.murmelmeister.murmelapi.database.Database;
 
 import java.text.DecimalFormat;
 import java.util.regex.Pattern;
 
 public final class Economy {
     public static final Pattern MONEY_PATTERN = Pattern.compile("^\\d+(\\.\\d{1,2})?$");
+    private static final String TABLE_NAME = "CB_Economy";
+    private final Database database;
     private final ConfigFile configFile;
 
-    public Economy(ConfigFile configFile) {
+    public Economy(Database database, ConfigFile configFile) {
+        this.database = database;
         this.configFile = configFile;
-        String tableName = "CB_Economy";
-        createTable(tableName);
-        Procedure.loadAll(tableName);
+        createTable();
+        Procedure.loadAll(database);
     }
 
-    private void createTable(String tableName) {
-        Database.createTable(tableName, "UserID INT PRIMARY KEY, Money DOUBLE, BankMoney DOUBLE");
+    private void createTable() {
+        database.createTable(TABLE_NAME, "UserID INT PRIMARY KEY, Money DOUBLE, BankMoney DOUBLE");
     }
 
     public boolean existUser(int userId) {
-        return Database.callExists(Procedure.ECONOMY_GET_USER.getName(), userId);
+        return database.exists(Procedure.ECONOMY_GET_USER.getName(), userId);
     }
 
     public void createUser(int userId) {
         if (existUser(userId)) return;
-        Database.callUpdate(Procedure.ECONOMY_CREATE_USER.getName(), userId, configFile.getDouble(Configs.ECONOMY_DEFAULT_MONEY), 0);
+        database.callUpdate(Procedure.ECONOMY_CREATE_USER.getName(), userId, configFile.getDouble(Configs.ECONOMY_DEFAULT_MONEY), 0);
     }
 
     public void deleteUser(int userId) {
-        Database.callUpdate(Procedure.ECONOMY_DELETE_USER.getName(), userId);
+        database.callUpdate(Procedure.ECONOMY_DELETE_USER.getName(), userId);
     }
 
     public double getMoney(int userId) {
-        return Database.callQuery(0.0D, "Money", double.class, Procedure.ECONOMY_GET_USER.getName(), userId);
+        return database.query(0.0D, "Money", double.class, Procedure.ECONOMY_GET_USER.getName(), userId);
     }
 
     public double getBankMoney(int userId) {
-        return Database.callQuery(0.0D, "BankMoney", double.class, Procedure.ECONOMY_GET_USER.getName(), userId);
+        return database.query(0.0D, "BankMoney", double.class, Procedure.ECONOMY_GET_USER.getName(), userId);
     }
 
     public String getFormattedMoney(int userId) {
@@ -52,11 +54,11 @@ public final class Economy {
     }
 
     public void setMoney(int userId, double amount) {
-        Database.callUpdate(Procedure.ECONOMY_UPDATE_MONEY.getName(), userId, amount);
+        database.callUpdate(Procedure.ECONOMY_UPDATE_MONEY.getName(), userId, amount);
     }
 
     public void setBankMoney(int userId, double amount) {
-        Database.callUpdate(Procedure.ECONOMY_UPDATE_BANK.getName(), userId, amount);
+        database.callUpdate(Procedure.ECONOMY_UPDATE_BANK.getName(), userId, amount);
     }
 
     public void addMoney(int userId, double amount) {
@@ -140,19 +142,19 @@ public final class Economy {
 
         Procedure(final String name, final String input, final String query) {
             this.name = name;
-            this.query = Database.getProcedureQueryWithoutObjects(name, input, query);
+            this.query = Database.getProcedureQuery(name, input, query);
         }
 
         public String getName() {
             return name;
         }
 
-        public String getQuery(String tableName) {
-            return query.replace("[TABLE]", tableName);
+        public String getQuery() {
+            return query.replace("[TABLE]", TABLE_NAME);
         }
 
-        public static void loadAll(String tableName) {
-            for (Procedure procedure : VALUES) Database.update(procedure.getQuery(tableName));
+        public static void loadAll(Database database) {
+            for (Procedure procedure : VALUES) database.update(procedure.getQuery());
         }
     }
 }

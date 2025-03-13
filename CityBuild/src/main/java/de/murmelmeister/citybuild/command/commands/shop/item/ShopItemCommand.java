@@ -24,7 +24,7 @@ public final class ShopItemCommand extends CommandManager {
         if (!hasPermission(sender, Configs.PERMISSION_SHOP_ITEM)) return true;
 
         if (args.length == 1 && args[0].equals("import")) {
-            shopItem.importItems(logger, config);
+            shopItem.importCSV(logger, config);
             sendMessage(sender, message.getString(Messages.SHOP_ITEM_IMPORT).replace("[FILE]", config.getString(Configs.IMPORT_DATA_SHOP_ITEMS)));
             return true;
         }

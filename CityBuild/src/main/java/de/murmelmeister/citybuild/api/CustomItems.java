@@ -1,30 +1,34 @@
 package de.murmelmeister.citybuild.api;
 
-import de.murmelmeister.murmelapi.utils.Database;
+import de.murmelmeister.murmelapi.database.Database;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class CustomItems {
-    public CustomItems() {
-        String tableName = "CB_CustomItems";
-        createTable(tableName);
-        Procedure.loadAll(tableName);
+    private static final String TABLE_NAME = "CB_CustomItems";
+    private final Database database;
+
+    public CustomItems(Database database) {
+        this.database = database;
+        createTable();
+        Procedure.loadAll(database);
     }
 
-    private void createTable(String tableName) {
-        Database.createTable(tableName, "ItemID VARCHAR(255) PRIMARY KEY, DisplayName TINYTEXT, Material TINYTEXT, Lore MEDIUMTEXT, IsStatic BOOLEAN");
+    private void createTable() {
+        database.createTable(TABLE_NAME, "ItemID VARCHAR(255) PRIMARY KEY, DisplayName TINYTEXT, Material TINYTEXT, Lore MEDIUMTEXT, IsStatic BOOLEAN");
     }
 
     public boolean existItem(String itemId) {
-        return Database.callExists(Procedure.ITEM_GET.getName(), itemId);
+        return database.exists(Procedure.ITEM_GET.getName(), itemId);
     }
 
     public void addItem(String itemId, String displayName, String material, String lore, boolean isStatic) {
         if (existItem(itemId)) return;
         byte staticItem = (byte) (isStatic ? 1 : 0);
-        Database.callUpdate(Procedure.ITEM_ADD.getName(), itemId, displayName, material, lore, staticItem);
+        database.callUpdate(Procedure.ITEM_ADD.getName(), itemId, displayName, material, lore, staticItem);
     }
 
     public void addItem(String itemId, String displayName, Material material, String lore, boolean isStatic) {
@@ -32,15 +36,15 @@ public final class CustomItems {
     }
 
     public void removeItem(String itemId) {
-        Database.callUpdate(Procedure.ITEM_REMOVE.getName(), itemId);
+        database.callUpdate(Procedure.ITEM_REMOVE.getName(), itemId);
     }
 
     public String getDisplayName(String itemId) {
-        return Database.callQuery(null, "DisplayName", String.class, Procedure.ITEM_GET.getName(), itemId);
+        return database.query(null, "DisplayName", String.class, Procedure.ITEM_GET.getName(), itemId);
     }
 
     public String getMaterialName(String itemId) {
-        return Database.callQuery(null, "Material", String.class, Procedure.ITEM_GET.getName(), itemId);
+        return database.query(null, "Material", String.class, Procedure.ITEM_GET.getName(), itemId);
     }
 
     public Material getMaterial(String itemId) {
@@ -49,16 +53,16 @@ public final class CustomItems {
     }
 
     public String getLore(String itemId) {
-        return Database.callQuery(null, "Lore", String.class, Procedure.ITEM_GET.getName(), itemId);
+        return database.query(null, "Lore", String.class, Procedure.ITEM_GET.getName(), itemId);
     }
 
     public boolean isStatic(String itemId) {
-        return Database.callQuery(false, "IsStatic", boolean.class, Procedure.ITEM_GET.getName(), itemId);
+        return database.query(false, "IsStatic", boolean.class, Procedure.ITEM_GET.getName(), itemId);
     }
 
     public void updateItem(String itemId, String displayName, String material, String lore, boolean isStatic) {
         byte staticItem = (byte) (isStatic ? 1 : 0);
-        Database.callUpdate(Procedure.ITEM_UPDATE.getName(), itemId, displayName, material, lore, staticItem);
+        database.callUpdate(Procedure.ITEM_UPDATE.getName(), itemId, displayName, material, lore, staticItem);
     }
 
     public void updateItem(String itemId, String displayName, Material material, String lore, boolean isStatic) {
@@ -66,7 +70,7 @@ public final class CustomItems {
     }
 
     public List<String> getItemIDs() {
-        return Database.callQueryList("ItemID", String.class, Procedure.ITEM_GET_ALL.getName());
+        return database.queryList(new ArrayList<>(), "ItemID", String.class, Procedure.ITEM_GET_ALL.getName());
     }
 
     public void loadAllMaterials() {
@@ -91,19 +95,19 @@ public final class CustomItems {
 
         Procedure(final String name, final String input, final String query) {
             this.name = name;
-            this.query = Database.getProcedureQueryWithoutObjects(name, input, query);
+            this.query = Database.getProcedureQuery(name, input, query);
         }
 
         public String getName() {
             return name;
         }
 
-        public String getQuery(String tableName) {
-            return query.replace("[TABLE]", tableName);
+        public String getQuery() {
+            return query.replace("[TABLE]", TABLE_NAME);
         }
 
-        public static void loadAll(String tableName) {
-            for (Procedure procedure : VALUES) Database.update(procedure.getQuery(tableName));
+        public static void loadAll(Database database) {
+            for (Procedure procedure : VALUES) database.update(procedure.getQuery());
         }
     }
 }

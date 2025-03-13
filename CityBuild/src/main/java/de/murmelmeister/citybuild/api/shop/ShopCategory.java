@@ -3,7 +3,7 @@ package de.murmelmeister.citybuild.api.shop;
 import de.murmelmeister.citybuild.CityBuild;
 import de.murmelmeister.citybuild.files.ConfigFile;
 import de.murmelmeister.citybuild.util.config.Configs;
-import de.murmelmeister.murmelapi.utils.Database;
+import de.murmelmeister.murmelapi.database.Database;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -16,31 +16,35 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public final class ShopCategory {
-    public ShopCategory() {
-        String tableName = "ShopCategory";
-        createTable(tableName);
-        Procedure.loadAll(tableName);
+    private static final String TABLE_NAME = "ShopCategory";
+    private final Database database;
+
+    public ShopCategory(Database database) {
+        this.database = database;
+        createTable();
+        Procedure.loadAll(database);
     }
 
-    private void createTable(String tableName) {
-        Database.createTable(tableName, "CategoryID VARCHAR(255) PRIMARY KEY, DisplayName TINYTEXT, IconItem TINYTEXT");
+    private void createTable() {
+        database.createTable(TABLE_NAME, "CategoryID VARCHAR(255) PRIMARY KEY, DisplayName TINYTEXT, IconItem TINYTEXT");
     }
 
     public boolean existCategory(String id) {
-        return Database.callExists(Procedure.CATEGORY_GET.getName(), id);
+        return database.exists(Procedure.CATEGORY_GET.getName(), id);
     }
 
     public void addCategory(String id, String displayName, Material icon) {
         if (id.length() > 255) throw new IllegalArgumentException("CategoryID is too long. Max length is 255 characters");
         if (displayName.length() > 255) throw new IllegalArgumentException("DisplayName is too long. Max length is 255 characters");
         if (icon.name().length() > 255) throw new IllegalArgumentException("IconItem is too long. Max length is 255 characters");
-        Database.callUpdate(Procedure.CATEGORY_CREATE.getName(), id, displayName, icon.name());
+        database.callUpdate(Procedure.CATEGORY_CREATE.getName(), id, displayName, icon.name());
     }
 
-    public void importCategories(Logger logger, ConfigFile config) {
+    public void importCSV(Logger logger, ConfigFile config) {
         String filePath = CityBuild.getMainPath() + config.getString(Configs.IMPORT_PATH) + config.getString(Configs.IMPORT_DATA_SHOP_CATEGORIES);
         File file = new File(filePath);
         logger.info("Importing categories from file: {}", file.getName());
@@ -53,7 +57,7 @@ public final class ShopCategory {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] data = line.split(";");
+                String[] data = line.split(",");
                 if (data.length != 3) {
                     logger.error("Invalid line: {}", line);
                     continue;
@@ -72,16 +76,16 @@ public final class ShopCategory {
 
     public void removeCategory(ShopItem item, String id) {
         item.removeCategoryItems(id);
-        Database.callUpdate(Procedure.CATEGORY_DELETE.getName(), id);
+        database.callUpdate(Procedure.CATEGORY_DELETE.getName(), id);
     }
 
     public Material getIconMaterial(String id) {
-        String material = Database.callQuery(null, "IconItem", String.class, Procedure.CATEGORY_GET.getName(), id);
+        String material = database.query(null, "IconItem", String.class, Procedure.CATEGORY_GET.getName(), id);
         return material == null ? null : Material.getMaterial(material);
     }
 
     public String getDisplayName(String id) {
-        return Database.callQuery(null, "DisplayName", String.class, Procedure.CATEGORY_GET.getName(), id);
+        return database.query(null, "DisplayName", String.class, Procedure.CATEGORY_GET.getName(), id);
     }
 
     public ItemStack getIcon(String id) {
@@ -97,13 +101,13 @@ public final class ShopCategory {
     }
 
     public List<String> getCategories() {
-        return Database.callQueryList("CategoryID", String.class, Procedure.CATEGORY_GET_ALL.getName());
+        return database.queryList(new ArrayList<>(), "CategoryID", String.class, Procedure.CATEGORY_GET_ALL.getName());
     }
 
     public void updateCategory(String id, String displayName, Material icon) {
         if (displayName.length() > 255) throw new IllegalArgumentException("DisplayName is too long. Max length is 255 characters");
         if (icon.name().length() > 255) throw new IllegalArgumentException("IconItem is too long. Max length is 255 characters");
-        Database.callUpdate(Procedure.CATEGORY_UPDATE.getName(), id, displayName, icon.name());
+        database.callUpdate(Procedure.CATEGORY_UPDATE.getName(), id, displayName, icon.name());
     }
 
     private enum Procedure {
@@ -119,19 +123,19 @@ public final class ShopCategory {
 
         Procedure(final String name, final String input, final String query) {
             this.name = name;
-            this.query = Database.getProcedureQueryWithoutObjects(name, input, query);
+            this.query = Database.getProcedureQuery(name, input, query);
         }
 
         public String getName() {
             return name;
         }
 
-        public String getQuery(String tableName) {
-            return query.replace("[TABLE]", tableName);
+        public String getQuery() {
+            return query.replace("[TABLE]", TABLE_NAME);
         }
 
-        private static void loadAll(String tableName) {
-            for (Procedure procedure : VALUES) Database.update(procedure.getQuery(tableName));
+        private static void loadAll(Database database) {
+            for (Procedure procedure : VALUES) database.update(procedure.getQuery());
         }
     }
 }

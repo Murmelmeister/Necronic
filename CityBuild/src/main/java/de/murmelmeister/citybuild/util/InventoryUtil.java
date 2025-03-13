@@ -1,9 +1,9 @@
 package de.murmelmeister.citybuild.util;
 
 import org.bukkit.inventory.ItemStack;
-import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.*;
+import java.util.Base64;
 
 public final class InventoryUtil {
 
@@ -19,14 +19,14 @@ public final class InventoryUtil {
                     dataOutputStream.write(itemBytes);
                 } else dataOutputStream.writeBoolean(false);
             }
-            return Base64Coder.encodeLines(outputStream.toByteArray());
+            return Base64.getEncoder().encodeToString(outputStream.toByteArray());
         } catch (IOException e) {
             throw new RuntimeException("Unable to save items", e);
         }
     }
 
     public static ItemStack[] loadItems(String data) {
-        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64.getDecoder().decode(data));
              DataInputStream dataInputStream = new DataInputStream(inputStream)) {
             ItemStack[] items = new ItemStack[dataInputStream.readInt()];
             for (int i = 0; i < items.length; i++) {

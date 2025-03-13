@@ -7,7 +7,7 @@ import de.murmelmeister.citybuild.files.ConfigFile;
 import de.murmelmeister.citybuild.files.MessageFile;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
-import de.murmelmeister.murmelapi.utils.Database;
+import de.murmelmeister.murmelapi.database.Database;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Material;
@@ -24,24 +24,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ShopItem {
+    private static final String TABLE_NAME = "ShopItems";
+    private final Database database;
     private final CustomItems customItems;
 
-    public ShopItem(CustomItems customItems) {
+    public ShopItem(Database database, CustomItems customItems) {
+        this.database = database;
         this.customItems = customItems;
-        String tableName = "ShopItems";
-        createTable(tableName);
-        Procedure.loadAll(tableName);
+        createTable();
+        Procedure.loadAll(database);
     }
 
     /*
      * ItemId soll zu mehreren Kategorien gehören können
      */
-    private void createTable(String tableName) {
-        Database.createTable(tableName, "ItemID VARCHAR(255) PRIMARY KEY, CategoryID VARCHAR(255), BuyPrice DOUBLE, SellPrice DOUBLE");
+    private void createTable() {
+        database.createTable(TABLE_NAME, "ItemID VARCHAR(255) PRIMARY KEY, CategoryID VARCHAR(255), BuyPrice DOUBLE, SellPrice DOUBLE");
     }
 
     public boolean existItem(String itemId) {
-        return Database.callExists(Procedure.ITEMS_GET.getName(), itemId);
+        return database.exists(Procedure.ITEMS_GET.getName(), itemId);
     }
 
     public void addItem(String itemId, String categoryId, double buy, double sell) {
@@ -49,10 +51,10 @@ public final class ShopItem {
             throw new IllegalArgumentException("ItemID is too long. Max length is 255 characters");
         if (categoryId.length() > 255)
             throw new IllegalArgumentException("CategoryID is too long. Max length is 255 characters");
-        Database.callUpdate(Procedure.ITEMS_CREATE.getName(), itemId, categoryId, buy, sell);
+        database.callUpdate(Procedure.ITEMS_CREATE.getName(), itemId, categoryId, buy, sell);
     }
 
-    public void importItems(Logger logger, ConfigFile config) {
+    public void importCSV(Logger logger, ConfigFile config) {
         String filePath = CityBuild.getMainPath() + config.getString(Configs.IMPORT_PATH) + config.getString(Configs.IMPORT_DATA_SHOP_ITEMS);
         File file = new File(filePath);
         logger.info("Importing items from file: {}", file.getName());
@@ -82,19 +84,19 @@ public final class ShopItem {
     }
 
     public void removeItem(String itemId) {
-        Database.callUpdate(Procedure.ITEMS_DELETE.getName(), itemId);
+        database.callUpdate(Procedure.ITEMS_DELETE.getName(), itemId);
     }
 
     public void removeCategoryItems(String categoryId) {
-        Database.callUpdate(Procedure.ITEMS_DELETE_CATEGORY_ITEMS.getName(), categoryId);
+        database.callUpdate(Procedure.ITEMS_DELETE_CATEGORY_ITEMS.getName(), categoryId);
     }
 
     public double getBuyPrice(String itemId) {
-        return Database.callQuery(0.0D, "BuyPrice", double.class, Procedure.ITEMS_GET.getName(), itemId);
+        return database.query(0.0D, "BuyPrice", double.class, Procedure.ITEMS_GET.getName(), itemId);
     }
 
     public double getSellPrice(String itemId) {
-        return Database.callQuery(0.0D, "SellPrice", double.class, Procedure.ITEMS_GET.getName(), itemId);
+        return database.query(0.0D, "SellPrice", double.class, Procedure.ITEMS_GET.getName(), itemId);
     }
 
     public Material getMaterial(String itemId) {
@@ -154,7 +156,7 @@ public final class ShopItem {
     }
 
     public List<String> getCategoryItems(String categoryId) {
-        return Database.callQueryList("ItemID", String.class, Procedure.ITEMS_GET_CATEGORY_ITEMS.getName(), categoryId);
+        return database.queryList(new ArrayList<>(), "ItemID", String.class, Procedure.ITEMS_GET_CATEGORY_ITEMS.getName(), categoryId);
     }
 
     public void updateItem(String itemId, String categoryId, double buy, double sell) {
@@ -162,7 +164,7 @@ public final class ShopItem {
             throw new IllegalArgumentException("ItemID is too long. Max length is 255 characters");
         if (categoryId.length() > 255)
             throw new IllegalArgumentException("CategoryID is too long. Max length is 255 characters");
-        Database.callUpdate(Procedure.ITEMS_UPDATE.getName(), itemId, categoryId, buy, sell);
+        database.callUpdate(Procedure.ITEMS_UPDATE.getName(), itemId, categoryId, buy, sell);
     }
 
     private enum Procedure {
@@ -181,19 +183,19 @@ public final class ShopItem {
 
         Procedure(final String name, final String input, final String query) {
             this.name = name;
-            this.query = Database.getProcedureQueryWithoutObjects(name, input, query);
+            this.query = Database.getProcedureQuery(name, input, query);
         }
 
         public String getName() {
             return name;
         }
 
-        public String getQuery(String tableName) {
-            return query.replace("[TABLE]", tableName);
+        public String getQuery() {
+            return query.replace("[TABLE]", TABLE_NAME);
         }
 
-        private static void loadAll(String tableName) {
-            for (Procedure procedure : VALUES) Database.update(procedure.getQuery(tableName));
+        private static void loadAll(Database database) {
+            for (Procedure procedure : VALUES) database.update(procedure.getQuery());
         }
     }
 }

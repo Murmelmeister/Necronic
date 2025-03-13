@@ -25,7 +25,7 @@ public final class ShopCategoryCommand extends CommandManager {
         if (!hasPermission(sender, Configs.PERMISSION_SHOP_CATEGORY)) return true;
 
         if (args.length == 1 && args[0].equals("import")) {
-            shopCategory.importCategories(logger, config);
+            shopCategory.importCSV(logger, config);
             sendMessage(sender, message.getString(Messages.SHOP_CATEGORY_IMPORT).replace("[FILE]", config.getString(Configs.IMPORT_DATA_SHOP_CATEGORIES)));
             return true;
         }

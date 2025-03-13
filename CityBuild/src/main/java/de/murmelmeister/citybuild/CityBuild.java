@@ -16,6 +16,7 @@ import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.scoreboard.TestScoreboard;
 import de.murmelmeister.murmelapi.MurmelAPI;
 import de.murmelmeister.murmelapi.MurmelPlugin;
+import de.murmelmeister.murmelapi.database.Database;
 import de.murmelmeister.murmelapi.user.User;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class CityBuild extends MurmelPlugin {
+    private final Database database = MurmelAPI.getDatabase();
     private ListUtil listUtil;
     private MySQL mySQL;
 
@@ -54,16 +56,16 @@ public final class CityBuild extends MurmelPlugin {
         this.mySQL = new MySQL(logger, config);
         mySQL.connect();
         this.listUtil = new ListUtil();
-        this.playerInventory = new PlayerInventory();
+        this.playerInventory = new PlayerInventory(database);
         this.message = new MessageFile(logger);
         this.cooldown = new Cooldown(logger);
-        this.locations = new Locations(logger, getServer());
-        this.homes = new Homes();
-        this.economy = new Economy(config);
-        this.customItems = new CustomItems();
-        this.shopCategory = new ShopCategory();
-        this.shopItem = new ShopItem(customItems);
-        this.enderChestEditor = new EnderChestEditor(config);
+        this.locations = new Locations(database, logger, getServer());
+        this.homes = new Homes(database);
+        this.economy = new Economy(database, config);
+        this.customItems = new CustomItems(database);
+        this.shopCategory = new ShopCategory(database);
+        this.shopItem = new ShopItem(database, customItems);
+        this.enderChestEditor = new EnderChestEditor(database, config);
     }
 
     @Override
@@ -85,7 +87,7 @@ public final class CityBuild extends MurmelPlugin {
         CommandManager.register(this);
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
-        scoreboardTask = this.getServer().getScheduler().runTaskTimer(this, () -> {
+        scoreboardTask = this.getServer().getScheduler().runTaskTimer(this, () -> { // TODO: runTaskTimerAsynchronously (if possible)
             for (Player player : this.getServer().getOnlinePlayers())
                 playerTestScoreboard.computeIfAbsent(player, user -> new TestScoreboard(user, this)).run();
         }, 0L, 2 * 20L);

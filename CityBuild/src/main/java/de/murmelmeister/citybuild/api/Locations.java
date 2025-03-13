@@ -2,6 +2,7 @@ package de.murmelmeister.citybuild.api;
 
 import de.murmelmeister.citybuild.CityBuild;
 import de.murmelmeister.citybuild.util.FileUtil;
+import de.murmelmeister.murmelapi.database.Database;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Locations {
+    private static final String TABLE_NAME = "CB_Locations";
+    private final Database database;
     private final Logger logger;
     private final Server server;
 
@@ -21,9 +24,17 @@ public class Locations {
     private YamlConfiguration config;
     private List<String> locationList;
 
-    public Locations(final Logger logger, final Server server) {
+    public Locations(Database database, final Logger logger, final Server server) {
+        this.database = database;
         this.logger = logger;
         this.server = server;
+        createTable();
+        Procedure.loadAll(database);
+    }
+
+    private void createTable() {
+        database.createTable(TABLE_NAME, "LocationID VARCHAR(100) PRIMARY KEY, WorldName VARCHAR(100), WorldType VARCHAR(100), " +
+                                        "X DOUBLE, Y DOUBLE, Z DOUBLE, Yaw DOUBLE, Pitch DOUBLE");
     }
 
     public void reloadFile() {
@@ -155,5 +166,34 @@ public class Locations {
         create();
         if (config.contains("LocationList")) locationList = config.getStringList("LocationList");
         return locationList;
+    }
+
+    private enum Procedure {
+        LOCATION_ADD("Location_Add", "lid VARCHAR(100), wname VARCHAR(100), wtype VARCHAR(100), wx DOUBLE, wy DOUBLE, wz DOUBLE, wyaw DOUBLE, wp DOUBLE",
+                "INSERT INTO [TABLE] VALUES (lid, wname, wtype, wx, wy, wz, wyaw, wp);"),
+        LOCATION_REMOVE("Location_Remove", "lid VARCHAR(100)", "DELETE FROM [TABLE] WHERE LocationID=lid;"),
+        LOCATION_GET("Location_Get", "lid VARCHAR(100)", "SELECT * FROM [TABLE] WHERE LocationID=lid;"),
+        LOCATION_GET_ALL("Location_GetAll", "", "SELECT * FROM [TABLE];");
+        private static final Procedure[] VALUES = values();
+
+        private final String name;
+        private final String query;
+
+        Procedure(final String name, final String input, final String query) {
+            this.name = name;
+            this.query = Database.getProcedureQuery(name, input, query);
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getQuery() {
+            return query.replace("[TABLE]", TABLE_NAME);
+        }
+
+        private static void loadAll(Database database) {
+            for (Procedure procedure : VALUES) database.update(procedure.getQuery());
+        }
     }
 }
