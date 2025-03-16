@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ShopCategory {
-    private static final String TABLE_NAME = "ShopCategory";
+    private static final String TABLE_NAME = "CB_ShopCategory";
     private final Database database;
 
     public ShopCategory(Database database) {

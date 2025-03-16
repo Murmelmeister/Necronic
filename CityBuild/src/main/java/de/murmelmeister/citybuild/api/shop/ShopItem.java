@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ShopItem {
-    private static final String TABLE_NAME = "ShopItems";
+    private static final String TABLE_NAME = "CB_ShopItems";
     private final Database database;
     private final CustomItems customItems;
 
