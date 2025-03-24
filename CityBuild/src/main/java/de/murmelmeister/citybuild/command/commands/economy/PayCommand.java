@@ -1,7 +1,7 @@
 package de.murmelmeister.citybuild.command.commands.economy;
 
 import de.murmelmeister.citybuild.CityBuild;
-import de.murmelmeister.citybuild.api.Economy;
+import de.murmelmeister.citybuild.api.economy.EconomyProviderImpl;
 import de.murmelmeister.citybuild.command.CommandManager;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
@@ -39,7 +39,7 @@ public final class PayCommand extends CommandManager {
         String username = args[0];
         String amount = args[1];
 
-        if (!Economy.MONEY_PATTERN.matcher(amount).matches()) {
+        if (!EconomyProviderImpl.MONEY_PATTERN.matcher(amount).matches()) {
             sendMessage(player, message.getString(Messages.INVALID_NUMBERS));
             return true;
         }

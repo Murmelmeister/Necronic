@@ -1,6 +1,7 @@
 package de.murmelmeister.citybuild.command.commands.homes;
 
 import de.murmelmeister.citybuild.CityBuild;
+import de.murmelmeister.citybuild.api.home.HomeImpl;
 import de.murmelmeister.citybuild.command.CommandManager;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
@@ -37,13 +38,13 @@ public class AddHomeCommand extends CommandManager {
         int userId = user.createOrGetUser(player.getUniqueId());
 
         String homeName = args[0];
-        if (homes.hasHome(userId, homeName)) {
+        if (homes.existsHome(userId, homeName)) {
             sendMessage(player, message.getString(Messages.COMMAND_EXIST_HOME).replace("[HOME]", homeName));
             return true;
         }
 
         if (homeLimit(player, userId)) {
-            homes.addHome(userId, homeName, player.getLocation());
+            homes.addHome(new HomeImpl(userId, homeName, player.getLocation()));
             sendMessage(player, message.getString(Messages.COMMAND_ADD_HOME).replace("[HOME]", homeName));
         }
         return true;
@@ -62,7 +63,7 @@ public class AddHomeCommand extends CommandManager {
         else if (player.hasPermission(config.getString(Configs.PERMISSION_HOME_LIMIT_RANK))) limit = config.getInt(Configs.HOME_LIMIT_RANK);
         else limit = config.getInt(Configs.HOME_LIMIT_DEFAULT);
 
-        if (homes.getHomes(userId).size() >= limit) {
+        if (homes.getHomeNames(userId).size() >= limit) {
             sendMessage(player, message.getString(Messages.COMMAND_HOME_LIMIT));
             return false;
         }

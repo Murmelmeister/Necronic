@@ -176,6 +176,7 @@ public enum Configs {
     TIME_REPAIR_COOLDOWN("Time.Repair.Cooldown", 4 * 24 * 60 * 60 * 1000),
     TIME_RENAME_COOLDOWN("Time.Rename.Cooldown", 24 * 60 * 60 * 1000),
     ECONOMY_DEFAULT_MONEY("Economy.Default.Money", 100.0D),
+    ECONOMY_DEFAULT_BANK_MONEY("Economy.Default.BankMoney", 0.0D),
     SHOP_CATEGORY_TITLE("Shop.Category.Title", "<#ccff88>Shop Menu"),
     SHOP_CATEGORY_PLACEHOLDER("Shop.Category.Placeholder", "BLACK_STAINED_GLASS_PANE"),
     SHOP_ITEM_TITLE("Shop.Item.Title", "<#ccff88>[CATEGORY] Items"),

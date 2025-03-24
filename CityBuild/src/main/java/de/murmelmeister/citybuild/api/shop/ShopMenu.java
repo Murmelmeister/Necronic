@@ -1,6 +1,6 @@
 package de.murmelmeister.citybuild.api.shop;
 
-import de.murmelmeister.citybuild.api.Economy;
+import de.murmelmeister.citybuild.api.economy.EconomyProvider;
 import de.murmelmeister.citybuild.files.ConfigFile;
 import de.murmelmeister.citybuild.files.MessageFile;
 import de.murmelmeister.citybuild.util.config.Configs;
@@ -22,9 +22,9 @@ public final class ShopMenu extends MultipleMenu<String> {
     private final MessageFile messageFile;
     private final ShopCategory category;
     private final ShopItem item;
-    private final Economy economy;
+    private final EconomyProvider economy;
 
-    public ShopMenu(User user, ConfigFile configFile, MessageFile messageFile, ShopCategory category, ShopItem item, Economy economy) {
+    public ShopMenu(User user, ConfigFile configFile, MessageFile messageFile, ShopCategory category, ShopItem item, EconomyProvider economy) {
         super(null, true, category.getCategories());
         this.user = user;
         this.configFile = configFile;
@@ -63,9 +63,9 @@ public final class ShopMenu extends MultipleMenu<String> {
         private final ConfigFile configFile;
         private final MessageFile messageFile;
         private final ShopItem shopItem;
-        private final Economy economy;
+        private final EconomyProvider economy;
 
-        public CategoryItemMenu(Menu parent, User user, ConfigFile configFile, MessageFile messageFile, ShopCategory category, ShopItem shopItem, Economy economy, String categoryId) {
+        public CategoryItemMenu(Menu parent, User user, ConfigFile configFile, MessageFile messageFile, ShopCategory category, ShopItem shopItem, EconomyProvider economy, String categoryId) {
             super(parent, false, shopItem.getCategoryItems(categoryId));
             this.user = user;
             this.configFile = configFile;

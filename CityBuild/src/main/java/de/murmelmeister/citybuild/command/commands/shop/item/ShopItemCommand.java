@@ -1,7 +1,7 @@
 package de.murmelmeister.citybuild.command.commands.shop.item;
 
 import de.murmelmeister.citybuild.CityBuild;
-import de.murmelmeister.citybuild.api.Economy;
+import de.murmelmeister.citybuild.api.economy.EconomyProviderImpl;
 import de.murmelmeister.citybuild.command.CommandManager;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
@@ -85,7 +85,7 @@ public final class ShopItemCommand extends CommandManager {
 
         String buy = args[3];
         String sell = args[4];
-        if (!Economy.MONEY_PATTERN.matcher(buy).matches() || !Economy.MONEY_PATTERN.matcher(sell).matches()) {
+        if (!EconomyProviderImpl.MONEY_PATTERN.matcher(buy).matches() || !EconomyProviderImpl.MONEY_PATTERN.matcher(sell).matches()) {
             sendMessage(sender, message.getString(Messages.INVALID_NUMBERS));
             return;
         }
@@ -130,7 +130,7 @@ public final class ShopItemCommand extends CommandManager {
         switch (args[3]) {
             case "buy" -> {
                 String buy = args[4];
-                if (!Economy.MONEY_PATTERN.matcher(buy).matches()) {
+                if (!EconomyProviderImpl.MONEY_PATTERN.matcher(buy).matches()) {
                     sendMessage(sender, message.getString(Messages.INVALID_NUMBERS));
                     return;
                 }
@@ -142,7 +142,7 @@ public final class ShopItemCommand extends CommandManager {
             }
             case "sell" -> {
                 String sell = args[4];
-                if (!Economy.MONEY_PATTERN.matcher(sell).matches()) {
+                if (!EconomyProviderImpl.MONEY_PATTERN.matcher(sell).matches()) {
                     sendMessage(sender, message.getString(Messages.INVALID_NUMBERS));
                     return;
                 }

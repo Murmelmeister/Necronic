@@ -1,6 +1,7 @@
 package de.murmelmeister.citybuild.listener.listeners;
 
 import de.murmelmeister.citybuild.CityBuild;
+import de.murmelmeister.citybuild.api.economy.EconomyImpl;
 import de.murmelmeister.citybuild.listener.ListenerManager;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
@@ -38,8 +39,8 @@ public class ConnectListener extends ListenerManager {
             sendMessage(player, message.getString(Messages.EVENT_SPAWN_NOT_EXIST).replace("[PREFIX]", message.prefix()));
 
         int userId = user.getId(player.getUniqueId());
-        if (user.existsUser(player.getUniqueId())) {
-            economy.createUser(userId);
+        if (!economy.existUser(userId)) {
+            economy.addUser(new EconomyImpl(userId, config.getDouble(Configs.ECONOMY_DEFAULT_MONEY), config.getDouble(Configs.ECONOMY_DEFAULT_BANK_MONEY)));
         }
 
         if (player.hasPermission(config.getString(Configs.PERMISSION_JOIN_FLY))) {

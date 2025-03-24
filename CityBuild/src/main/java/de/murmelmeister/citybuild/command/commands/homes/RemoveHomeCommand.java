@@ -36,12 +36,12 @@ public class RemoveHomeCommand extends CommandManager {
         int userId = user.createOrGetUser(player.getUniqueId());
 
         String homeName = args[0];
-        if (!(homes.hasHome(userId, homeName))) {
+        if (!(homes.existsHome(userId, homeName))) {
             sendMessage(player, message.getString(Messages.COMMAND_NOT_EXIST_HOME).replace("[HOME]", homeName));
             return true;
         }
 
-        homes.removeHome(userId, homeName);
+        homes.removeHome(homes.getHome(userId, homeName));
         sendMessage(player, message.getString(Messages.COMMAND_REMOVE_HOME).replace("[HOME]", homeName));
         return true;
     }
@@ -50,6 +50,6 @@ public class RemoveHomeCommand extends CommandManager {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         Player player = getPlayer(sender);
         int userId = user.createOrGetUser(player.getUniqueId());
-        return tabComplete(homes.getHomes(userId), args, 1);
+        return tabComplete(homes.getHomeNames(userId), args, 1);
     }
 }

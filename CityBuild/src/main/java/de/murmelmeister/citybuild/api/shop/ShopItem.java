@@ -2,7 +2,7 @@ package de.murmelmeister.citybuild.api.shop;
 
 import de.murmelmeister.citybuild.CityBuild;
 import de.murmelmeister.citybuild.api.CustomItems;
-import de.murmelmeister.citybuild.api.Economy;
+import de.murmelmeister.citybuild.api.economy.EconomyProvider;
 import de.murmelmeister.citybuild.files.ConfigFile;
 import de.murmelmeister.citybuild.files.MessageFile;
 import de.murmelmeister.citybuild.util.config.Configs;
@@ -107,7 +107,7 @@ public final class ShopItem {
         return new ItemStack(material, amount);
     }
 
-    public ItemStack getIcon(ConfigFile configFile, MessageFile messageFile, Economy economy, int userId, String itemId) {
+    public ItemStack getIcon(ConfigFile configFile, MessageFile messageFile, EconomyProvider economy, int userId, String itemId) {
         Material material = getMaterial(itemId);
         if (material == null) return null;
         DecimalFormat decimalFormat = new DecimalFormat(configFile.getString(Configs.PATTERN_DECIMAL));

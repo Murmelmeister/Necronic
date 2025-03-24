@@ -2,7 +2,9 @@ package de.murmelmeister.citybuild.listener;
 
 import de.murmelmeister.citybuild.CityBuild;
 import de.murmelmeister.citybuild.api.*;
+import de.murmelmeister.citybuild.api.economy.EconomyProvider;
 import de.murmelmeister.citybuild.api.enderchest.EnderChestEditor;
+import de.murmelmeister.citybuild.api.home.HomeProvider;
 import de.murmelmeister.citybuild.files.ConfigFile;
 import de.murmelmeister.citybuild.files.MessageFile;
 import de.murmelmeister.citybuild.listener.listeners.*;
@@ -26,8 +28,8 @@ public class ListenerManager implements Listener {
     protected final MessageFile message;
     protected final Cooldown cooldown;
     protected final Locations locations;
-    protected final Homes homes;
-    protected final Economy economy;
+    protected final HomeProvider homes;
+    protected final EconomyProvider economy;
     protected final PlayerInventory playerInventory;
     protected final EnderChestEditor enderChestEditor;
     protected final DecimalFormat decimalFormat;

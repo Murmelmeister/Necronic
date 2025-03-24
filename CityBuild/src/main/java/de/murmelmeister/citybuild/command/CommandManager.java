@@ -2,7 +2,9 @@ package de.murmelmeister.citybuild.command;
 
 import de.murmelmeister.citybuild.CityBuild;
 import de.murmelmeister.citybuild.api.*;
+import de.murmelmeister.citybuild.api.economy.EconomyProvider;
 import de.murmelmeister.citybuild.api.enderchest.EnderChestEditor;
+import de.murmelmeister.citybuild.api.home.HomeProvider;
 import de.murmelmeister.citybuild.api.shop.ShopCategory;
 import de.murmelmeister.citybuild.api.shop.ShopItem;
 import de.murmelmeister.citybuild.command.commands.*;
@@ -52,8 +54,8 @@ public abstract class CommandManager implements TabExecutor {
     protected final MessageFile message;
     protected final Cooldown cooldown;
     protected final Locations locations;
-    protected final Homes homes;
-    protected final Economy economy;
+    protected final HomeProvider homes;
+    protected final EconomyProvider economy;
     protected final DecimalFormat decimalFormat;
     protected final PlayerInventory playerInventory;
     protected final CustomItems customItems;

@@ -1,7 +1,11 @@
 package de.murmelmeister.citybuild;
 
 import de.murmelmeister.citybuild.api.*;
+import de.murmelmeister.citybuild.api.economy.EconomyProvider;
+import de.murmelmeister.citybuild.api.economy.EconomyProviderImpl;
 import de.murmelmeister.citybuild.api.enderchest.EnderChestEditor;
+import de.murmelmeister.citybuild.api.home.HomeProvider;
+import de.murmelmeister.citybuild.api.home.HomeProviderImpl;
 import de.murmelmeister.citybuild.api.shop.ShopCategory;
 import de.murmelmeister.citybuild.api.shop.ShopItem;
 import de.murmelmeister.citybuild.command.CommandManager;
@@ -35,8 +39,8 @@ public final class CityBuild extends MurmelPlugin {
     private MessageFile message;
     private Cooldown cooldown;
     private Locations locations;
-    private Homes homes;
-    private Economy economy;
+    private HomeProvider homes;
+    private EconomyProvider economy;
     private PlayerInventory playerInventory;
     private CustomItems customItems;
     private ShopCategory shopCategory;
@@ -60,8 +64,8 @@ public final class CityBuild extends MurmelPlugin {
         this.message = new MessageFile(logger);
         this.cooldown = new Cooldown(logger);
         this.locations = new Locations(database, logger, getServer());
-        this.homes = new Homes(database);
-        this.economy = new Economy(database, config);
+        this.homes = new HomeProviderImpl(database);
+        this.economy = new EconomyProviderImpl(database);
         this.customItems = new CustomItems(database);
         this.shopCategory = new ShopCategory(database);
         this.shopItem = new ShopItem(database, customItems);
@@ -141,11 +145,11 @@ public final class CityBuild extends MurmelPlugin {
         return locations;
     }
 
-    public Homes getHomes() {
+    public HomeProvider getHomes() {
         return homes;
     }
 
-    public Economy getEconomy() {
+    public EconomyProvider getEconomy() {
         return economy;
     }
 

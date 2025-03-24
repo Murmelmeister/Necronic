@@ -36,12 +36,12 @@ public class HomeCommand extends CommandManager {
         int userId = user.createOrGetUser(player.getUniqueId());
 
         String homeName = args[0];
-        if (!(homes.hasHome(userId, homeName))) {
+        if (!(homes.existsHome(userId, homeName))) {
             sendMessage(player, message.getString(Messages.COMMAND_NOT_EXIST_HOME).replace("[HOME]", homeName));
             return true;
         }
 
-        player.teleport(homes.getHome(player.getServer(), userId, homeName));
+        player.teleport(homes.getHome(userId, homeName).getLocation(player.getServer()));
         sendMessage(player, message.getString(Messages.COMMAND_SEND_HOME).replace("[HOME]", homeName));
         return true;
     }
@@ -50,6 +50,6 @@ public class HomeCommand extends CommandManager {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
         Player player = getPlayer(sender);
         int userId = user.createOrGetUser(player.getUniqueId());
-        return tabComplete(homes.getHomes(userId), args, 1);
+        return tabComplete(homes.getHomeNames(userId), args, 1);
     }
 }

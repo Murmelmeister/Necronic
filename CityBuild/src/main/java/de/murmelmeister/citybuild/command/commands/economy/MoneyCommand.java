@@ -34,7 +34,7 @@ public final class MoneyCommand extends CommandManager {
             if (!(isEnable(sender, Configs.COMMAND_ENABLE_MONEY_USE))) return true;
             if (!(hasPermission(sender, Configs.PERMISSION_MONEY_USE))) return true;
             sendMessage(player, message.getString(Messages.COMMAND_MONEY_USE)
-                    .replace("[MONEY]", economy.getFormattedMoney(userId)));
+                    .replace("[MONEY]", economy.getFormattedMoney(userId, config.getString(Configs.PATTERN_DECIMAL))));
         } else if (args.length == 1) {
             if (!(isEnable(sender, Configs.COMMAND_ENABLE_MONEY_OTHER))) return true;
             if (!(hasPermission(sender, Configs.PERMISSION_MONEY_OTHER))) return true;
@@ -46,7 +46,7 @@ public final class MoneyCommand extends CommandManager {
                 int targetId = user.getId(uuid);
 
                 sendMessage(player, message.getString(Messages.COMMAND_MONEY_OTHER)
-                        .replace("[MONEY]", economy.getFormattedMoney(targetId))
+                        .replace("[MONEY]", economy.getFormattedMoney(targetId, config.getString(Configs.PATTERN_DECIMAL)))
                         .replace("[PLAYER]", target));
             });
         } else sendMessage(sender, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
