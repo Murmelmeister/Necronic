@@ -1,23 +1,23 @@
-package de.murmelmeister.citybuild.api;
+package de.murmelmeister.citybuild.api.home;
 
 import de.murmelmeister.murmelapi.database.Database;
-import org.bukkit.Location;
-import org.bukkit.Server;
-import org.bukkit.World;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-public final class Homes {
+public final class HomeProviderImpl implements HomeProvider {
     private static final String TABLE_NAME = "CB_Home";
     private final Database database;
 
-    public Homes(Database database) {
+    private final Map<HomeKeys, Home> cache = new ConcurrentHashMap<>();
+
+    public HomeProviderImpl(Database database) {
         this.database = database;
         createTable();
         Procedure.loadAll(database);
+        loadData();
     }
 
     private void createTable() {
@@ -26,7 +26,58 @@ public final class Homes {
                                          "X DOUBLE, Y DOUBLE, Z DOUBLE, Yaw DOUBLE, Pitch DOUBLE");
     }
 
-    public boolean hasHome(int userId, String homeName) {
+    private void loadData() {
+        cache.clear();
+        database.queryProcess(resultSet -> {
+            int userId = resultSet.getInt("UserID");
+            String homeName = resultSet.getString("HomeName");
+            String worldName = resultSet.getString("WorldName");
+            String worldType = resultSet.getString("WorldType");
+            double x = resultSet.getDouble("X");
+            double y = resultSet.getDouble("Y");
+            double z = resultSet.getDouble("Z");
+            double yaw = resultSet.getDouble("Yaw");
+            double pitch = resultSet.getDouble("Pitch");
+
+            HomeKeys keys = new HomeKeys(userId, homeName);
+            Home home = new HomeImpl(keys, worldName, worldType, x, y, z, yaw, pitch);
+            cache.put(keys, home);
+        }, Procedure.HOME_ALL.getName());
+    }
+
+    @Override
+    public Home getHome(int userId, String homeName) {
+        return cache.get(new HomeKeys(userId, homeName));
+    }
+
+    @Override
+    public boolean existsHome(int userId, String homeName) {
+        return cache.containsKey(new HomeKeys(userId, homeName));
+    }
+
+    @Override
+    public void addHome(Home home) {
+        cache.put(home.getKeys(), home);
+        database.asyncUpdate(Procedure.HOME_ADD.getName(), home.getKeys().userId(), home.getKeys().homeName(),
+                home.getWorldName(), home.getWorldType(), home.getX(), home.getY(), home.getZ(), home.getYaw(), home.getPitch());
+    }
+
+    @Override
+    public void removeHome(Home home) {
+        cache.remove(home.getKeys());
+        database.asyncUpdate(Procedure.HOME_REMOVE.getName(), home.getKeys().userId(), home.getKeys().homeName());
+    }
+
+    @Override
+    public List<String> getHomeNames(int userId) {
+        List<String> homeNames = new ArrayList<>();
+        for (Home home : cache.values())
+            if (home.getKeys().userId() == userId)
+                homeNames.add(home.getKeys().homeName());
+        return homeNames;
+    }
+
+    /*public boolean hasHome(int userId, String homeName) {
         return database.exists(Procedure.HOME_GET.getName(), userId, homeName);
     }
 
@@ -64,14 +115,15 @@ public final class Homes {
 
     public List<String> getHomes(int userId) {
         return database.queryList(new ArrayList<>(), "HomeName", String.class, Procedure.HOME_GET_ALL.getName(), userId);
-    }
+    }*/
 
     private enum Procedure {
         HOME_ADD("Home_Add", "uid INT, hname VARCHAR(100), wname VARCHAR(100), wtype VARCHAR(100), wx DOUBLE, wy DOUBLE, wz DOUBLE, wyaw DOUBLE, wp DOUBLE",
                 "INSERT INTO [TABLE] VALUES (uid, hname, wname, wtype, wx, wy, wz, wyaw, wp);"),
         HOME_REMOVE("Home_Remove", "uid INT, hname VARCHAR(100)", "DELETE FROM [TABLE] WHERE UserID=uid AND HomeName=hname;"),
         HOME_GET("Home_Get", "uid INT, hname VARCHAR(100)", "SELECT * FROM [TABLE] WHERE UserID=uid AND HomeName=hname;"),
-        HOME_GET_ALL("Home_GetAll", "uid INT", "SELECT * FROM [TABLE] WHERE UserID=uid;");
+        HOME_GET_ALL("Home_GetAll", "uid INT", "SELECT * FROM [TABLE] WHERE UserID=uid;"),
+        HOME_ALL("Home_All", "", "SELECT * FROM [TABLE];");
         private static final Procedure[] VALUES = values();
 
         private final String name;
