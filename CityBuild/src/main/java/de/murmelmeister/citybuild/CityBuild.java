@@ -6,8 +6,12 @@ import de.murmelmeister.citybuild.api.economy.EconomyProviderImpl;
 import de.murmelmeister.citybuild.api.enderchest.EnderChestEditor;
 import de.murmelmeister.citybuild.api.home.HomeProvider;
 import de.murmelmeister.citybuild.api.home.HomeProviderImpl;
-import de.murmelmeister.citybuild.api.shop.ShopCategory;
-import de.murmelmeister.citybuild.api.shop.ShopItem;
+import de.murmelmeister.citybuild.api.item.CustomItemProvider;
+import de.murmelmeister.citybuild.api.item.CustomItemProviderImpl;
+import de.murmelmeister.citybuild.api.shop.category.ShopCategoryProvider;
+import de.murmelmeister.citybuild.api.shop.category.ShopCategoryProviderImpl;
+import de.murmelmeister.citybuild.api.shop.item.ShopItemProvider;
+import de.murmelmeister.citybuild.api.shop.item.ShopItemProviderImpl;
 import de.murmelmeister.citybuild.command.CommandManager;
 import de.murmelmeister.citybuild.files.ConfigFile;
 import de.murmelmeister.citybuild.files.MessageFile;
@@ -42,9 +46,9 @@ public final class CityBuild extends MurmelPlugin {
     private HomeProvider homes;
     private EconomyProvider economy;
     private PlayerInventory playerInventory;
-    private CustomItems customItems;
-    private ShopCategory shopCategory;
-    private ShopItem shopItem;
+    private CustomItemProvider customItems;
+    private ShopCategoryProvider shopCategory;
+    private ShopItemProvider shopItem;
     private EnderChestEditor enderChestEditor;
 
     private BukkitTask scoreboardTask;
@@ -66,9 +70,9 @@ public final class CityBuild extends MurmelPlugin {
         this.locations = new Locations(database, logger, getServer());
         this.homes = new HomeProviderImpl(database);
         this.economy = new EconomyProviderImpl(database);
-        this.customItems = new CustomItems(database);
-        this.shopCategory = new ShopCategory(database);
-        this.shopItem = new ShopItem(database, customItems);
+        this.customItems = new CustomItemProviderImpl(database);
+        this.shopCategory = new ShopCategoryProviderImpl(database);
+        this.shopItem = new ShopItemProviderImpl(database);
         this.enderChestEditor = new EnderChestEditor(database, config);
     }
 
@@ -86,7 +90,7 @@ public final class CityBuild extends MurmelPlugin {
     @Override
     public void onEnable() {
         super.onEnable();
-        customItems.loadAllMaterials();
+        //customItems.loadAllMaterials(); // TODO: This should be in a command
         ListenerManager.register(this);
         CommandManager.register(this);
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -161,15 +165,15 @@ public final class CityBuild extends MurmelPlugin {
         return MurmelAPI.getUser();
     }
 
-    public CustomItems getCustomItems() {
+    public CustomItemProvider getCustomItems() {
         return customItems;
     }
 
-    public ShopCategory getShopCategory() {
+    public ShopCategoryProvider getShopCategory() {
         return shopCategory;
     }
 
-    public ShopItem getShopItem() {
+    public ShopItemProvider getShopItem() {
         return shopItem;
     }
 

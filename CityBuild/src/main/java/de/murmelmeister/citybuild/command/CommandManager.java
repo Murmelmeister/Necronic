@@ -5,8 +5,9 @@ import de.murmelmeister.citybuild.api.*;
 import de.murmelmeister.citybuild.api.economy.EconomyProvider;
 import de.murmelmeister.citybuild.api.enderchest.EnderChestEditor;
 import de.murmelmeister.citybuild.api.home.HomeProvider;
-import de.murmelmeister.citybuild.api.shop.ShopCategory;
-import de.murmelmeister.citybuild.api.shop.ShopItem;
+import de.murmelmeister.citybuild.api.item.CustomItemProvider;
+import de.murmelmeister.citybuild.api.shop.category.ShopCategoryProvider;
+import de.murmelmeister.citybuild.api.shop.item.ShopItemProvider;
 import de.murmelmeister.citybuild.command.commands.*;
 import de.murmelmeister.citybuild.command.commands.economy.*;
 import de.murmelmeister.citybuild.command.commands.homes.AddHomeCommand;
@@ -58,9 +59,9 @@ public abstract class CommandManager implements TabExecutor {
     protected final EconomyProvider economy;
     protected final DecimalFormat decimalFormat;
     protected final PlayerInventory playerInventory;
-    protected final CustomItems customItems;
-    protected final ShopCategory shopCategory;
-    protected final ShopItem shopItem;
+    protected final CustomItemProvider customItems;
+    protected final ShopCategoryProvider shopCategory;
+    protected final ShopItemProvider shopItem;
     protected final EnderChestEditor enderChestEditor;
 
     public CommandManager(CityBuild plugin) {

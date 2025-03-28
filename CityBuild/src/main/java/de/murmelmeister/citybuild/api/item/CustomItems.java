@@ -1,4 +1,4 @@
-package de.murmelmeister.citybuild.api;
+package de.murmelmeister.citybuild.api.item;
 
 import de.murmelmeister.murmelapi.database.Database;
 import org.bukkit.Material;

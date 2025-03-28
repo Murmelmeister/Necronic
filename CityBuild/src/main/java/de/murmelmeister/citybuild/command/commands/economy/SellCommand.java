@@ -1,6 +1,7 @@
 package de.murmelmeister.citybuild.command.commands.economy;
 
 import de.murmelmeister.citybuild.CityBuild;
+import de.murmelmeister.citybuild.api.shop.item.ShopItem;
 import de.murmelmeister.citybuild.command.CommandManager;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 public final class SellCommand extends CommandManager {
     public SellCommand(CityBuild plugin) {
@@ -39,19 +41,21 @@ public final class SellCommand extends CommandManager {
             return true;
         }
 
-        String itemId = mainItem.getType().name(); // TODO: Fix that the item has a key!
-        if (!customItems.existItem(itemId)) {
+        UUID itemId = UUID.fromString(mainItem.getType().name()); // TODO: Fix that the item has a key!
+        if (!customItems.containsCustomItem(itemId)) {
             sendMessage(player, message.getString(Messages.INVALID_ITEM));
             return true;
         }
 
-        if (!shopItem.existItem(itemId)) {
+        // TODO: Fix this
+        ShopItem item = shopItem.getItem(itemId);
+        if (!shopItem.containsItem(itemId) || item == null) {
             sendMessage(player, message.getString(Messages.INVALID_ITEM));
             return true;
         }
 
-        double sellPrice = shopItem.getSellPrice(itemId);
-        String displayName = customItems.getDisplayName(itemId);
+        double sellPrice = item.getSellPrice();
+        String displayName = customItems.getCustomItem(itemId).getDisplayName();
 
         switch (args[0]) {
             case "show" -> {

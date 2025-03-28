@@ -1,7 +1,7 @@
 package de.murmelmeister.citybuild.api.shop;
 
 import de.murmelmeister.citybuild.CityBuild;
-import de.murmelmeister.citybuild.api.CustomItems;
+import de.murmelmeister.citybuild.api.item.CustomItems;
 import de.murmelmeister.citybuild.api.economy.EconomyProvider;
 import de.murmelmeister.citybuild.files.ConfigFile;
 import de.murmelmeister.citybuild.files.MessageFile;

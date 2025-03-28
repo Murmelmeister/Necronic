@@ -142,7 +142,8 @@ public enum Messages {
                              "\n<aqua>/bank deposit <amount> <gray>- Deposit money to your bank account" +
                              "\n<aqua>/bank withdraw <amount> <gray>- Withdraw money from your bank account"),
     BANK_DEPOSIT("Bank.Deposit", "<#919292>You have deposited<#01c04e> [MONEY] money<#919292> to your bank account."),
-    BANK_WITHDRAW("Bank.Withdraw", "<#919292>You have withdrawn<#01c04e> [MONEY] money<#919292> from your bank account."),;
+    BANK_WITHDRAW("Bank.Withdraw", "<#919292>You have withdrawn<#01c04e> [MONEY] money<#919292> from your bank account."),
+    INVALID_UUID("Invalid.UUID", "<#d31c49>Invalid UUID."),;
     public static final Messages[] VALUES = values();
 
     private final String path;

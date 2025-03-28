@@ -31,7 +31,7 @@ public final class ShopCommand extends CommandManager {
             return true;
         }
 
-        ShopMenu shopMenu = new ShopMenu(user, config, message, shopCategory, shopItem, economy);
+        ShopMenu shopMenu = new ShopMenu(user, config, message, customItems, shopCategory, shopItem, economy);
         shopMenu.show(player);
         return true;
     }
