@@ -2,12 +2,12 @@ package de.murmelmeister.citybuild.command;
 
 import de.murmelmeister.citybuild.CityBuild;
 import de.murmelmeister.citybuild.api.*;
-import de.murmelmeister.citybuild.api.economy.EconomyProvider;
+import de.murmelmeister.citybuild.api.economy.Economy;
 import de.murmelmeister.citybuild.api.enderchest.EnderChestEditor;
-import de.murmelmeister.citybuild.api.home.HomeProvider;
-import de.murmelmeister.citybuild.api.item.CustomItemProvider;
-import de.murmelmeister.citybuild.api.shop.category.ShopCategoryProvider;
-import de.murmelmeister.citybuild.api.shop.item.ShopItemProvider;
+import de.murmelmeister.citybuild.api.home.Home;
+import de.murmelmeister.citybuild.api.item.CustomItem;
+import de.murmelmeister.citybuild.api.shop.category.ShopCategory;
+import de.murmelmeister.citybuild.api.shop.item.ShopItem;
 import de.murmelmeister.citybuild.command.commands.*;
 import de.murmelmeister.citybuild.command.commands.economy.*;
 import de.murmelmeister.citybuild.command.commands.homes.AddHomeCommand;
@@ -55,13 +55,13 @@ public abstract class CommandManager implements TabExecutor {
     protected final MessageFile message;
     protected final Cooldown cooldown;
     protected final Locations locations;
-    protected final HomeProvider homes;
-    protected final EconomyProvider economy;
+    protected final Home homes;
+    protected final Economy economy;
     protected final DecimalFormat decimalFormat;
     protected final PlayerInventory playerInventory;
-    protected final CustomItemProvider customItems;
-    protected final ShopCategoryProvider shopCategory;
-    protected final ShopItemProvider shopItem;
+    protected final CustomItem customItems;
+    protected final ShopCategory shopCategory;
+    protected final ShopItem shopItem;
     protected final EnderChestEditor enderChestEditor;
 
     public CommandManager(CityBuild plugin) {

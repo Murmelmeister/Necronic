@@ -1,17 +1,17 @@
 package de.murmelmeister.citybuild;
 
 import de.murmelmeister.citybuild.api.*;
+import de.murmelmeister.citybuild.api.economy.Economy;
 import de.murmelmeister.citybuild.api.economy.EconomyProvider;
-import de.murmelmeister.citybuild.api.economy.EconomyProviderImpl;
 import de.murmelmeister.citybuild.api.enderchest.EnderChestEditor;
+import de.murmelmeister.citybuild.api.home.Home;
 import de.murmelmeister.citybuild.api.home.HomeProvider;
-import de.murmelmeister.citybuild.api.home.HomeProviderImpl;
+import de.murmelmeister.citybuild.api.item.CustomItem;
 import de.murmelmeister.citybuild.api.item.CustomItemProvider;
-import de.murmelmeister.citybuild.api.item.CustomItemProviderImpl;
+import de.murmelmeister.citybuild.api.shop.category.ShopCategory;
 import de.murmelmeister.citybuild.api.shop.category.ShopCategoryProvider;
-import de.murmelmeister.citybuild.api.shop.category.ShopCategoryProviderImpl;
+import de.murmelmeister.citybuild.api.shop.item.ShopItem;
 import de.murmelmeister.citybuild.api.shop.item.ShopItemProvider;
-import de.murmelmeister.citybuild.api.shop.item.ShopItemProviderImpl;
 import de.murmelmeister.citybuild.command.CommandManager;
 import de.murmelmeister.citybuild.files.ConfigFile;
 import de.murmelmeister.citybuild.files.MessageFile;
@@ -43,12 +43,12 @@ public final class CityBuild extends MurmelPlugin {
     private MessageFile message;
     private Cooldown cooldown;
     private Locations locations;
-    private HomeProvider homes;
-    private EconomyProvider economy;
+    private Home homes;
+    private Economy economy;
     private PlayerInventory playerInventory;
-    private CustomItemProvider customItems;
-    private ShopCategoryProvider shopCategory;
-    private ShopItemProvider shopItem;
+    private CustomItem customItems;
+    private ShopCategory shopCategory;
+    private ShopItem shopItem;
     private EnderChestEditor enderChestEditor;
 
     private BukkitTask scoreboardTask;
@@ -68,11 +68,11 @@ public final class CityBuild extends MurmelPlugin {
         this.message = new MessageFile(logger);
         this.cooldown = new Cooldown(logger);
         this.locations = new Locations(database, logger, getServer());
-        this.homes = new HomeProviderImpl(database);
-        this.economy = new EconomyProviderImpl(database);
-        this.customItems = new CustomItemProviderImpl(database);
-        this.shopCategory = new ShopCategoryProviderImpl(database);
-        this.shopItem = new ShopItemProviderImpl(database);
+        this.homes = new HomeProvider(database);
+        this.economy = new EconomyProvider(database);
+        this.customItems = new CustomItemProvider(database);
+        this.shopCategory = new ShopCategoryProvider(database);
+        this.shopItem = new ShopItemProvider(database);
         this.enderChestEditor = new EnderChestEditor(database, config);
     }
 
@@ -149,11 +149,11 @@ public final class CityBuild extends MurmelPlugin {
         return locations;
     }
 
-    public HomeProvider getHomes() {
+    public Home getHomes() {
         return homes;
     }
 
-    public EconomyProvider getEconomy() {
+    public Economy getEconomy() {
         return economy;
     }
 
@@ -165,15 +165,15 @@ public final class CityBuild extends MurmelPlugin {
         return MurmelAPI.getUser();
     }
 
-    public CustomItemProvider getCustomItems() {
+    public CustomItem getCustomItems() {
         return customItems;
     }
 
-    public ShopCategoryProvider getShopCategory() {
+    public ShopCategory getShopCategory() {
         return shopCategory;
     }
 
-    public ShopItemProvider getShopItem() {
+    public ShopItem getShopItem() {
         return shopItem;
     }
 
