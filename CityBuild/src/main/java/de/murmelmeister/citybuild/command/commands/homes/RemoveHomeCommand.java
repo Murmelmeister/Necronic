@@ -41,7 +41,7 @@ public class RemoveHomeCommand extends CommandManager {
             return true;
         }
 
-        homes.removeHome(homes.getHome(userId, homeName));
+        homes.removeHome(userId, homeName);
         sendMessage(player, message.getString(Messages.COMMAND_REMOVE_HOME).replace("[HOME]", homeName));
         return true;
     }

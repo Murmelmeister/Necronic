@@ -1,7 +1,6 @@
 package de.murmelmeister.citybuild.command.commands.homes;
 
 import de.murmelmeister.citybuild.CityBuild;
-import de.murmelmeister.citybuild.api.home.HomeImpl;
 import de.murmelmeister.citybuild.command.CommandManager;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
@@ -44,7 +43,7 @@ public class AddHomeCommand extends CommandManager {
         }
 
         if (homeLimit(player, userId)) {
-            homes.addHome(new HomeImpl(userId, homeName, player.getLocation()));
+            homes.addHome(userId, homeName, player.getLocation());
             sendMessage(player, message.getString(Messages.COMMAND_ADD_HOME).replace("[HOME]", homeName));
         }
         return true;
