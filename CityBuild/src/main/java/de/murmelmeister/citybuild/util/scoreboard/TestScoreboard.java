@@ -1,7 +1,7 @@
 package de.murmelmeister.citybuild.util.scoreboard;
 
 import de.murmelmeister.citybuild.CityBuild;
-import de.murmelmeister.citybuild.api.economy.EconomyProvider;
+import de.murmelmeister.citybuild.api.economy.Economy;
 import de.murmelmeister.citybuild.files.ConfigFile;
 import de.murmelmeister.citybuild.files.MessageFile;
 import de.murmelmeister.citybuild.util.config.Configs;
@@ -27,7 +27,7 @@ public class TestScoreboard extends ScoreboardBuilder {
     private void setScoreboard() {
         final ConfigFile config = plugin.getConfigFile();
         final MessageFile message = plugin.getMessageFile();
-        final EconomyProvider economy = plugin.getEconomy();
+        final Economy economy = plugin.getEconomy();
         final User user = plugin.getUser();
         final int userId = user.getId(player.getUniqueId());
         final String money = economy.getFormattedMoney(userId, config.getString(Configs.PATTERN_DECIMAL));
