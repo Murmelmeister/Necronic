@@ -22,7 +22,7 @@ public final class SellCommand extends CommandManager {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         if (!(isEnable(sender, Configs.COMMAND_ENABLE_SELL))) return true;
         if (!(hasPermission(sender, Configs.PERMISSION_SELL))) return true;
 
@@ -34,27 +34,33 @@ public final class SellCommand extends CommandManager {
             return true;
         }
 
-        /*ItemStack mainItem = player.getInventory().getItemInMainHand();
+        ItemStack mainItem = player.getInventory().getItemInMainHand();
         if (mainItem.getType() == Material.AIR) {
             sendMessage(player, message.getString(Messages.INVALID_ITEM));
             return true;
         }
 
-        UUID itemId = UUID.fromString(mainItem.getType().name()); // TODO: Fix that the item has a key!
-        if (!customItems.containsCustomItem(itemId)) {
+        UUID customItemId = customItems.getCustomItemId(mainItem.getType().name());
+        if (!customItems.existsItem(customItemId)) {
             sendMessage(player, message.getString(Messages.INVALID_ITEM));
             return true;
         }
 
-        // TODO: Fix this
-        ShopItem item = shopItem.getItem(itemId);
-        if (!shopItem.existsItem(itemId) || item == null) {
+        // TODO: This does not work => fix this
+        UUID categoryId = shopCategory.getCategoryId(null);
+        if (!shopCategory.existsCategory(categoryId)) {
+            sendMessage(player, message.getString(Messages.INVALID_ITEM));
+            return true;
+        }
+
+        UUID itemId = shopItem.getItemId(customItemId, categoryId);
+        if (!shopItem.existsItem(itemId)) {
             sendMessage(player, message.getString(Messages.INVALID_ITEM));
             return true;
         }
 
         double sellPrice = shopItem.getSellPrice(itemId);
-        String displayName = customItems.getCustomItem(itemId).getDisplayName();
+        String displayName = customItems.getInternName(customItemId);
 
         switch (args[0]) {
             case "show" -> {
@@ -132,12 +138,12 @@ public final class SellCommand extends CommandManager {
             }
             default ->
                     sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
-        }*/
+        }
         return true;
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String @NotNull [] args) {
         return tabComplete(Arrays.asList("show", "one", "stack", "inventory"), args, 1);
     }
 }
