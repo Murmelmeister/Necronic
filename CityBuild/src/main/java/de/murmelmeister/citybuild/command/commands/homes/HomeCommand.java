@@ -41,7 +41,7 @@ public class HomeCommand extends CommandManager {
             return true;
         }
 
-        player.teleport(homes.getHome(userId, homeName).getLocation(player.getServer()));
+        player.teleport(homes.getHome(player.getServer(), userId, homeName));
         sendMessage(player, message.getString(Messages.COMMAND_SEND_HOME).replace("[HOME]", homeName));
         return true;
     }

@@ -3,36 +3,50 @@ package de.murmelmeister.citybuild.api.home;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
-public sealed interface Home permits HomeImpl {
-    HomeKeys getKeys();
+import java.util.List;
 
-    String getWorldName();
+public sealed interface Home permits HomeProvider {
+    /**
+     * Checks if a home with the specified name exists for the given user.
+     *
+     * @param userId   The ID of the user.
+     * @param homeName The name of the home to check.
+     * @return true if the home exists, false otherwise.
+     */
+    boolean existsHome(int userId, String homeName);
 
-    void setWorldName(String worldName);
+    /**
+     * Adds a home for the specified user with the given name and location.
+     *
+     * @param userId    The ID of the user.
+     * @param homeName  The name of the home to add.
+     * @param location  The location of the home.
+     */
+    void addHome(int userId, String homeName, Location location);
 
-    String getWorldType();
+    /**
+     * Removes a home for the specified user with the given name.
+     *
+     * @param userId   The ID of the user.
+     * @param homeName The name of the home to remove.
+     */
+    void removeHome(int userId, String homeName);
 
-    void setWorldType(String worldType);
+    /**
+     * Retrieves the location of a home for the specified user with the given name.
+     *
+     * @param server    The server instance.
+     * @param userId    The ID of the user.
+     * @param homeName  The name of the home to retrieve.
+     * @return The location of the home, or null if it does not exist.
+     */
+    Location getHome(Server server, int userId, String homeName);
 
-    double getX();
-
-    void setX(double x);
-
-    double getY();
-
-    void setY(double y);
-
-    double getZ();
-
-    void setZ(double z);
-
-    double getYaw();
-
-    void setYaw(double yaw);
-
-    double getPitch();
-
-    void setPitch(double pitch);
-
-    Location getLocation(Server server);
+    /**
+     * Retrieves a list of home names for the specified user.
+     *
+     * @param userId The ID of the user.
+     * @return A list of home names associated with the user.
+     */
+    List<String> getHomeNames(int userId);
 }
