@@ -34,13 +34,13 @@ public final class PlayerInventory {
         String enderChestContents = saveItems(player.getEnderChest().getContents());
         String enderChestStorage = saveItems(player.getEnderChest().getStorageContents());
         if (update)
-            database.callUpdate(Procedure.INVENTORY_UPDATE.getName(), userId, contents, storageContents, armorContents, extraContents, enderChestContents, enderChestStorage);
+            database.updateCallable(Procedure.INVENTORY_UPDATE.getName(), userId, contents, storageContents, armorContents, extraContents, enderChestContents, enderChestStorage);
         else
-            database.callUpdate(Procedure.INVENTORY_CREATE.getName(), userId, contents, storageContents, armorContents, extraContents, enderChestContents, enderChestStorage);
+            database.updateCallable(Procedure.INVENTORY_CREATE.getName(), userId, contents, storageContents, armorContents, extraContents, enderChestContents, enderChestStorage);
     }
 
     public void deleteInventory(int userId) {
-        database.callUpdate(Procedure.INVENTORY_DELETE.getName(), userId);
+        database.updateCallable(Procedure.INVENTORY_DELETE.getName(), userId);
     }
 
     public void setInventory(int userId, Player player) {
@@ -53,27 +53,27 @@ public final class PlayerInventory {
     }
 
     public ItemStack[] getContents(int userId) {
-        return loadItems(database.query(null, "Content", String.class, Procedure.INVENTORY_GET.getName(), userId));
+        return loadItems(database.queryCallable(Procedure.INVENTORY_GET.getName(), null, resultSet -> resultSet.getString("Content"), userId));
     }
 
     public ItemStack[] getStorageContents(int userId) {
-        return loadItems(database.query(null, "StorageContent", String.class, Procedure.INVENTORY_GET.getName(), userId));
+        return loadItems(database.queryCallable(Procedure.INVENTORY_GET.getName(), null, resultSet -> resultSet.getString("StorageContent"), userId));
     }
 
     public ItemStack[] getArmorContents(int userId) {
-        return loadItems(database.query(null, "ArmorContent", String.class, Procedure.INVENTORY_GET.getName(), userId));
+        return loadItems(database.queryCallable(Procedure.INVENTORY_GET.getName(), null, resultSet -> resultSet.getString("ArmorContent"), userId));
     }
 
     public ItemStack[] getExtraContents(int userId) {
-        return loadItems(database.query(null, "ExtraContent", String.class, Procedure.INVENTORY_GET.getName(), userId));
+        return loadItems(database.queryCallable(Procedure.INVENTORY_GET.getName(), null, resultSet -> resultSet.getString("ExtraContent"), userId));
     }
 
     public ItemStack[] getEnderChestContents(int userId) {
-        return loadItems(database.query(null, "EnderChestContent", String.class, Procedure.INVENTORY_GET.getName(), userId));
+        return loadItems(database.queryCallable(Procedure.INVENTORY_GET.getName(), null, resultSet -> resultSet.getString("EnderChestContent"), userId));
     }
 
     public ItemStack[] getEnderChestStorage(int userId) {
-        return loadItems(database.query(null, "EnderChestStorage", String.class, Procedure.INVENTORY_GET.getName(), userId));
+        return loadItems(database.queryCallable(Procedure.INVENTORY_GET.getName(), null, resultSet -> resultSet.getString("EnderChestStorage"), userId));
     }
 
     private enum Procedure {
