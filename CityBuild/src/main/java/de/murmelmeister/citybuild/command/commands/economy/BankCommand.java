@@ -1,7 +1,7 @@
 package de.murmelmeister.citybuild.command.commands.economy;
 
 import de.murmelmeister.citybuild.CityBuild;
-import de.murmelmeister.citybuild.api.economy.EconomyProviderImpl;
+import de.murmelmeister.citybuild.api.economy.EconomyProvider;
 import de.murmelmeister.citybuild.command.CommandManager;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
@@ -34,7 +34,7 @@ public final class BankCommand extends CommandManager {
                     .replace("[BANK]", economy.getFormattedBankMoney(userId, config.getString(Configs.PATTERN_DECIMAL))));
             case 2 -> {
                 String input = args[1];
-                if (!EconomyProviderImpl.MONEY_PATTERN.matcher(input).matches()) {
+                if (!EconomyProvider.MONEY_PATTERN.matcher(input).matches()) {
                     sendMessage(player, message.getString(Messages.INVALID_NUMBERS));
                     return true;
                 }
