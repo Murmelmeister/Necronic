@@ -76,6 +76,14 @@ public sealed interface ShopItem permits ShopItemProvider {
     void updateSellPrice(UUID id, double sellPrice);
 
     /**
+     * Updates the category of an item identified by its unique ID.
+     *
+     * @param id         The unique identifier of the item to be updated
+     * @param categoryId The new category ID to be set for the item
+     */
+    void updateCategory(UUID id, UUID categoryId);
+
+    /**
      * Retrieves a list of item IDs belonging to the specified category.
      *
      * @param categoryId The UUID of the category whose items are to be retrieved
@@ -87,10 +95,9 @@ public sealed interface ShopItem permits ShopItemProvider {
      * Retrieves the unique identifier of a shop item based on its custom item ID and category ID.
      *
      * @param customItemId The unique identifier of the custom item
-     * @param categoryId   The unique identifier of the category
      * @return The unique identifier of the shop item if it exists, or null if no such item is found
      */
-    UUID getItemId(UUID customItemId, UUID categoryId);
+    UUID getItemId(UUID customItemId);
 
     /**
      * Retrieves the unique identifier of a custom item associated with the specified ID.

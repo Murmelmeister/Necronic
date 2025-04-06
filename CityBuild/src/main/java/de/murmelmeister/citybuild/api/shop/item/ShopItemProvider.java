@@ -39,7 +39,7 @@ public final class ShopItemProvider implements ShopItem {
     }
 
     private void createTable() {
-        database.createTable(TABLE_NAME, "ID UUID PRIMARY KEY, CustomItem UUID, Category UUID, " +
+        database.createTable(TABLE_NAME, "ID UUID PRIMARY KEY, CustomItem UUID UNIQUE, Category UUID, " +
                                          "FOREIGN KEY (CustomItem) REFERENCES CB_CustomItems(ID), " +
                                          "FOREIGN KEY (Category) REFERENCES CB_ShopCategory(ID), " +
                                          "Icon TINYTEXT, BuyPrice DOUBLE, SellPrice DOUBLE");
@@ -81,6 +81,11 @@ public final class ShopItemProvider implements ShopItem {
     }
 
     @Override
+    public void updateCategory(UUID id, UUID categoryId) {
+        database.updateCallable(Procedure.UPDATE_CATEGORY.getName(), id.toString(), categoryId.toString());
+    }
+
+    @Override
     public List<UUID> getCategoryItems(UUID categoryId) {
         return database.queryListCallable(Procedure.GET_ITEMS.getName(), new LinkedList<>(), resultSet -> {
             String id = resultSet.getString("ID");
@@ -89,11 +94,11 @@ public final class ShopItemProvider implements ShopItem {
     }
 
     @Override
-    public UUID getItemId(UUID customItemId, UUID categoryId) {
-        return database.queryCallable(Procedure.GET_ID_BY_OTHER.getName(), null, resultSet -> {
+    public UUID getItemId(UUID customItemId) {
+        return database.queryCallable(Procedure.GET_ID_BY_CUSTOM_ITEM.getName(), null, resultSet -> {
             String id = resultSet.getString("ID");
             return id == null ? null : UUID.fromString(id);
-        }, customItemId.toString(), categoryId.toString());
+        }, customItemId.toString());
     }
 
     @Override
@@ -235,10 +240,11 @@ public final class ShopItemProvider implements ShopItem {
         REMOVE_ITEM("CB_ShopItem_RemoveItem", "sid UUID", "DELETE FROM [TABLE] WHERE ID=sid;"),
         GET_DATA("CB_ShopItem_GetData", "sid UUID", "SELECT * FROM [TABLE] WHERE ID=sid;"),
         GET_ITEMS("CB_ShopItem_GetItems", "cid UUID", "SELECT * FROM [TABLE] WHERE Category=cid;"),
-        GET_ID_BY_OTHER("CB_ShopItem_GetIdByOther", "item UUID, cat UUID", "SELECT ID FROM [TABLE] WHERE CustomItem=item AND Category=cat;"),
+        GET_ID_BY_CUSTOM_ITEM("CB_ShopItem_GetIdByCustomItem", "item UUID", "SELECT ID FROM [TABLE] WHERE CustomItem=item;"),
         UPDATE_MATERIAL("CB_ShopItem_UpdateMaterial", "sid UUID, mat TINYTEXT", "UPDATE [TABLE] SET Icon=mat WHERE ID=sid;"),
         UPDATE_BUY_PRICE("CB_ShopItem_UpdateBuyPrice", "sid UUID, buy DOUBLE", "UPDATE [TABLE] SET BuyPrice=buy WHERE ID=sid;"),
-        UPDATE_SELL_PRICE("CB_ShopItem_UpdateSellPrice", "sid UUID, sell DOUBLE", "UPDATE [TABLE] SET SellPrice=sell WHERE ID=sid;");
+        UPDATE_SELL_PRICE("CB_ShopItem_UpdateSellPrice", "sid UUID, sell DOUBLE", "UPDATE [TABLE] SET SellPrice=sell WHERE ID=sid;"),
+        UPDATE_CATEGORY("CB_ShopItem_UpdateCategory", "sid UUID, cat UUID", "UPDATE [TABLE] SET Category=cat WHERE ID=sid;");
         private static final Procedure[] VALUES = values();
 
         private final String name;

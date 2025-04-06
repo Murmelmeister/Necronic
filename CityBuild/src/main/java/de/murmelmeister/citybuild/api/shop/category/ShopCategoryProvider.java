@@ -37,7 +37,7 @@ public final class ShopCategoryProvider implements ShopCategory {
 
     @Override
     public boolean existsCategory(UUID id) {
-        return database.existsCallable(Procedure.GET_DATA.getName(), id.toString());
+        return id != null && database.existsCallable(Procedure.GET_DATA.getName(), id.toString());
     }
 
     @Override

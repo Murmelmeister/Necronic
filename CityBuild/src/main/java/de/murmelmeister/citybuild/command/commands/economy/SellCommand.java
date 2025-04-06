@@ -46,14 +46,7 @@ public final class SellCommand extends CommandManager {
             return true;
         }
 
-        // TODO: This does not work => fix this
-        UUID categoryId = shopCategory.getCategoryId(null);
-        if (!shopCategory.existsCategory(categoryId)) {
-            sendMessage(player, message.getString(Messages.INVALID_ITEM));
-            return true;
-        }
-
-        UUID itemId = shopItem.getItemId(customItemId, categoryId);
+        UUID itemId = shopItem.getItemId(customItemId);
         if (!shopItem.existsItem(itemId)) {
             sendMessage(player, message.getString(Messages.INVALID_ITEM));
             return true;
