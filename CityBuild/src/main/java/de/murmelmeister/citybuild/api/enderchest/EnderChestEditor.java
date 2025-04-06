@@ -46,25 +46,25 @@ public final class EnderChestEditor {
         String content = saveItems(contents);
         String storageContent = saveItems(inventory.getStorageContents());
         if (update)
-            database.callUpdate(Procedure.ENDER_CHEST_UPDATE.getName(), userId, slot, content, storageContent);
+            database.updateCallable(Procedure.ENDER_CHEST_UPDATE.getName(), userId, slot, content, storageContent);
         else
-            database.callUpdate(Procedure.ENDER_CHEST_CREATE.getName(), userId, slot, content, storageContent);
+            database.updateCallable(Procedure.ENDER_CHEST_CREATE.getName(), userId, slot, content, storageContent);
     }
 
     public void delete(int userId, int slot) {
-        database.callUpdate(Procedure.ENDER_CHEST_DELETE.getName(), userId, slot);
+        database.updateCallable(Procedure.ENDER_CHEST_DELETE.getName(), userId, slot);
     }
 
     public void deleteAll(int userId) {
-        database.callUpdate(Procedure.ENDER_CHEST_DELETE_ALL.getName(), userId);
+        database.updateCallable(Procedure.ENDER_CHEST_DELETE_ALL.getName(), userId);
     }
 
     public ItemStack[] getContents(int userId, int slot) {
-        return loadItems(database.query(null, "Content", String.class, Procedure.ENDER_CHEST_GET.getName(), userId, slot));
+        return loadItems(database.queryCallable(Procedure.ENDER_CHEST_GET.getName(), null, resultSet -> resultSet.getString("Content"), userId, slot));
     }
 
     public ItemStack[] getStorageContents(int userId, int slot) {
-        return loadItems(database.query(null, "StorageContent", String.class, Procedure.ENDER_CHEST_GET.getName(), userId, slot));
+        return loadItems(database.query(Procedure.ENDER_CHEST_GET.getName(), null, resultSet -> resultSet.getString("StorageContent"), userId, slot));
     }
 
     public void setInventory(int userId, int slot, Inventory inventory) {
@@ -76,7 +76,7 @@ public final class EnderChestEditor {
     }
 
     public List<Integer> getSlots(int userId) {
-        return database.queryList(new ArrayList<>(), "Slot", Integer.class, Procedure.ENDER_CHEST_GET_ALL.getName(), userId);
+        return database.queryListCallable(Procedure.ENDER_CHEST_GET_ALL.getName(), new ArrayList<>(), resultSet -> resultSet.getInt("Slot"), userId);
     }
 
     public ItemStack getLockedIcon(int slot) {
