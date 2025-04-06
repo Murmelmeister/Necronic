@@ -1,11 +1,9 @@
 package de.murmelmeister.citybuild.api.shop;
 
-import de.murmelmeister.citybuild.api.economy.EconomyProvider;
-import de.murmelmeister.citybuild.api.item.CustomItemProvider;
+import de.murmelmeister.citybuild.api.economy.Economy;
+import de.murmelmeister.citybuild.api.item.CustomItem;
 import de.murmelmeister.citybuild.api.shop.category.ShopCategory;
-import de.murmelmeister.citybuild.api.shop.category.ShopCategoryProvider;
 import de.murmelmeister.citybuild.api.shop.item.ShopItem;
-import de.murmelmeister.citybuild.api.shop.item.ShopItemProvider;
 import de.murmelmeister.citybuild.files.ConfigFile;
 import de.murmelmeister.citybuild.files.MessageFile;
 import de.murmelmeister.citybuild.util.config.Configs;
@@ -27,12 +25,12 @@ public final class ShopMenu extends MultipleMenu<UUID> {
     private final User user;
     private final ConfigFile configFile;
     private final MessageFile messageFile;
-    private final CustomItemProvider customItems;
-    private final ShopCategoryProvider shopCategory;
-    private final ShopItemProvider shopItem;
-    private final EconomyProvider economy;
+    private final CustomItem customItems;
+    private final ShopCategory shopCategory;
+    private final ShopItem shopItem;
+    private final Economy economy;
 
-    public ShopMenu(User user, ConfigFile configFile, MessageFile messageFile, CustomItemProvider customItems, ShopCategoryProvider category, ShopItemProvider item, EconomyProvider economy) {
+    public ShopMenu(User user, ConfigFile configFile, MessageFile messageFile, CustomItem customItems, ShopCategory category, ShopItem item, Economy economy) {
         super(null, true, category.getCategories());
         this.user = user;
         this.configFile = configFile;
@@ -48,8 +46,7 @@ public final class ShopMenu extends MultipleMenu<UUID> {
 
     @Override
     protected ItemStack convertToItemStack(UUID categoryId) {
-        ShopCategory category = shopCategory.getCategory(categoryId);
-        return category.toItemStack();
+        return shopCategory.getItemStack(categoryId);
     }
 
     @Override
@@ -72,11 +69,11 @@ public final class ShopMenu extends MultipleMenu<UUID> {
         private final User user;
         private final ConfigFile configFile;
         private final MessageFile messageFile;
-        private final CustomItemProvider customItems;
-        private final ShopItemProvider shopItem;
-        private final EconomyProvider economy;
+        private final CustomItem customItems;
+        private final ShopItem shopItem;
+        private final Economy economy;
 
-        public CategoryItemMenu(Menu parent, User user, ConfigFile configFile, MessageFile messageFile, CustomItemProvider customItems, ShopCategoryProvider category, ShopItemProvider shopItem, EconomyProvider economy, UUID categoryId) {
+        public CategoryItemMenu(Menu parent, User user, ConfigFile configFile, MessageFile messageFile, CustomItem customItems, ShopCategory category, ShopItem shopItem, Economy economy, UUID categoryId) {
             super(parent, false, shopItem.getCategoryItems(categoryId));
             this.user = user;
             this.configFile = configFile;
@@ -84,25 +81,23 @@ public final class ShopMenu extends MultipleMenu<UUID> {
             this.shopItem = shopItem;
             this.economy = economy;
             this.customItems = customItems;
-            setTitle(configFile.getString(Configs.SHOP_ITEM_TITLE).replace("[CATEGORY]", category.getCategory(categoryId).getDisplayName()));
+            setTitle(configFile.getString(Configs.SHOP_ITEM_TITLE).replace("[CATEGORY]", category.getDisplayName(categoryId)));
             setPlaceholder(Material.getMaterial(configFile.getString(Configs.SHOP_ITEM_PLACEHOLDER)));
         }
 
         @Override
         protected ItemStack convertToItemStack(UUID itemId) {
             int userId = user.getId(getViewer().getUniqueId());
-            return shopItem.getItem(itemId).toItemStack(configFile, messageFile, customItems, economy, userId);
+            return shopItem.getItemStack(configFile, messageFile, customItems, economy, userId, itemId);
         }
 
         @Override
         protected void handlePageClick(Player player, UUID itemId, ClickType clickType) {
-            ShopItem item = shopItem.getItem(itemId);
-            if (item == null) return;
-            Material material = item.getIcon();
+            Material material = shopItem.getIcon(itemId);
             if (material == null) return;
             int maxStackSize = material.getMaxStackSize();
             int userId = user.getId(player.getUniqueId());
-            double buy = item.getBuyPrice();
+            double buy = shopItem.getBuyPrice(itemId);
             Component noMoneyMessage = MiniMessage.miniMessage().deserialize(messageFile.getString(Messages.SHOP_ITEM_MONEY_NOT_ENOUGH));
             if (clickType.isLeftClick()) {
                 if (!economy.hasEnoughMoney(userId, buy)) {
