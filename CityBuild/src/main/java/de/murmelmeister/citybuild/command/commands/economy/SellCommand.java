@@ -1,7 +1,6 @@
 package de.murmelmeister.citybuild.command.commands.economy;
 
 import de.murmelmeister.citybuild.CityBuild;
-import de.murmelmeister.citybuild.api.shop.item.ShopItem;
 import de.murmelmeister.citybuild.command.CommandManager;
 import de.murmelmeister.citybuild.util.config.Configs;
 import de.murmelmeister.citybuild.util.config.Messages;
@@ -35,7 +34,7 @@ public final class SellCommand extends CommandManager {
             return true;
         }
 
-        ItemStack mainItem = player.getInventory().getItemInMainHand();
+        /*ItemStack mainItem = player.getInventory().getItemInMainHand();
         if (mainItem.getType() == Material.AIR) {
             sendMessage(player, message.getString(Messages.INVALID_ITEM));
             return true;
@@ -49,12 +48,12 @@ public final class SellCommand extends CommandManager {
 
         // TODO: Fix this
         ShopItem item = shopItem.getItem(itemId);
-        if (!shopItem.containsItem(itemId) || item == null) {
+        if (!shopItem.existsItem(itemId) || item == null) {
             sendMessage(player, message.getString(Messages.INVALID_ITEM));
             return true;
         }
 
-        double sellPrice = item.getSellPrice();
+        double sellPrice = shopItem.getSellPrice(itemId);
         String displayName = customItems.getCustomItem(itemId).getDisplayName();
 
         switch (args[0]) {
@@ -133,7 +132,7 @@ public final class SellCommand extends CommandManager {
             }
             default ->
                     sendMessage(player, message.getString(Messages.COMMAND_SYNTAX).replace("[USAGE]", command.getUsage()));
-        }
+        }*/
         return true;
     }
 
